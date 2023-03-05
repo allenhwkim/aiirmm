@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ComponentMeta } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import FormflowChart from '../../reactflow/FormflowChart';
+import FormflowChart from './FormflowChart';
 import CustomDocumentation from './FormflowChart.mdx';
 
 export default { 

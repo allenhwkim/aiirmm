@@ -1,15 +1,14 @@
 import { ComponentMeta } from '@storybook/react';
 import * as React from 'react';
 import { useRef, useState } from 'react';
-import FormflowChartElement from "../../reactflow/formflow-chart-element";
-import CustomDocumentation from './formflow-chart.mdx';
+import FormDiagram from "./form-diagram";
+import CustomDocumentation from './form-diagram.mdx';
 
-(!customElements.get('formflow-chart')) &&
-  customElements.define('formflow-chart',FormflowChartElement)
+(!customElements.get('form-diagram')) && customElements.define('form-diagram', FormDiagram);
 
 export default {
-  title: 'Components/formflow-chart',
-  component: FormflowChartElement,
+  title: 'Components/form-diagram',
+  component: FormDiagram,
   parameters: {
     docs: { page: CustomDocumentation },
   },
@@ -32,7 +31,7 @@ const Template:any = (args: any) => {
   }, [args.data])
 
   return <>
-    <formflow-chart ref={chartEl} />
+    <form-diagram ref={chartEl}></form-diagram>
     <button onClick={getData}>Get Data</button>
     <button onClick={getImage}>Get Image</button>
     <button onClick={getInstance}>Get Instance</button>

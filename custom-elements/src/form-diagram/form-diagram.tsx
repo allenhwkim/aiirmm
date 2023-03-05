@@ -4,12 +4,12 @@ import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { createRoot } from 'react-dom/client'
 import { Node, Edge, ReactFlowInstance } from 'reactflow';
 import { toPng } from 'html-to-image';
-import FormflowChart from "./FormflowChart";
+import FormflowChart from "../reactflow/FormflowChart";
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      'formflow-chart': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
+      'form-diagram': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
     }
   }
 }
