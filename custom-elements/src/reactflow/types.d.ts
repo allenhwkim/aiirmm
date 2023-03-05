@@ -20,7 +20,7 @@ export type TAddNode = {
 }
 
 // zustand store state and methods
-export type StoreState = {
+export type TStoreState = {
   nodes: Node[];
   edges: Edge[];
   setNodes: (nodes: Node[]) => void;

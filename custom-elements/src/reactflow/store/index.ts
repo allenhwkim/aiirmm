@@ -9,13 +9,13 @@ import {
 import { addNodeOn } from './add-node-on';
 import { addNodeBeside } from './add-node-beside';
 import { initialEdges, initialNodes } from './initial-nodes-edges';
-import { StoreState } from '../types.d';
+import { TStoreState } from '../types.d';
 import { UndoRedo } from './undo-redo';
 
 UndoRedo.addHistory({nodes: initialNodes, edges: initialEdges});
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-const useStore = create<StoreState>((set, get) => ({
+const useStore = create<TStoreState>((set, get) => ({
   nodes: initialNodes,
   edges: initialEdges,
   nextNodeId: 1,

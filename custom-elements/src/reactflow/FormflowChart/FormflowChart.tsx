@@ -4,9 +4,9 @@ import ReactFlow, {Controls, ControlButton, Background, Edge, Node, ReactFlowIns
 import 'reactflow/dist/style.css';
 import './styles.css';
 
-import useStore from './store';
-import { customNodeTypes } from './custom-nodes';
-import { customEdgeTypes } from './custom-edges';
+import useStore from '../store';
+import { customNodeTypes } from '../custom-nodes';
+import { customEdgeTypes } from '../custom-edges';
 
 export interface FormflowChartProps {
   nodes?: Node[],
