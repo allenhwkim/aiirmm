@@ -4,12 +4,13 @@ import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { createRoot } from 'react-dom/client'
 import { Node, Edge, ReactFlowInstance } from 'reactflow';
 import { toPng } from 'html-to-image';
-import FormflowChart from '../reactflow/FormflowChart/FormflowChart';
+import FormflowChart from '../react-components/FormflowChart/FormflowChart';
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       'form-diagram': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
+      'form-editor': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
     }
   }
 }
@@ -23,7 +24,7 @@ const initialEdges: Edge[]  = [
   {id: 'start-end', source: 'start', target: 'end', type: 'custom'},
 ];
 
-export default class FormflowChartElement extends HTMLElement {
+export default class FormDiagram extends HTMLElement {
   root: any;
   reactflowInstance!: ReactFlowInstance;
 

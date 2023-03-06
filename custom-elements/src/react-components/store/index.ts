@@ -9,7 +9,7 @@ import {
 import { addNodeOn } from './add-node-on';
 import { addNodeBeside } from './add-node-beside';
 import { initialEdges, initialNodes } from './initial-nodes-edges';
-import { TStoreState } from '../types.d';
+import { TStoreState } from '../types';
 import { UndoRedo } from './undo-redo';
 
 UndoRedo.addHistory({nodes: initialNodes, edges: initialEdges});

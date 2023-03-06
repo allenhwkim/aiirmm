@@ -6,7 +6,7 @@ import FormflowChart from './FormflowChart';
 import CustomDocumentation from './FormflowChart.mdx';
 
 export default { 
-  title: 'Components/FormflowChart',
+  title: 'React Components/FormflowChart',
   component: FormflowChart,
   parameters: {
     docs: { page: CustomDocumentation },

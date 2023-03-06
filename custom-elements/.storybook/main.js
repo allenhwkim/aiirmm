@@ -16,12 +16,10 @@ module.exports = {
   ],
   framework: '@storybook/react',
   webpackFinal: async (config, { configType: string }) => { // configType: 'DEVELOPMENT' or 'PRODUCTION'
-    config.module.rules.push({
-      test: /\.scss$/,
-      use: ['style-loader', 'css-loader', 'sass-loader'],
-      include: path.resolve(__dirname, '../'),
-    });
+    config.module.rules.push(
+      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'], include: path.resolve(__dirname, '../')}, 
+    );
 
     return config;
-  },
+  }
 }

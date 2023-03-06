@@ -1,5 +1,5 @@
 import { Node, Edge, getOutgoers } from "reactflow";
-import { TAddNode, TAddNodeOptions} from '../types.d';
+import { TAddNode, TAddNodeOptions} from '../types';
 
 const NODE_GAP_V = 120;
 const NODE_WIDTH = 200;
