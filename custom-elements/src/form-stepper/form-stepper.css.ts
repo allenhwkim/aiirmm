@@ -1,46 +1,81 @@
 export default /* css */ `
   form-stepper {
-    --label-size: clamp(1.5rem, 5vw, 3rem);
-    --spacing: clamp(0.25rem, 2vw, 0.5rem);
+    --label-size: 32px;
+    --max-width: 200px;
     display: flex;
   }
-
+  
   form-stepper .form-step {
+    flex: 1; /* stretch width */
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    text-align: center;
+    justify-content: center;
+    position: relative;
   }
 
-  form-stepper .form-step .form-label {
-    display: block;
+  form-stepper .form-step .form-link {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    width: var(--max-width);
+    cursor: pointer;
+  }
+
+  form-stepper .form-step .form-link .form-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: var(--label-size);
     height: var(--label-size);
+    font-size: 16px;
+    border: 1px solid;
     border-radius: 50%;
-    background-color: red;
+    border-color: #b2b2b2;
+    color: #1a1a1a;
+    background-color: #fff;
+    form-link-shadow: 0 0 0 4px #FFF;
   }
 
-  form-stepper .form-step .form-title {
-    font-weight: bold;
-    font-size: clamp(1rem, 4vw, 1.25rem);
-    margin-bottom: 0.5rem;
-    margin: .5rem 0 0 0;
+  form-stepper .form-step.incomplete .form-link {
+    cursor: auto;
   }
 
-  form-stepper .form-step .form-desc {
+  form-stepper .form-step.active .form-link {
+    font-weight: 600;
+  }
+
+  form-stepper .form-step:is(.complete, .active, .skipped, .error) .connection-line {
+    background-color: #90caf9;
+  }
+
+  form-stepper .form-step:is(.complete, .active, .skipped) .form-link .form-label {
+    color: #FFF;
+    border-color: #1976d2;
+    background-color: #1976d2;
+  }
+
+  form-stepper .form-step:is(.error) .form-link .form-label {
+    color: #FFF;
+    border-color: #d27519;
+    background-color: #d27519;
+  }
+
+  form-stepper .form-step .form-link .form-title {
+    padding-top: .2rem;
+    word-wrap: break-word;
+  }
+
+  form-stepper .form-step .form-link .form-desc {
     color: grey;
-    font-size: clamp(0.85rem, 2vw, 1rem);
-    padding-left: var(--spacing);
-    padding-right: var(--spacing);
   }
 
-  form-stepper .form-step:not(:last-child) .connection-line {
-    position: relative;
-    top: calc(var(--circle-size) / 2);
-    width: calc(100% - var(--circle-size) - calc(var(--spacing) * 2));
-    left: calc(50% + calc(var(--circle-size) / 2 + var(--spacing)));
-    height: 2px;
-    background-color: #e0e0e0;
-    order: -1;
+  form-stepper .form-step .connection-line {
+    position: absolute;
+    width: 100%;
+    background-color: #EEE;
+    height: 4px;
+    right: 50%;
+    top: calc( var(--label-size) / 2);
+    z-index: -1;
   }
 `;

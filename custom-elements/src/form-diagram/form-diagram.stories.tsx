@@ -6,6 +6,14 @@ import CustomDocumentation from './form-diagram.mdx';
 
 (!customElements.get('form-diagram')) && customElements.define('form-diagram', FormDiagram);
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'form-diagram': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
+  }
+}
+
 export default {
   title: 'Components/form-diagram',
   component: FormDiagram,

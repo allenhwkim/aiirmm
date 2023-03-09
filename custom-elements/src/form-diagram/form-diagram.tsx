@@ -1,19 +1,9 @@
 import * as React from 'react';
 import { StrictMode } from 'react';
-import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { createRoot } from 'react-dom/client'
 import { Node, Edge, ReactFlowInstance } from 'reactflow';
 import { toPng } from 'html-to-image';
 import FormflowChart from '../react-components/FormflowChart/FormflowChart';
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'form-diagram': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
-      'form-editor': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
-}
 
 const initialNodes: Node[] = [
   {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},

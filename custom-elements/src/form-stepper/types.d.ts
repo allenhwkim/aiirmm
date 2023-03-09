@@ -13,16 +13,18 @@ export interface IFormsSubmit {
   onError: (resp: Response) => void;
 }
 
+export type IForm {
+  type?: 'review' | 'thankyou' | undefined;
+  url?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  source?: string | (() => string);
+  skippable?: boolean;
+  getErrors?: (userData: IUserData) => string[];
+}
+
 export interface IForms {
-  steps: string[];
-  [formName: string]: {
-    url?: string;
-    label?: string;
-    title?: string;
-    description?: string;
-    source?: string;
-    skippable?: boolean;
-    getErrors?: (userData: IUserData) => string[];
-  } | any;
+  [formName: string]: IForm;
   submit?: IFormsSubmit;
 }

@@ -59,7 +59,7 @@ export const basicActionsPanel = {
     {
       id: 'preview',
       context: 'preview',
-      command: (editor) => editor.runCommand('preview'),
+      command: (editor: any) => editor.runCommand('preview'),
       label: icons.preview
     }
   ],

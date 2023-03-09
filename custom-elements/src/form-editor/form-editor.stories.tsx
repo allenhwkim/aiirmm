@@ -3,6 +3,14 @@ import { FormEditor } from "./form-editor";
 import CustomDocumentation from './form-editor.mdx';
 (!customElements.get('form-editor')) && customElements.define('form-editor', FormEditor);
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'form-editor': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
+  }
+}
+
 export default {
   title: 'Components/form-editor',
   component: FormEditor,
