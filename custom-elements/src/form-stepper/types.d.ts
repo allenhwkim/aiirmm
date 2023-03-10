@@ -13,8 +13,8 @@ export interface IFormsSubmit {
   onError: (resp: Response) => void;
 }
 
-export type IForm {
-  type?: 'review' | 'thankyou' | undefined;
+export interface IForm {
+  type?: string;
   url?: string;
   label?: string;
   title?: string;

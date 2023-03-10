@@ -1,4 +1,4 @@
-button {
+button:is(.primary, .secondary, .small, .medium, .large) {
   border: 0;
   border-radius: 12px; 
   padding: 12px 16px;

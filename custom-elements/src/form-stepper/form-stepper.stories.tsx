@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FormController } from './form-controller';
 import { FormStepper } from "./form-stepper"; // Shares the same FormController
 
 // import CustomDocumentation from './form-editor.mdx';
@@ -25,19 +24,11 @@ export default {
 };
 
 const Template = (args?: any) => {
-  document.addEventListener('form-goto', (event: any) => { // clicked on stepper
-    FormController.initForm(event.detail);
-  });
   document.addEventListener('click', (event: any) => { // clicked on buttons
-    if (event.target.classList.contains('form-review')) {
-      FormController.initForm('review'); 
-    } else if (event.target.classList.contains('form-prev')) {
-      FormController.initForm('prev'); 
-    } else if (event.target.classList.contains('form-next')) {
-      FormController.setUserData(FormController.currentForm, {foo: 1});
-      FormController.initForm('next'); 
-    }
-  })
+    event.target.classList.contains('clear-user-form-data') &&  sessionStorage.clear();
+    (document.querySelector('.user-form-data') as HTMLElement).innerText = 
+      JSON.stringify(JSON.parse(window.sessionStorage.getItem('form-user-data') as string), null, '  ');
+  });
 
   return <>
     <form-stepper></form-stepper>
@@ -52,6 +43,10 @@ const Template = (args?: any) => {
       <button className="form-prev">Prev</button>
       <button className="form-next">Next</button>
     </div>
+    <pre className="user-form-data">
+      {JSON.stringify(JSON.parse(window.sessionStorage.getItem('form-user-data') as string), null, '  ')}
+    </pre>
+    <button className="clear-user-form-data">Clear storage</button>
   </>
 }; 
 

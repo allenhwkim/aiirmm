@@ -1,68 +1,106 @@
 import { IForms, IForm, IFormsSubmit, IUserData} from './types';
 
-export const FormController = {
-  steps: ['Name', 'Contact', 'Review'], 
-  forms: {
-    Name: {}, 
-    Contact: {}, 
-    Review: {type: 'review'}
-  } as IForms,
-  currentForm: '',
+const defaultForms = {
+  Name: {
+    source: () => `Name: <input name="first" />`,
+  }, 
+  Contact: {
+    source: () => `Address: <input name="address" />`,
+    skippable: true
+  }, 
+  Review: {
+    type: 'review',
+  }
+};
+
+let instance: FormController;
+export class FormController {
+  steps: string[] = [];
+  currentForm: string = '';
+  forms: IForms = {};
+  _docGotoListener = (event: any) => this.initForm(event.detail);
+  _docClickListener = (event: any) => {
+    if (event.target.classList.contains('form-review')) {
+      this.initForm('review'); 
+    } else if (event.target.classList.contains('form-prev')) {
+      this.initForm('prev'); 
+    } else if (event.target.classList.contains('form-next')) { 
+      this.setUserData(this.currentForm, {foo: 1});
+      this.initForm('next');
+    }
+  }
+
+  constructor(forms?: IForms) {
+    if (!instance) {
+      this.forms = forms || defaultForms;
+      this.steps = Object.keys(this.forms);
+      this.currentForm = this.steps[0];
+      this.addEventListeners();
+      instance = this;
+    }
+    return instance;
+  }
+
+  addEventListeners() {
+    document.addEventListener('form-goto', this._docGotoListener);
+    document.addEventListener('click', this._docClickListener);
+  }
+
+  removeEventListeners() {
+    document.removeEventListener('form-goto', this._docGotoListener);
+    document.removeEventListener('click', this._docClickListener);
+  }
 
   initForm(target: string = 'auto') {
-    FormController.steps ||= Object.keys(FormController.forms).filter(el => el !== 'steps');
-    FormController.currentForm ||= FormController.steps[0];
-
-    const steps = FormController.steps;
     let nextFormIndex = 0;
-    if (steps.includes(target)) {
-      nextFormIndex = steps.indexOf(target);
-      FormController.currentForm = target;
+    if (this.steps.includes(target)) {
+      nextFormIndex = this.steps.indexOf(target);
+      this.currentForm = target;
     } else if (['submit', 'review', 'auto', 'prev', 'next'].includes(target)) {
-      const currentFormIndex = steps.indexOf(FormController.currentForm);
+      const currentFormIndex = this.steps.indexOf(this.currentForm);
 
       if (target === 'submit' || target === 'review') {
-        nextFormIndex = steps.findIndex((formId: string) => formId = 'submit');
+        nextFormIndex = this.steps.findIndex((formId: string) => formId = 'submit');
       } else if (target === 'auto') {
-        nextFormIndex = steps.findIndex((formId: string) =>  FormController.getStatus(formId) !== 'complete')
+        nextFormIndex = this.steps.findIndex((formId: string) =>  this.getStatus(formId) !== 'complete')
       } else if (target === 'prev') {
-        nextFormIndex = (currentFormIndex - 1) % steps.length;
+        nextFormIndex = (currentFormIndex - 1) % this.steps.length;
       } else if (target === 'next') {
-        nextFormIndex = (currentFormIndex + 1) % steps.length;
+        nextFormIndex = (currentFormIndex + 1) % this.steps.length;
       }
 
-      FormController.currentForm = steps[nextFormIndex]
+      this.currentForm = this.steps[nextFormIndex]
     }
 
-    FormController.initStepperEl();
-    FormController.initErrorsEl();
-    FormController.initFormEl();
-    FormController.initButtonsEl();
-  },
+    this.initStepperEl();
+    this.initErrorsEl();
+    this.initFormEl();
+    this.initButtonsEl();
+  }
 
   getStatus(formId: string): 'error' | 'complete' | 'active' | 'incomplete' | 'skipped'  { 
     const userDataJson = window.sessionStorage.getItem('form-user-data');
     const userData: IUserData = userDataJson ? JSON.parse(userDataJson) : null;
-    const form: IForm = FormController.forms[formId];
-    if (formId === FormController.currentForm) {
+    const form: IForm = this.forms[formId];
+    if (formId === this.currentForm) {
       return 'active';
     } else if (userData?.[formId]) { // user has visited this formId already and saved data 
-      const errors = FormController.getErrors(formId);
+      const errors = this.getErrors(formId);
       return errors ? 'error' : 'complete';
     } else {
-      const currentFormIndex = Object.keys(FormController.forms).indexOf(FormController.currentForm);
-      const formIndex = Object.keys(FormController.forms).indexOf(formId);
-      if (form.skippable && formIndex > currentFormIndex) {
+      const currentFormIndex = Object.keys(this.forms).indexOf(this.currentForm);
+      const formIndex = Object.keys(this.forms).indexOf(formId);
+      if (form.skippable && formIndex < currentFormIndex) {
         return 'skipped';
       } else {
         return 'incomplete';
       }
     }
-  },
+  }
 
   getErrors(formId: string): string[] | null{
     // returns errors of the given formId
-    const getErrorFunc = FormController.forms[formId].getErrors;
+    const getErrorFunc = this.forms[formId].getErrors;
     if (getErrorFunc) {
       const userDataJson = window.sessionStorage.getItem('form-user-data');
       const userData = userDataJson ? JSON.parse(userDataJson) : null;
@@ -70,67 +108,78 @@ export const FormController = {
     } else {
       return null;
     }
-  },
+  }
 
   initStepperEl(): void {
     const stepperEl: any = document.querySelector('form-stepper');
     stepperEl?.render();
-  },
+  }
 
   initErrorsEl(): void {
     const errorsEl = document.querySelector('.form-errors');
     if (errorsEl) {
       errorsEl.innerHTML = '';
-      const errors = FormController.getErrors(FormController.currentForm);
+      const errors = this.getErrors(this.currentForm);
       (errors||[]).forEach(error => {
         errorsEl.insertAdjacentHTML('beforeend', `<div class="error">${error}</div>`)
       });
     }
-  },
+  }
 
-  initFormEl(): void { // set innerHTML of <form> element
+
+  async initFormEl(): Promise<void> { // set innerHTML of <form> element
     const formEl = document.querySelector('form.x-form');
-    const source = FormController.forms[FormController.currentForm].source;
-    if (formEl && source) {
-      const html = typeof source === 'string' ? source : source();
-      formEl.innerHTML = html;
+    const source = this.forms[this.currentForm].source;
+    if (formEl) {
+      if (typeof source === 'string') {
+        window.fetch(source)
+          .then(resp => resp.text())
+          .then(resp => formEl.innerHTML = resp)
+          .catch(error => formEl.innerHTML = error)
+      } else if (typeof source === 'function') {
+        formEl.innerHTML = source();
+      } else {
+        formEl.innerHTML = `HTML for "${this.currentForm} form" goes here`;
+      }
     }
-  },
-  
+  }  
+
   initButtonsEl(): void { // set buttons text and availability
+    console.log('initButtonsEl called')
     const reviewButtonEl = document.querySelector('.form-buttons .form-review');
     const prevButtonEl = document.querySelector('.form-buttons .form-prev');
     const nextButtonEl = document.querySelector('.form-buttons .form-next');
-    const steps = FormController.steps;
-    const currentFormIndex = Object.keys(steps).indexOf(FormController.currentForm);
+    const currentFormIndex = this.steps.indexOf(this.currentForm);
     if (reviewButtonEl) {
-      (reviewButtonEl as HTMLButtonElement).disabled = !FormController.isReviewable();
+      (reviewButtonEl as HTMLButtonElement).disabled = !this.isReviewable();
     }
     if (prevButtonEl) {
       // 0-1-2-3-current -> enabled,  current-1-2-3-review -> disabled
       (prevButtonEl as HTMLButtonElement).disabled = !(currentFormIndex > 0);
+      console.log('!(currentFormIndex > 0);', currentFormIndex, !(currentFormIndex > 0))
     }
     if (nextButtonEl) {
       // 0-1-2-3-current -> disabled, current-1-2-3-review -> enabled
-      (nextButtonEl as HTMLButtonElement).disabled = !(currentFormIndex !== steps.length - 1);
+      (nextButtonEl as HTMLButtonElement).disabled = !(currentFormIndex !== this.steps.length - 1);
     }
-  },
+  }
 
-  setUserData(key: string, data: { [key: string] : any }) : void { // update session storage dat 
+  setUserData(key: string, data?: { [key: string] : any }) : void { // update session storage dat 
+    // TODO: collect user data from formElement
     const userDataJson = window.sessionStorage.getItem('form-user-data');
     const formUserData: IUserData = userDataJson ? JSON.parse(userDataJson) : {};
     formUserData[key] = data;
     window.sessionStorage.setItem('form-user-data', JSON.stringify(formUserData));
-  }, 
+  } 
 
   isReviewable(): boolean {
     // complete - skippable - skippable - review => true
     // incomplete - skippable - skippable - review => false
-    const steps = FormController.steps;
+    const steps = this.steps;
     for (var i = 0; i < steps.length; i++) {
       const stepName = steps[i];
-      const stepStatus = FormController.getStatus(stepName);
-      const form = FormController.forms[stepName];
+      const stepStatus = this.getStatus(stepName);
+      const form = this.forms[stepName];
       if (!(stepStatus === 'complete' || form.skippable)) {
         return false;
       }
