@@ -11,6 +11,9 @@ export default /* css */ `
     justify-content: center;
     position: relative;
   }
+  form-stepper .form-step.submit {
+    display: none;
+  }
 
   form-stepper .form-step .form-link {
     display: flex;
