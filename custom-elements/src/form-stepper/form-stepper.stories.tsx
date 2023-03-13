@@ -31,17 +31,18 @@ const Template = (args?: any) => {
   });
 
   return <>
-    <form-stepper></form-stepper>
-    <div className="form-errors" style={{border: '1px dashed', padding: 16}}>
+    <form-stepper className="form-flow"></form-stepper>
+    <div className="form-flow form-errors" style={{border: '1px dashed', padding: 16}}>
       Error goes here
     </div>
-    <form className="x-form" style={{border: '1px dashed', padding: 16}}>
+    <form className="form-flow" style={{border: '1px dashed', padding: 16}}>
       Form goes here.
     </form>
-    <div className="form-buttons" style={{border: '1px dashed', padding: 16}}>
-      <button className="form-review">Review + Submit</button>
+    <div className="form-flow form-buttons" style={{border: '1px dashed', padding: 16}}>
       <button className="form-prev">Prev</button>
       <button className="form-next">Next</button>
+      <button className="form-review">Review</button>
+      <button className="form-submit">Submit</button>
     </div>
     <pre className="user-form-data">
       {JSON.stringify(JSON.parse(window.sessionStorage.getItem('form-user-data') as string), null, '  ')}

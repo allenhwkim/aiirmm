@@ -3,14 +3,18 @@ export interface IUserData {
 }
 
 export interface IFormsSubmit {
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method: 'GET' | 'POST';
   url: string;
-  headers: {
+  headers?: {
     [key: string]: string;
   },
-  getData: (userData: any) => any;
-  onSuccess: (resp: Response) => void;
-  onError: (resp: Response) => void;
+  payload: (userData: any) => any;
+  onSuccess?: (resp: Response) => void;
+  onError?: (resp: Response) => void;
+  source?: string | (() => string);
+  label?: string;
+  title?: string;
+  description?: string;
 }
 
 export interface IForm {
@@ -21,10 +25,9 @@ export interface IForm {
   description?: string;
   source?: string | (() => string);
   skippable?: boolean;
-  getErrors?: (userData: IUserData) => string[];
+  getErrors?: (formElData: any) => string[] | null;
 }
 
 export interface IForms {
-  [formName: string]: IForm;
-  submit?: IFormsSubmit;
+  [formName: string]: IForm | IFromSubmit;
 }

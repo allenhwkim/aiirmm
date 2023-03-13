@@ -23,15 +23,16 @@ export const FormStepper = customElement({
 
   render() {
     if (!this._props.formController) return;
-
+    
     this.innerHTML = '';
     this._props.formController.steps.forEach( (formName: string, index: number) => {
+      const activeClass = formName === this._props.formController.currentForm ? ' active' : '';
       const formProp = this._props.formController.forms[formName];
       const label = formProp.label || index + 1;
       this.insertAdjacentHTML(`beforeend`, `
-        <div class="form-step ${ this._props.formController.getStatus(formName) }">
+        <div class="form-step ${ this._props.formController.getStatus(formName) }${activeClass}">
           <div class="form-link" data-name="${formName}">
-            ${ this._props.formController.getStatus(formName)}
+            ${ this._props.formController.getStatus(formName)}${activeClass}
             <div class="form-label">${label}</div>
             <div class="form-title">${formProp.title || formName}</div>
             <div class="form-desc">${formProp.description || ''}</div>
