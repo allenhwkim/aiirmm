@@ -9,7 +9,7 @@ export const FormStepper = customElement({
   props: { formController : FormController},
 
   events: {
-    click(event) {
+    click(event: UIEvent) {
       const formLinkEl = (event.target as any).closest('.form-link');
       const formStepEl = (event.target as any).closest('.form-step');
       const visitable = !formStepEl.classList.contains('incomplete');
@@ -22,19 +22,20 @@ export const FormStepper = customElement({
   },
 
   render() {
-    if (!this._props.formController) return;
+    if (!this._props?.formController) return;
     
     this.innerHTML = '';
-    this._props.formController.steps.forEach( (formName: string, index: number) => {
-      const activeClass = formName === this._props.formController.currentForm ? ' active' : '';
-      const formProp = this._props.formController.forms[formName];
+    const formCtrl = this._props?.formController;
+    formCtrl.steps.forEach( (formName: string, index: number) => {
+      const activeClass = formName === formCtrl.currentForm ? ' active' : '';
+      const formProp = formCtrl.forms[formName];
       const formType = formProp.type ? ` ${formProp.type}` : '';
       const label = formProp.label || index + 1;
       this.insertAdjacentHTML(`beforeend`, `
-        <div class="form-step ${ this._props.formController.getStatus(formName) }${activeClass}${formType}">
+        <div class="form-step ${ formCtrl.getStatus(formName) }${activeClass}${formType}">
           ${ index ? `<div class="connection-line"></div>`: '' }
           <div class="form-link" data-name="${formName}">
-            <!-- ${ this._props.formController.getStatus(formName)}${activeClass} -->
+            <!-- ${ formCtrl.getStatus(formName)}${activeClass} -->
             <div class="form-label">${label}</div>
             <div class="form-title">${formProp.title || formName}</div>
             <div class="form-desc">${formProp.description || ''}</div>
@@ -45,13 +46,15 @@ export const FormStepper = customElement({
   },
 
   connectedCallback: function() {
-    this._props.formController = new FormController();
-    this.render();
-    this._props.formController.initForm();
+    if (this._props) {
+      this._props.formController = new FormController();
+      this.render?.();
+      this._props.formController.initForm();
+    }
   },
 
   disconnectedCallback: function() {
-    this._props.formController.removeEventListeners();
+    this._props?.formController.removeEventListeners();
   }
 });
 
