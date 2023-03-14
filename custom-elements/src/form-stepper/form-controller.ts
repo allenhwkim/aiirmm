@@ -136,7 +136,9 @@ export class FormController {
     const currentFormIndex = this.steps.indexOf(this.currentForm);
 
     // 0-1-2-3-current -> enabled,  current-1-2-3-review -> disabled
-    prevButtonEl && (prevButtonEl.disabled = !(currentFormIndex > 0));
+    if (prevButtonEl) {
+      prevButtonEl.disabled = !(currentFormIndex > 0) || this.currentFormType === 'submit';
+    }
     // 0-1-2-3-current -> disabled, current-1-2-3-review -> enabled
     nextButtonEl && (nextButtonEl.disabled = !(currentFormIndex !== this.steps.length - 1));
     if (submitButtonEl) {
@@ -211,6 +213,7 @@ export class FormController {
     const payload = form.payload ? JSON.stringify(form.payload(formUserData)) : userDataJson;
     console.log({userDataJson, form, payload})
 
+    document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
     return window.fetch(form.url, { method: form.method, headers: form.headers, body: payload })
       .then(response => response.json())
       .then(response => {
@@ -218,5 +221,8 @@ export class FormController {
         window.sessionStorage.removeItem('form-user-data');
       })
       .catch(error => form.onError(error))
+      .finally(() => {
+        console.log('done');
+      })
   }
 }

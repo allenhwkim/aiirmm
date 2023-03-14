@@ -13,9 +13,9 @@ Mono-repo using npm workspaces with the following packages
   * form-diagram: Show steps of all forms graphically using Reactflow
   * form-editor: Grapejs form editor with bootstrap5 style
   * form-stepper: Show steps of all forms in HTML
+    * **forms-controller**: Updates these; 
+      * form-stepper
+      * form errors section
+      * form user section
+      * buttons section(review/submit/next/prev)
 
-* **forms-controller**: A form application composed with;
-  * form-stepper
-  * form errors section
-  * form user section
-  * buttons section(review/next/prev)

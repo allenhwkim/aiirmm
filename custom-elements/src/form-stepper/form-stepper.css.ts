@@ -36,7 +36,6 @@ export default /* css */ `
     border-color: #b2b2b2;
     color: #1a1a1a;
     background-color: #fff;
-    form-link-shadow: 0 0 0 4px #FFF;
   }
 
   form-stepper .form-step.incomplete .form-link {
@@ -49,6 +48,12 @@ export default /* css */ `
 
   form-stepper .form-step:is(.complete, .active, .skipped, .error) .connection-line {
     background-color: #90caf9;
+  }
+
+  form-stepper .form-step:not(.active).complete .form-link .form-label:after {
+    content: '✓';
+    position: absolute;
+    background: inherit;
   }
 
   form-stepper .form-step:is(.complete, .active, .skipped) .form-link .form-label {
@@ -74,11 +79,10 @@ export default /* css */ `
 
   form-stepper .form-step .connection-line {
     position: absolute;
-    width: 100%;
+    width: calc(100% - var(--label-size) - 8px);
     background-color: #EEE;
     height: 4px;
-    right: 50%;
+    right: calc(50% + var(--label-size) / 2 + 4px);
     top: calc( var(--label-size) / 2);
-    z-index: -1;
   }
 `;

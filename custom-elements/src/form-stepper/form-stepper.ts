@@ -32,13 +32,13 @@ export const FormStepper = customElement({
       const label = formProp.label || index + 1;
       this.insertAdjacentHTML(`beforeend`, `
         <div class="form-step ${ this._props.formController.getStatus(formName) }${activeClass}${formType}">
+          ${ index ? `<div class="connection-line"></div>`: '' }
           <div class="form-link" data-name="${formName}">
-            ${ this._props.formController.getStatus(formName)}${activeClass}
+            <!-- ${ this._props.formController.getStatus(formName)}${activeClass} -->
             <div class="form-label">${label}</div>
             <div class="form-title">${formProp.title || formName}</div>
             <div class="form-desc">${formProp.description || ''}</div>
           </div>
-          ${ index ? `<div class="connection-line"></div>`: '' }
         </div>
       `)
     });
