@@ -49,6 +49,6 @@ export default create({
   // Brand
   brandTitle: 'My custom storybook',
   brandUrl: 'https://example.com',
-  brandImage: 'https://elements-x.com/assets/elements-x.png',
+  brandImage: '/logo.png',
   brandTarget: '_self',
 });

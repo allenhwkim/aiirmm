@@ -4,23 +4,23 @@ export class XTouchSwipe {
   static els: HTMLElement[] = [];
   static _instance: XTouchSwipe;
 
-  touchOrgX: number; // touch original start position
-  touchOrgY: number;
-  touchStaX: number; // touch start position
-  touchStaY: number;
-  touchEndX: number; // touch end position
-  touchEndY: number;
-  touchOrgAt: number; // touch start time
-  touchStaAt: number;
-  touchEndAt: number;
+  touchOrgX: number = 0; // touch original start position
+  touchOrgY: number = 0;
+  touchStaX: number = 0; // touch start position
+  touchStaY: number = 0;
+  touchEndX: number = 0; // touch end position
+  touchEndY: number = 0;
+  touchOrgAt: number = 0; // touch start time
+  touchStaAt: number = 0;
+  touchEndAt: number = 0;
   touchStaEl: HTMLElement | undefined;
-  prevMove: string; // prev move e.g. TOP RIGHT
-  prevEndX: number; // previous x/y position
-  prevEndY: number;
+  prevMove: string = ''; // prev move e.g. TOP RIGHT
+  prevEndX: number = 0; // previous x/y position
+  prevEndY: number = 0;
   touchStaListener: any;
   touchEndListener: any;
   touchMoveListener: any;
-  isTouchDevice: boolean;
+  isTouchDevice: boolean = false;
   events: any;
 
   constructor(el: HTMLElement) {
