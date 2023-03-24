@@ -96,16 +96,7 @@ export const Combobox = customElement({
       debounce(() => srcFunc(inputEl.value).then((resp: any[]) => {
         rewriteListEl(listEl, resp, custEl.template)
       }), 500) : () => highlightSearch(listEl, inputEl.value);
-    inputEl?.addEventListener('input', inputListener
-      // function(event: any) { // input key event handler
-      //   if (typeof srcFunc === 'function') { // async API call
-      //     srcFunc(inputEl.value)
-      //       .then((resp: any[]) => rewriteListEl(listEl, resp, custEl.template))
-      //   } else {
-      //     highlightSearch(listEl, inputEl.value);
-      //   }
-      // }
-    );
+    inputEl?.addEventListener('input', inputListener);
 
   },
 });

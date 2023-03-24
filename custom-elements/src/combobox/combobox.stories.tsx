@@ -32,6 +32,9 @@ const Template = (args?: any) => {
   }
 
   return <>
+    <p>
+      This is combobox with keyboard navigation and selection enabled.
+    </p>
     <x-combobox>
       <input placeholder="Choose one value" autoComplete="off" defaultValue="Hello World" />
       <ul>
@@ -43,9 +46,17 @@ const Template = (args?: any) => {
         <li>Foo Bar</li>
       </ul>
     </x-combobox>
-    <p>
-      This is combobox with keyboard navigation and selection enabled.
-    </p>
+    <pre>{`    <x-combobox>
+      <input placeholder="Choose one value" autoComplete="off" defaultValue="Hello World" />
+      <ul>
+        <li data-value="">Choose One</li>
+        <li data-value="1">Hello</li>
+        <li>Hello World</li>
+        <li>Foo</li>
+        <li className="disabled">Disabled</li>
+        <li>Foo Bar</li>
+      </ul>
+    </x-combobox>`}</pre>
 
     <x-combobox>
       <input placeholder="Readonly dropdown" readOnly />
@@ -71,7 +82,20 @@ const Template = (args?: any) => {
         <li data-value="[[id]]-[[title]]">[[brand]] - [[description]]</li>
       </ul>
     </x-combobox>
-    
+    <pre>{`
+    function srcFunc(search: string) {
+      return fetch('https://dummyjson.com/products/search?q='+search)
+        .then(res => res.json())
+        .then(res => res.products || [])
+    }
+
+    <x-combobox src={srcFunc}>
+      <input placeholder="Search a product" style={{width: 800}}/>
+      <ul>
+        <li data-value="[[id]]-[[title]]">[[brand]] - [[description]]</li>
+      </ul>
+    </x-combobox>`}</pre>
+
     <ul>
       <li> When attribute 'data-value' is given, it shows the value</li>
       <li> When 'disabled' class is given to a list, it's not focusable </li>
