@@ -25,6 +25,11 @@ export default {
 };
 
 const Template = (args?: any) => {
+  function srcFunc(search: string) {
+    return fetch('https://dummyjson.com/products/search?q='+search)
+      .then(res => res.json())
+      .then(res => res.products || [])
+  }
 
   return <>
     <x-combobox>
@@ -78,6 +83,14 @@ const Template = (args?: any) => {
       <li> When dropdown list is too big to show in 200px dropdown height, when arrow up/down key is pressed, it shows the highlighted list in dropdown by auto scrolling into it.  </li>
       {/* <li> When positioned at the bottom, show the dropdown on the top of input </li> */}
     </ul>
+
+    <h3> Asynchronous src</h3>
+    <x-combobox src={srcFunc}>
+      <input placeholder="Search a product" style={{width: 800}}/>
+      <ul>
+        <li data-value="[[id]]-[[title]]">[[brand]] - [[description]]</li>
+      </ul>
+    </x-combobox>
   </>
 }; 
 

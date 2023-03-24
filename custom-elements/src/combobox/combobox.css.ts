@@ -9,7 +9,7 @@ export default /*css*/ `
   }
   
   x-combobox input {
-    width: 200px;
+    min-width: 200px;
     height: 32px;
     padding: 0 20px 0 4px;
     border: 1px solid #CCC;
@@ -43,6 +43,9 @@ export default /*css*/ `
   x-combobox ul > :is(.x-highlighted, :hover) {
     background: #529FFF;
     color: #FFF;
+  }
+  x-combobox ul:empty {
+    display: none;
   }
 
   x-combobox ul > * {

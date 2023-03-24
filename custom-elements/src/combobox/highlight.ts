@@ -21,6 +21,24 @@ export function highlightValue(listEl: HTMLUListElement, value: any) {
 }
 
 /**
+ * Rebuild list from the given array
+ */
+export function rewriteListEl(listEl: HTMLUListElement, rows: any[], template: string) {
+  const replExprs = template.match(/\[\[.*?\]\]/g) || [];
+  // rewrite list elements
+  listEl.innerHTML = '';
+  rows.forEach( (row: any) => {
+    let html = template;
+    replExprs.forEach( (expr: string) => {
+      const key = expr.match(/\[\[(.*?)\]\]/)?.[1] as string;
+      html = html.replace(expr, row[key]);
+    });
+    listEl.insertAdjacentHTML('beforeend', html);
+  })
+  listEl.children[0]?.classList.add(CLASS_HIGHLIGHTED);
+}
+
+/**
  * Hide all child elements of list element that does not have search string
  * by removing highlighted class and adding hidden class.
  * It also add highted class to the first searched element.
@@ -56,7 +74,7 @@ export function highlightNext(listEl: HTMLUListElement, inc=1) {
 
   const nextHighlight = notDisaledOrHidden[(curIndex + total + inc) % total];
 
-  highlightedEl?.classList.remove(CLASS_HIGHLIGHTED, CLASS_SELECTED);
+  highlightedEl?.classList.remove(CLASS_HIGHLIGHTED);
   nextHighlight.classList.add(CLASS_HIGHLIGHTED);
   scrollIfNeeded(listEl, nextHighlight);
 }
