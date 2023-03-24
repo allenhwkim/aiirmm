@@ -6,6 +6,19 @@ const CLASS_HIGHLIGHTED = `x-highlighted`;
 const CLASS_SELECTED = `x-selected`;
 const CLASS_HIDDEN = `hidden`;
 
+function debounce(func: Function, wait = 500) {
+  let timeout: any;
+  return function (this: any, ...args: any) {
+    var context = this;
+    var later = function () {
+      timeout = null;
+      func.apply(context, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 function getElProp(el: any, propName: string) {
   // react <x-combobox src={func}>     ----> $0.__reactProps$xxxxxx.src;
   // angular <x-combobox [src]="func"> ----> $0.src
@@ -78,19 +91,6 @@ export const Combobox = customElement({
         return false;
       }
     });
-
-    function debounce(func: Function, wait = 500) {
-      let timeout: any;
-      return function (this: any, ...args: any) {
-        var context = this;
-        var later = function () {
-          timeout = null;
-          func.apply(context, args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
-    }
 
     inputEl?.addEventListener('input', debounce(
       function(event: any) { // input key event handler
