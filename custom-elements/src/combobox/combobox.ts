@@ -94,7 +94,11 @@ export const Combobox = customElement({
 
     const inputListener = srcFunc ? 
       debounce(() => srcFunc(inputEl.value).then((resp: any[]) => {
-        rewriteListEl(listEl, resp, custEl.template)
+        if (Array.isArray(resp)) {
+          rewriteListEl(listEl, resp, custEl.template)
+        } else {
+          console.error('combobox, src response is not an array', resp);
+        }
       }), 500) : () => highlightSearch(listEl, inputEl.value);
     inputEl?.addEventListener('input', inputListener);
 

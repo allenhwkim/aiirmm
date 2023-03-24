@@ -303,12 +303,12 @@
   background-color: #fff;
 }
 
-/* src/reactflow/FormflowChart/styles.css */
+/* src/react-components/FormflowChart/styles.css */
 .react-flow__panel.react-flow__attribution a {
   background: #FFF;
 }
 
-/* src/reactflow/custom-nodes/styles.css */
+/* src/react-components/custom-nodes/styles.css */
 .react-flow__panel.react-flow__attribution a {
   background: #FFF;
   color: #333;
@@ -363,7 +363,7 @@
   opacity: 1;
 }
 
-/* src/reactflow/custom-edges/styles.css */
+/* src/react-components/custom-edges/styles.css */
 .react-flow__edge-custom foreignObject {
   display: none;
 }

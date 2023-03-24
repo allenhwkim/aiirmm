@@ -41,11 +41,15 @@ export class ResizeDivs extends HTMLElement {
   }
 
   connectedCallback() {
-    Array.from(this.children).slice(0, -1).forEach(el => {
-      const resizeBarEl = document.createElement('div');
-      resizeBarEl.classList.add('resize-bar');
-      new XTouchSwipe(resizeBarEl);
-      el.insertAdjacentElement('afterend', resizeBarEl);
+    setTimeout( () => { // svelte runs too fast
+      Array.from(this.children).slice(0, -1).forEach(el => {
+        console.log('.........el', el);
+        const resizeBarEl = document.createElement('div');
+        resizeBarEl.classList.add('resize-bar');
+        new XTouchSwipe(resizeBarEl);
+        console.log('.........resizeBarEl', resizeBarEl);
+        el.insertAdjacentElement('afterend', resizeBarEl);
+      })
     })
 
     document.addEventListener('x-swipe', this.resizeListener);

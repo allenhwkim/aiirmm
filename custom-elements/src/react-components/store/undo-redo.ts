@@ -1,3 +1,5 @@
+import structuredClone from "@ungap/structured-clone";
+
 export const UndoRedo = {
   debugMode: 0,
   maxHistory: 50,

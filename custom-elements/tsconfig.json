@@ -5,6 +5,7 @@
     "module": "commonjs",
     "jsx": "react",
     "skipLibCheck": true,  /* Skip type checking all .d.ts files. */
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "esModuleInterop": true 
   }
 }
