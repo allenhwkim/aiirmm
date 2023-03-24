@@ -56,11 +56,10 @@ export const Combobox = customElement({
       selectHandler(event, inputEl, highlightedEl)
     });
 
-    listEl?.addEventListener('mouseover', function(event: any) { 
+    // remove highlighted part when input focused out to remove duplicated highlighting.
+    inputEl?.addEventListener('blur', function(event: any) { 
       const highlightedEl = listEl.querySelector(`.${CLASS_HIGHLIGHTED}`);
       highlightedEl?.classList.remove(CLASS_HIGHLIGHTED);
-      // console.log('target', event);
-      // event.target.closest('li').classList.add(CLASS_HIGHLIGHTED);
     });
 
     inputEl?.addEventListener('keydown', function(event: any) {
