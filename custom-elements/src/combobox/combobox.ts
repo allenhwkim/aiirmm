@@ -16,18 +16,19 @@ function getElProp(el: any, propName: string) {
       el[propName] ? el[propName] : (globalThis as any)[propName];
 }
 
-
-function selectHandler(event: any, inputEl: HTMLInputElement, highlightedEl: HTMLLIElement) {
+/* action when an dropdown list is selected */
+function selectHandler(event: any, inputEl: HTMLInputElement, highlightedEl: any) {
   const liEl = event.target.closest('ul') && event.target.closest('li');
   if (event instanceof MouseEvent && liEl) { // <li> mouse clicked
     const value = liEl.dataset.value !== undefined ?  liEl.dataset.value : liEl.innerText;
-    liEl.dispatchEvent(new CustomEvent('select', {bubbles: true, detail: value}));
+    const detail = liEl.data || value;
+    liEl.dispatchEvent(new CustomEvent('select', {bubbles: true, detail}));
     inputEl.value = value;
     inputEl.blur();
   } else if (event instanceof KeyboardEvent && highlightedEl) { // keyboard enter
-    const value = highlightedEl.dataset.value !== undefined ? 
-      highlightedEl.dataset.value : highlightedEl.innerText;
-    highlightedEl.dispatchEvent(new CustomEvent('select', {bubbles: true, detail: value}));
+    const value = highlightedEl.dataset.value !== undefined ?  highlightedEl.dataset.value : highlightedEl.innerText;
+    const detail = highlightedEl.data || value;
+    highlightedEl.dispatchEvent(new CustomEvent('select', {bubbles: true, detail}));
     inputEl.value = value as string;
     inputEl.blur();
   }
@@ -78,14 +79,29 @@ export const Combobox = customElement({
       }
     });
 
-    inputEl?.addEventListener('input', function(event: any) { // input key event handler
-      if (typeof srcFunc === 'function') { // async API call
-        srcFunc(inputEl.value)
-          .then((resp: any[]) => rewriteListEl(listEl, resp, custEl.template))
-      } else {
-        highlightSearch(listEl, inputEl.value);
+    function debounce(func: Function, wait = 500) {
+      let timeout: any;
+      return function (this: any, ...args: any) {
+        var context = this;
+        var later = function () {
+          timeout = null;
+          func.apply(context, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    inputEl?.addEventListener('input', debounce(
+      function(event: any) { // input key event handler
+        if (typeof srcFunc === 'function') { // async API call
+          srcFunc(inputEl.value)
+            .then((resp: any[]) => rewriteListEl(listEl, resp, custEl.template))
+        } else {
+          highlightSearch(listEl, inputEl.value);
+        }
       }
-    });
+    ), 500);
 
   },
 });

@@ -64,6 +64,14 @@ const Template = (args?: any) => {
     </x-combobox>
 
     <h3>Functionality Checklist</h3>
+    <h3> Asynchronous src</h3>
+    <x-combobox src={srcFunc}>
+      <input placeholder="Search a product" style={{width: 800}}/>
+      <ul>
+        <li data-value="[[id]]-[[title]]">[[brand]] - [[description]]</li>
+      </ul>
+    </x-combobox>
+    
     <ul>
       <li> When attribute 'data-value' is given, it shows the value</li>
       <li> When 'disabled' class is given to a list, it's not focusable </li>
@@ -84,13 +92,6 @@ const Template = (args?: any) => {
       {/* <li> When positioned at the bottom, show the dropdown on the top of input </li> */}
     </ul>
 
-    <h3> Asynchronous src</h3>
-    <x-combobox src={srcFunc}>
-      <input placeholder="Search a product" style={{width: 800}}/>
-      <ul>
-        <li data-value="[[id]]-[[title]]">[[brand]] - [[description]]</li>
-      </ul>
-    </x-combobox>
   </>
 }; 
 

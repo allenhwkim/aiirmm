@@ -34,6 +34,7 @@ export function rewriteListEl(listEl: HTMLUListElement, rows: any[], template: s
       html = html.replace(expr, row[key]);
     });
     listEl.insertAdjacentHTML('beforeend', html);
+    (listEl.lastElementChild as any).data = row;
   })
   listEl.children[0]?.classList.add(CLASS_HIGHLIGHTED);
 }
