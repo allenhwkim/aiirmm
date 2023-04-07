@@ -3,12 +3,12 @@ import { XTouchSwipe } from './touch-swipe';
 const css = /*css*/ `
   resize-divs { display: block; }
   resize-divs[width] { display: flex; }
-  resize-divs :not(.resize-bar) { overflow: hidden; }
+  resize-divs > :not(.resize-bar) { overflow: hidden; }
   resize-divs:has(.resize-bar.active) { user-select: none; }
-  resize-divs .resize-bar { background: #CCC; display: block; }
-  resize-divs .resize-bar:is(.active, :hover) { background: #00F; }
-  resize-divs[width] .resize-bar { cursor: col-resize ; width: 2px;}
-  resize-divs[height] .resize-bar { cursor: row-resize; height: 2px;}
+  resize-divs > .resize-bar { background: #CCC; display: block; }
+  resize-divs > .resize-bar:is(.active, :hover) { background: #00F; }
+  resize-divs[width] > .resize-bar { cursor: col-resize ; width: 2px;}
+  resize-divs[height] > .resize-bar { cursor: row-resize; height: 2px;}
 `;
 
 export class ResizeDivs extends HTMLElement {
