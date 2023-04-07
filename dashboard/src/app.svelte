@@ -2,22 +2,21 @@
   import type { FormDiagram } from '@form-flow/custom-elements/src';
 
   let chartEl: FormDiagram;
-  const getData = (event: any) => console.log(chartEl.getData());
-  const getImage = async (event: any) => console.log( await chartEl.getImage());
-  const getInstance = (event: any) => console.log(chartEl.getInstance());
 </script>
 
 <style lang="scss">
 </style>
 
-<resize-divs width class="h-100">
-  <h1 hidden>Form Flow Dashboard</h1>
+<svelte:window on:resize={() => chartEl.getInstance().fitView()} />
+
+<h1 hidden>Form Flow Dashboard</h1>
+<resize-divs width class="h-100" on:resize-move={() => chartEl.getInstance().fitView()}>
   <div class="position-relative" style="width: 33%">
     <form-diagram bind:this={chartEl}></form-diagram>
     <div class="position-absolute bottom-0 end-0 m-3">
-      <button on:click={getData}>Get Data</button>
-      <button on:click={getImage}>Get Image</button>
-      <button on:click={getInstance}>Get Instance</button>
+      <button on:click={() => alert(JSON.stringify(chartEl.getData()))}>Get Data</button>
+      <button on:click={async () => alert(await chartEl.getImage())}>Get Image</button>
+      <button on:click={() => alert(chartEl.getInstance())}>Get Instance</button>
     </div>
   </div>
   <div class="accordion flex-fill" id="right-section" role="navigation">
@@ -29,6 +28,21 @@
       </h2>
       <div id="properties" class="accordion-collapse collapse show" data-bs-parent="#right-section">
         <div class="accordion-body">
+          START Node
+          <ul>
+            <li>
+              API List
+              <ul>
+                <li>An HTTP method (like GET)</li>
+                <li>A URL (like https://api.spotify.com/v1/artists?name=michael)</li>
+                <li>Body</li>
+                <li>Headers</li>
+              </ul>
+            </li>
+            <li>
+              Global Variables
+            </li>
+          </ul>
           property contents <br/> property contents <br/> property contents <br/> property contents <br/>
         </div>
       </div>
@@ -40,9 +54,8 @@
         </button>
       </h2>
       <div id="form-designer" class="accordion-collapse collapse" data-bs-parent="#right-section">
-        <div class="accordion-body">
-          editor contents<br/> editor contents<br/>  editor contents<br/>
-          editor contents<br/> editor contents<br/>  editor contents<br/>
+        <div class="accordion-body p-0">
+          <form-designer></form-designer>
         </div>
       </div>
     </div>

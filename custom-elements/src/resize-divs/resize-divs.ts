@@ -3,6 +3,7 @@ import { XTouchSwipe } from './touch-swipe';
 const css = /*css*/ `
   resize-divs { display: block; }
   resize-divs[width] { display: flex; }
+  resize-divs :not(.resize-bar) { overflow: hidden; }
   resize-divs:has(.resize-bar.active) { user-select: none; }
   resize-divs .resize-bar { background: #CCC; display: block; }
   resize-divs .resize-bar:is(.active, :hover) { background: #00F; }
@@ -27,6 +28,7 @@ export class ResizeDivs extends HTMLElement {
         nextElW: nextEl.offsetWidth, 
         nextElH: nextEl.offsetHeight,
       }
+      this.dispatchEvent(new CustomEvent('resize-start', {bubbles: true}));
     } else if (type === 'move') {
       if (this.getAttribute('width') !== null) {
         prevEl.style.width = Math.max(this.touchStart.prevElW + (x2 - x0), 20) + 'px';
@@ -35,19 +37,19 @@ export class ResizeDivs extends HTMLElement {
         prevEl.style.height = Math.max(this.touchStart.prevElH + (y2 - y0), 20) + 'px';
         nextEl.style.height = Math.max(this.touchStart.nextElH - (y2 - y0), 20) + 'px';
       }
+      this.dispatchEvent(new CustomEvent('resize-move', {bubbles: true}));
     } else if (type === 'end') {
       touchStaEl.classList.remove('active');
+      this.dispatchEvent(new CustomEvent('resize-end', {bubbles: true}));
     } 
   }
 
   connectedCallback() {
     setTimeout( () => { // svelte runs too fast
       Array.from(this.children).slice(0, -1).forEach(el => {
-        console.log('.........el', el);
         const resizeBarEl = document.createElement('div');
         resizeBarEl.classList.add('resize-bar');
         new XTouchSwipe(resizeBarEl);
-        console.log('.........resizeBarEl', resizeBarEl);
         el.insertAdjacentElement('afterend', resizeBarEl);
       })
     })

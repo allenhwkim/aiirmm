@@ -16,7 +16,6 @@ form-designer {
   position: relative;
   display: block;
   min-height: 600px;
-  width: 800px;
   margin: 0 auto;
 }
 form-designer :is(.gjs-category-title, .gjs-layer-title, .gjs-block-category .gjs-title, .gjs-sm-sector-title) {
