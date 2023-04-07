@@ -15,8 +15,8 @@ export default /* css */ `
 form-designer {
   position: relative;
   display: block;
-  min-height: 600px;
   margin: 0 auto;
+  height: 720px;
 }
 form-designer :is(.gjs-category-title, .gjs-layer-title, .gjs-block-category .gjs-title, .gjs-sm-sector-title) {
   padding: 4px;
@@ -49,7 +49,7 @@ form-designer .editor-row {
 
 form-designer .editor-row .side-bar {
   flex-basis: 230px;
-  border: 2px solid #CCC;
+  border-right: 2px solid #CCC;
   position: relative;
   overflow-y: auto;
 }

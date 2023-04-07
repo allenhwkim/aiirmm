@@ -54,21 +54,8 @@
         </button>
       </h2>
       <div id="form-designer" class="accordion-collapse collapse" data-bs-parent="#right-section">
-        <div class="accordion-body p-0">
+        <div class="accordion-body p-0 py-1">
           <form-designer></form-designer>
-        </div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingThree">
-        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#preview">
-          Preview
-        </button>
-      </h2>
-      <div id="preview" class="accordion-collapse collapse" data-bs-parent="#right-section">
-        <div class="accordion-body">
-          preview contents<br/> preview contents<br/> 
-          preview contents<br/> preview contents<br/> 
         </div>
       </div>
     </div>
