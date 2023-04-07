@@ -20,12 +20,11 @@ function debounce(func: Function, wait = 500) {
 }
 
 function getElProp(el: any, propName: string) {
-  // react <x-combobox src={func}>     ----> $0.__reactProps$xxxxxx.src;
+  // react   <x-combobox src={func}>   ----> $0.__reactProps$xxxxxx.src;
   // angular <x-combobox [src]="func"> ----> $0.src
-  // vuejs <x-combobox :src="func"> ----> $0.src
+  // vuejs   <x-combobox :src="func">  ----> $0.src
   const reactPropKey = Object.keys(el).find( key => key.startsWith('__reactProps$')) // react 17+
-  return reactPropKey ?
-    el[reactPropKey][propName] :
+  return reactPropKey ? el[reactPropKey][propName] || el[propName] :
       el[propName] ? el[propName] : (globalThis as any)[propName];
 }
 

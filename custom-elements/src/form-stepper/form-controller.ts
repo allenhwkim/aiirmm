@@ -3,10 +3,11 @@ import { IForms, IForm, IFormsSubmit, IUserData} from './types';
 
 export class FormController {
   static instance: FormController;
-  steps: string[] = [];
   currentForm: string = '';
   currentFormType: string = '';
+  
   forms: IForms = defaultForms;
+  steps: string[] = Object.keys(defaultForms);
 
   static get userData() {
     const userDataJson = window.sessionStorage.getItem('form-user-data');
@@ -42,10 +43,11 @@ export class FormController {
     }
   }
 
-  constructor(forms: IForms = defaultForms) {
+  constructor() {
     if (!FormController.instance) {
-      this.forms = forms;
-      this.steps = Object.keys(this.forms);
+      // this.forms = forms;
+      // this.steps = Object.keys(this.forms);
+      // alert(this.steps);
       this.addEventListeners();
       FormController.instance = this;
     }

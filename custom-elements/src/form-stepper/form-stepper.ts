@@ -6,7 +6,9 @@ import { FormController } from './form-controller';
 export const FormStepper = customElement({
   debug: true,
   css: css,
-  props: { formController : FormController},
+  props: {
+    formController : FormController
+  },
 
   events: {
     click(event: UIEvent) {
@@ -22,8 +24,8 @@ export const FormStepper = customElement({
   },
 
   render() {
-    if (!this._props?.formController) return;
-    
+    if (!this._props?.formController?.forms) return;
+
     this.innerHTML = '';
     const formCtrl = this._props?.formController;
     formCtrl.steps.forEach( (formName: string, index: number) => {
@@ -45,12 +47,18 @@ export const FormStepper = customElement({
     });
   },
 
-  connectedCallback: function() {
+  connectedCallback: function(this:any) {
     if (this._props) {
       this._props.formController = new FormController();
       this.render?.();
       this._props.formController.initForm();
+
+      if (this.forms) { // data-form attribute
+        this._props.formController.forms = this.forms;
+        this._props.formController.steps = Object.keys(this.forms);
+      }
     }
+
   },
 
   disconnectedCallback: function() {
