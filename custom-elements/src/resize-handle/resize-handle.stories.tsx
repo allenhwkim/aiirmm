@@ -4,7 +4,6 @@ import './resize-handle.stories.css';
 import { useRef, useEffect } from 'react';
 import { XTouchSwipe } from './touch-swipe';
 
-// import CustomDocumentation from './form-editor.mdx';
 (!customElements.get('resize-handle')) && customElements.define('resize-handle', ResizeHandle);
 
 declare global {

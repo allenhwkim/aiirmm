@@ -11,7 +11,7 @@ Mono-repo using npm workspaces with the following packages
 
 * **custom-elements**: Collection of custom elements including
   * form-diagram: Show steps of all forms graphically using Reactflow
-  * form-editor: Grapejs form editor with bootstrap5 style
+  * form-designer: Grapejs form editor with bootstrap5 style
   * form-stepper: Show steps of all forms in HTML
     * **forms-controller**: Updates these; 
       * form-stepper

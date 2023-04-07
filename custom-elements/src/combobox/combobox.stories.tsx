@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Combobox } from "./combobox"; // Shares the same FormController
 import { useRef, useEffect } from 'react';
 
-// import CustomDocumentation from './form-editor.mdx';
 (!customElements.get('x-combobox')) && customElements.define('x-combobox', Combobox);
 
 declare global {

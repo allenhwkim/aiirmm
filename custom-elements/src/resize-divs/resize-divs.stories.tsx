@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ResizeDivs } from './resize-divs';
 import './resize-divs.stories.css';
 
-// import CustomDocumentation from './form-editor.mdx';
 (!customElements.get('resize-divs')) && customElements.define('resize-divs', ResizeDivs);
 
 declare global {

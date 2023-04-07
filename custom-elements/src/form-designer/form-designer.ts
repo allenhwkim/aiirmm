@@ -1,11 +1,11 @@
 import { customElement } from '@elements-x/core';
 import { initGrapesJs } from './init-grapejs';
 
-import html from './form-editor.html';
-import themeCSS from './form-editor-theme.css';
-import stylesCSS from './form-editor-styles.css';
+import html from './html';
+import themeCSS from './theme.css';
+import stylesCSS from './styles.css';
 
-const FormEditor = customElement({
+const FormDesigner = customElement({
   // await: () => customElement.waitForScriptLoad('document', ['//unpkg.com/grapesjs/dist/css/grapes.min.css']),
   html: html,
   css: themeCSS + stylesCSS,
@@ -15,11 +15,11 @@ const FormEditor = customElement({
   render: () => {},
   debug: true,
   connectedCallback: () => {
-    const formEditor = initGrapesJs('#gjs');
+    const FormDesigner = initGrapesJs('#gjs');
   },
   // constructorCallback: () => {},
   // propsChangedCallback: () => {},
   // attributeChangedCallback: () => {},
 });
 
-export { FormEditor };
+export { FormDesigner };

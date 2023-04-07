@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { InputMask } from "./input-mask"; // Shares the same FormController
 
-// import CustomDocumentation from './form-editor.mdx';
 (!customElements.get('input-mask')) && customElements.define('input-mask', InputMask);
 
 declare global {

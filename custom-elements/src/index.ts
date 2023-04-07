@@ -1,6 +1,6 @@
 import FormflowChart from "./react-components/FormflowChart/FormflowChart"
 import FormDiagram from './form-diagram/form-diagram';
-import { FormEditor } from './form-editor/form-editor';
+import { FormDesigner } from './form-designer/form-designer';
 import { FormStepper } from './form-stepper/form-stepper';
 import { Combobox } from './combobox/combobox';
 import { InputMask } from './input-mask/input-mask';
@@ -10,7 +10,7 @@ import { ResizeHandle } from './resize-handle/resize-handle';
 export {
   FormflowChart,
   FormDiagram,
-  FormEditor,
+  FormDesigner,
   FormStepper,
   Combobox,
   InputMask,

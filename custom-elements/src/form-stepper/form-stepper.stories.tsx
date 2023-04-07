@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { FormStepper } from "./form-stepper"; // Shares the same FormController
 
-// import CustomDocumentation from './form-editor.mdx';
 (!customElements.get('form-stepper')) && customElements.define('form-stepper', FormStepper);
 
 declare global {
