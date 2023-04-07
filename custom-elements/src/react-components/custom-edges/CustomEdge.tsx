@@ -27,7 +27,7 @@ export default function CustomEdge({
 
   const onClick = () => {
     addNodeOn(id);
-    setTimeout(_ => fitView({duration: 500}));
+    setTimeout(() => fitView({duration: 500}));
   };
   const markerId = `triangle-${Math.ceil(Math.random()*10^6)}`;
 
@@ -60,7 +60,7 @@ export default function CustomEdge({
         style={{textAlign: 'center'}}
         requiredExtensions="http://www.w3.org/1999/xhtml">
 
-        <input className="label-input" 
+        <input className="label-input" aria-label="Enter edge label"
           defaultValue={label as string}
           onChange={evt => updateEdgeLabel(id, evt.target.value)} 
         />
