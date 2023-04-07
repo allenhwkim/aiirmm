@@ -1,7 +1,7 @@
 export default /* css */ `
   form-stepper {
-    --label-size: 32px;
-    --max-width: 200px;
+    --fs-label-size: 32px;
+    --fs-width: 100px;
     display: flex;
   }
   
@@ -20,16 +20,16 @@ export default /* css */ `
     position: relative;
     flex-direction: column;
     align-items: center;
-    width: var(--max-width);
-    cursor: pointer;
+    width: var(--fs-width);
+    cursor: pointer
   }
 
   form-stepper .form-step .form-link .form-label {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--label-size);
-    height: var(--label-size);
+    width: var(--fs-label-size);
+    height: var(--fs-label-size);
     font-size: 16px;
     border: 1px solid;
     border-radius: 50%;
@@ -79,10 +79,10 @@ export default /* css */ `
 
   form-stepper .form-step .connection-line {
     position: absolute;
-    width: calc(100% - var(--label-size) - 8px);
+    width: calc(100% - var(--fs-label-size) - 8px);
     background-color: #EEE;
     height: 4px;
-    right: calc(50% + var(--label-size) / 2 + 4px);
-    top: calc( var(--label-size) / 2);
+    right: calc(50% + var(--fs-label-size) / 2 + 4px);
+    top: calc( var(--fs-label-size) / 2);
   }
 `;

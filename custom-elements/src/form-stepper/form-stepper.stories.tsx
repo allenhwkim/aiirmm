@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { FormStepper } from "./form-stepper"; // Shares the same FormController
+import { useState } from 'react';
+import { FormController } from './form-controller';
 
 (!customElements.get('form-stepper')) && customElements.define('form-stepper', FormStepper);
+
 
 declare global {
   namespace JSX {
@@ -14,24 +17,17 @@ declare global {
 export default {
   title: 'Components/form-stepper',
   component: FormStepper,
-  parameters: {
-    // docs: { page: CustomDocumentation },
-  },
-  // argTypes: {
-  //   data: { control: 'object' },
-  // }
 };
 
 const Template = (args?: any) => {
-  document.addEventListener('click', (event: any) => { // clicked on buttons
-    event.target.classList.contains('clear-user-form-data') &&  sessionStorage.clear();
-    (document.querySelector('.user-form-data') as HTMLElement).innerText = 
-      JSON.stringify(JSON.parse(window.sessionStorage.getItem('form-user-data') as string), null, '  ');
-  });
+  const [userData, setUserData] = useState(JSON.stringify(FormController.userData));
 
+  const clearStorage = () => (sessionStorage.clear(), setUserData(''));
+  window.addEventListener('form-user-data', (event: any) => setUserData(JSON.stringify(event.detail)));
+  
   return <>
-    <form-stepper className="form-flow"></form-stepper>
-    <div className="form-flow form-errors" style={{border: '1px dashed', padding: 16}}>
+    <form-stepper></form-stepper>
+    <div className="form-flow form-errors" style={{padding: 16}}>
       Error goes here
     </div>
     <form className="form-flow" style={{border: '1px dashed', padding: 16}}>
@@ -43,10 +39,8 @@ const Template = (args?: any) => {
       <button className="form-review">Review</button>
       <button className="form-submit">Submit</button>
     </div>
-    <pre className="user-form-data">
-      {JSON.stringify(JSON.parse(window.sessionStorage.getItem('form-user-data') as string), null, '  ')}
-    </pre>
-    <button className="clear-user-form-data">Clear storage</button>
+    <pre className="user-form-data"> {userData} </pre>
+    <button className="clear-user-form-data" onClick={clearStorage}>Clear storage</button>
   </>
 }; 
 

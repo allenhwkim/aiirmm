@@ -8,6 +8,18 @@ export class FormController {
   currentFormType: string = '';
   forms: IForms = defaultForms;
 
+  static get userData() {
+    const userDataJson = window.sessionStorage.getItem('form-user-data');
+    return userDataJson ? JSON.parse(userDataJson) : null;
+  }
+
+  static setUserData(key: string, data?: { [key: string] : any }) : void { // update session storage dat 
+    const formUserData: IUserData = FormController.userData || {};
+    formUserData[key] = data;
+    window.sessionStorage.setItem('form-user-data', JSON.stringify(formUserData));
+    document.body.dispatchEvent(new CustomEvent('form-user-data', {bubbles: true, detail: formUserData}));
+  } 
+
   _docGotoListener = (event: any) => this.initForm(event.detail);
 
   _docClickListener = (event: any) => {
@@ -23,7 +35,7 @@ export class FormController {
         const formEl = document.querySelector('form.form-flow') as HTMLFormElement;
         const formElData = Object.fromEntries(new FormData(formEl).entries())
         if (Object.keys(formElData).length) {
-          this.setUserData(this.currentForm, formElData);
+          FormController.setUserData(this.currentForm, formElData);
         }
         this.initForm('next');
       }
@@ -79,8 +91,7 @@ export class FormController {
   }
 
   getStatus(formId: string): 'complete' | 'incomplete'  { 
-    const userDataJson = window.sessionStorage.getItem('form-user-data');
-    const userData: IUserData = userDataJson ? JSON.parse(userDataJson) : null;
+    const userData: IUserData = FormController.userData;
     const form: IForm = this.forms[formId];
     if (userData?.[formId]) { // user has visited this formId already and saved data 
       return 'complete';
@@ -111,8 +122,7 @@ export class FormController {
         formEl.innerHTML = `HTML for "${this.currentForm} form" goes here`;
       }
 
-      const userDataJson = window.sessionStorage.getItem('form-user-data');
-      const formUserData: IUserData = userDataJson ? JSON.parse(userDataJson) : {};
+      const formUserData: IUserData = FormController.userData || {};
       for (var key in formUserData[this.currentForm]) {
         const el = formEl.elements[key as any] as HTMLInputElement;
         const value = formUserData[this.currentForm][key];
@@ -180,13 +190,6 @@ export class FormController {
     }
   }
 
-  setUserData(key: string, data?: { [key: string] : any }) : void { // update session storage dat 
-    const userDataJson = window.sessionStorage.getItem('form-user-data');
-    const formUserData: IUserData = userDataJson ? JSON.parse(userDataJson) : {};
-    formUserData[key] = data;
-    window.sessionStorage.setItem('form-user-data', JSON.stringify(formUserData));
-  } 
-
   isReviewable(): boolean {
     // complete - skippable - skippable - review => true
     // incomplete - skippable - skippable - review => false
@@ -207,11 +210,9 @@ export class FormController {
 
   submitForm(): Promise<Response> {
     const submitFormName = this.steps.find(formId => this.forms[formId]?.type === 'submit') as string;
-    const userDataJson = window.sessionStorage.getItem('form-user-data');
-    const formUserData: IUserData = userDataJson ? JSON.parse(userDataJson) : {};
+    const formUserData: IUserData = FormController.userData || {};
     const form = this.forms[submitFormName];
-    const payload = form.payload ? JSON.stringify(form.payload(formUserData)) : userDataJson;
-    console.log({userDataJson, form, payload})
+    const payload = form.payload ? JSON.stringify(form.payload(formUserData)) : JSON.stringify(formUserData);
 
     document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
     return window.fetch(form.url, { method: form.method, headers: form.headers, body: payload })
