@@ -5,7 +5,7 @@ export class FormController {
   static instance: FormController;
   currentForm: string = '';
   currentFormType: string = '';
-  
+
   forms: IForms = defaultForms;
   steps: string[] = Object.keys(defaultForms);
 
@@ -45,9 +45,6 @@ export class FormController {
 
   constructor() {
     if (!FormController.instance) {
-      // this.forms = forms;
-      // this.steps = Object.keys(this.forms);
-      // alert(this.steps);
       this.addEventListeners();
       FormController.instance = this;
     }
