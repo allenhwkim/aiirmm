@@ -1,4 +1,10 @@
 <script lang='ts'>
+  import type { FormDiagram } from '@form-flow/custom-elements/src';
+
+  let chartEl: FormDiagram;
+  const getData = (event: any) => console.log(chartEl.getData());
+  const getImage = async (event: any) => console.log( await (chartEl.current as any).getImage());
+  const getInstance = (event: any) => console.log((chartEl.current as any).getInstance());
 </script>
 
 <style lang="scss">
@@ -14,7 +20,12 @@
 </style>
 
 <resize-divs width class="">
-  <div>form-diagram</div>
+  <div>
+    <form-diagram bind:this={chartEl}></form-diagram>
+    <button on:click={getData}>Get Data</button>
+    <button on:click={getImage}>Get Image</button>
+    <button on:click={getInstance}>Get Instance</button>
+  </div>
   <div class="accordion" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
