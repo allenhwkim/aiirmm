@@ -6,8 +6,8 @@
   "scripts": {
     "start": "npm run storybook",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "build": "tsup src/index.ts"
+    "build": "build-storybook -o ../dist/custom-elements",
+    "build:lib": "tsup src/index.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",
