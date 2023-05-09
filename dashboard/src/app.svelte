@@ -1,10 +1,24 @@
-<script lang='ts'>
+<script lang='ts' context="module">
+  declare const bootstrap: any;
   import type { FormDiagram } from '@form-flow/custom-elements/src';
 
   let chartEl: FormDiagram;
-  function handleReactflow(e) {
+  function handleReactflowEvent(e) {
     const {action, type, node, edge} = e.detail;
+    const id = node?.id || edge?.id || '';
     console.log({type, action, node, edge});
+    (<any>document.querySelector('#event-type')).innerText = type || '';
+    (<any>document.querySelector('#event-id')).innerText = id;
+    (<any>document.querySelector('#event-label')).innerText = node?.data?.label || edge?.data?.label || '';
+    (<any>document.querySelector('#event-action')).innerText = action || '';
+    (<any>document.querySelector('#event-detail')).innerText = (node || edge) ? JSON.stringify(node || edge, null, '  ') : '';
+
+    document.querySelectorAll('.collapse.show').forEach(el => new bootstrap.Collapse(el));
+    if (node?.type === 'start' || node?.type === 'end' || edge?.type === 'custom') {
+      new bootstrap.Collapse(document.querySelector('#properties'));
+    } else if (node?.type === 'custom') {
+      new bootstrap.Collapse(document.querySelector('#form-designer'));
+    }
   }
 
   function showJson(obj) {
@@ -13,7 +27,7 @@
     document.querySelectorAll('.dialog-dynamic').forEach((el:any) => el.style.display = 'none');
     document.querySelector('#dialog-json')['style'].display='';
     document.querySelector('#dialog-json').innerHTML = JSON.stringify(newObj, null, '  '); 
-    new window['bootstrap'].Modal(document.querySelector('#dialog')).toggle();
+    new bootstrap.Modal(document.querySelector('#dialog')).toggle();
   }
 
   async function showImage() {
@@ -34,7 +48,7 @@
 <resize-divs width class="h-100" on:resize-move={() => chartEl.getInstance().fitView()}>
   <div class="position-relative" style="width: 33%">
     <form-diagram bind:this={chartEl} 
-      on:reactflow={handleReactflow}></form-diagram>
+      on:reactflow={handleReactflowEvent}></form-diagram>
     <div class="position-absolute bottom-0 end-0 m-3">
       <button on:click={() => showJson(chartEl.getData())}>Get Data</button>
       <button on:click={() => showImage()}>Get Image</button>
@@ -44,29 +58,27 @@
   <div class="accordion flex-fill" id="right-section" role="navigation">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#properties">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#properties">
           Properties
         </button>
       </h2>
-      <div id="properties" class="accordion-collapse collapse show" data-bs-parent="#right-section">
+      <div id="properties" class="accordion-collapse collapse" data-bs-parent="#right-section">
         <div class="accordion-body">
-          START Node
-          <ul>
-            <li>
-              API List
-              <ul>
-                <li>An HTTP method (like GET)</li>
-                <li>A URL (like https://api.spotify.com/v1/artists?name=michael)</li>
-                <li>Body</li>
-                <li>Headers</li>
-              </ul>
-            </li>
-            <li>
-              Global Variables
-            </li>
-          </ul>
-          property contents <br/> property contents <br/> property contents <br/> property contents <br/>
+          <span id="event-type"></span>
+          <span id="event-id"></span>
+          <span id="event-label"></span>
+          <span id="event-action"></span>
+          <pre id="event-detail"></pre>
         </div>
+        <pre>
+          todo 1
+          * save reactflow to a sessionStorage
+          * restore reactflow from a sessionStorage
+
+          todo 2
+          * save htmlcss by nodeId to a sessionStorage
+          * restore htmlcss when node is clicked from sessionStorage
+        </pre>
       </div>
     </div>
     <div class="accordion-item">
