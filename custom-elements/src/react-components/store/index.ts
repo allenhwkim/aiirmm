@@ -101,15 +101,13 @@ const useStore = create<TStoreState>((set, get) => ({
   },
 
   updateNodeLabel: (nodeId: string, label: string) => {
-    set({
-      nodes: get().nodes.map((node) => {
-        if (node.id === nodeId) {
-          node.data = { ...node.data, label }; // it's important to create a new object here
-        }
-
-        return node;
-      }),
+    const newNodes = get().nodes.map((node) => {
+      if (node.id === nodeId) {
+        node.data = { ...node.data, label }; // it's important to create a new object here
+      }
+      return node;
     });
+    set( {nodes: newNodes});
   },
 
   updateEdgeLabel: (edgeId: string, label: string) => {

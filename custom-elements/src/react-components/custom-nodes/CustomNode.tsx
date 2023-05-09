@@ -20,7 +20,7 @@ function CustomNode({ id, data }: Node): React.ReactElement {
     setTimeout(() => fitView({duration: 500}));
   }
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onLabelInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateNodeLabel(id, event.target.value);
   }
 
@@ -28,11 +28,11 @@ function CustomNode({ id, data }: Node): React.ReactElement {
     <div ref={containerRef}
       className={`container in-${numIncomers} out-${numOutgoers}`}>
       <Handle type="target" position={Position.Top} />
-      {/* this cannot be <input> for a11y */}
+      {/* this cannot be <input> for a11y for several reasons. focusavle cannot have focusable etc */}
       <div className="nodrag label-input" 
         contentEditable={true} 
         suppressContentEditableWarning={true}
-        onChange={onChange}
+        onInput={onLabelInput}
       >
         {data.label}
       </div>

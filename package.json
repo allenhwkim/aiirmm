@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "start": "npm start -w dashboard",
+    "start:custom-elements": "npm start -w custom-elements",
     "build": "npm run build -w dashboard -w custom-elements",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
