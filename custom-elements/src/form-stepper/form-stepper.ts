@@ -1,11 +1,10 @@
-import { customElement } from '@elements-x/core';
+import { customElement } from '@pgjs/core';
 import css from './form-stepper.css';
 
 import { FormController } from './form-controller';
 
 export const FormStepper = customElement({
-  debug: true,
-  css: css,
+  css,
   props: {
     formController : FormController
   },

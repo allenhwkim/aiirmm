@@ -17,9 +17,13 @@
     "react-dom": "^18.2.0",
     "typescript": "^4.9.5"
   },
-  "files":  [
+  "files": [
     "dist"
   ],
   "author": "Allen Kim<allenhwkim@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@pgjs/core": "^0.1.11",
+    "@types/react-dom": "^18.2.4"
+  }
 }

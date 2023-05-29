@@ -1,14 +1,14 @@
 export default /*css*/ `
-  x-combobox {
+  :host {
     display: inline-block;
     position: relative;
   }
 
-  x-combobox:focus-within ul {
+  :host:focus-within ul {
     display: block;
   }
   
-  x-combobox input {
+  :host input {
     min-width: 200px;
     height: 32px;
     padding: 0 20px 0 4px;
@@ -21,11 +21,11 @@ export default /*css*/ `
     box-sizing: border-box;
   }
 
-  x-combobox input:read-only {
+  :host input:read-only {
     pointer-events: none;
   }
 
-  x-combobox ul {
+  :host ul {
     display: none;
     padding: 0;
     margin: 0;
@@ -40,23 +40,23 @@ export default /*css*/ `
     z-index: 1;
   }
 
-  x-combobox ul > :is(.x-highlighted, :hover) {
+  :host ul > :is(.x-highlighted, :hover) {
     background: #529FFF;
     color: #FFF;
   }
-  x-combobox ul:empty {
+  :host ul:empty {
     display: none;
   }
 
-  x-combobox ul > * {
+  :host ul > * {
     line-height: 26px;
     padding: 0 2px;
   }
-  x-combobox ul > li.disabled {
+  :host ul > li.disabled {
     pointer-events: none;
   }
 
-  x-combobox ul > .x-selected:before {
+  :host ul > .x-selected:before {
     content: '✓ ';
   }
 `;

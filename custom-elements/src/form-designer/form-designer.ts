@@ -1,25 +1,40 @@
-import { customElement } from '@elements-x/core';
-import { initGrapesJs } from './init-grapejs';
+import { customElement } from '@pgjs/core';
 
-import html from './html';
+import { initGrapesJs } from './init-grapejs';
 import themeCSS from './theme.css';
 import stylesCSS from './styles.css';
 
 const FormDesigner = customElement({
-  // await: () => customElement.waitForScriptLoad('document', ['//unpkg.com/grapesjs/dist/css/grapes.min.css']),
-  html: html,
+  tagName: 'form-designer',
   css: themeCSS + stylesCSS,
-  props: {},
-  events: {},
-  attrs: {},
-  render: () => {},
-  debug: true,
   connectedCallback: () => {
-    const FormDesigner = initGrapesJs('#gjs');
+    initGrapesJs('#gjs');
   },
-  // constructorCallback: () => {},
-  // propsChangedCallback: () => {},
-  // attributeChangedCallback: () => {},
+  render() {
+    return `
+      <link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css" />
+
+      <div class="panel__top">
+        <div class="panel__basic-actions"></div>
+        <div class="panel__devices"></div>
+      </div>
+
+      <div class="editor-row">
+        <div class="side-bar">
+          <div class="tabs panel__switcher"></div>
+          <div>
+            <div class="layers-container"></div>
+            <div class="styles-container"></div>
+            <div class="traits-container"></div>
+            <div class="blocks-container"></div>
+          </div>
+        </div>
+
+        <div class="editor-canvas">
+          <div id="gjs"></div>
+        </div>
+      </div>`
+  }
 });
 
 export { FormDesigner };

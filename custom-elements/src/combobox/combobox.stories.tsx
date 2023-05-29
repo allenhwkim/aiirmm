@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { Combobox } from "./combobox"; // Shares the same FormController
+import './combobox'; // Shares the same FormController
 import { useRef, useEffect } from 'react';
-
-(!customElements.get('x-combobox')) && customElements.define('x-combobox', Combobox);
 
 declare global {
   namespace JSX {
@@ -14,7 +12,7 @@ declare global {
 
 export default {
   title: 'Components/combobox',
-  component: Combobox,
+  // component: Combobox,
   parameters: {
     // docs: { page: CustomDocumentation },
   },

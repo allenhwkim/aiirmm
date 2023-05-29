@@ -1,23 +1,10 @@
-import { customElement, ICustomElement } from '@elements-x/core';
+import { customElement, debounce } from '@pgjs/core';
 import { highlightNext, highlightValue, highlightSearch, rewriteListEl } from './highlight';
 import css from './combobox.css';
 
 const CLASS_HIGHLIGHTED = `x-highlighted`;
 const CLASS_SELECTED = `x-selected`;
 const CLASS_HIDDEN = `hidden`;
-
-function debounce(func: Function, wait = 500) {
-  let timeout: any;
-  return function (this: any, ...args: any) {
-    var context = this;
-    var later = function () {
-      timeout = null;
-      func.apply(context, args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
 
 function getElProp(el: any, propName: string) {
   // react   <x-combobox src={func}>   ----> $0.__reactProps$xxxxxx.src;
@@ -47,9 +34,9 @@ function selectHandler(event: any, inputEl: HTMLInputElement, highlightedEl: any
 }
 
 export const Combobox = customElement({
-  // debug: true,
+  tagName: 'x-combobox',
   css, 
-  connectedCallback(this: ICustomElement) { // do not call this.render() here, it's called already
+  connectedCallback() { // do not call this.render() here, it's called already
     const custEl = this as any;
     const inputEl = custEl.querySelector('input');
     const listEl = custEl.querySelector('ul');

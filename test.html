@@ -1,0 +1,61 @@
+<div id="app"></div>
+
+<script>
+class FormatJSON {
+  static render(el, data, level=0) {
+    if (!FormatJSON.cssDone) {
+      el.innerHTML = '';
+      el.insertAdjacentHTML('beforeend', FormatJSON.css);
+      FormatJSON.cssDone = true;
+    }
+
+    const ul = document.createElement('ul');
+    ul.classList.add('format-json');
+    if (level >= FormatJSON.expandLevel) {
+      ul.classList.add('hidden');
+    }
+
+    if (typeof data === 'object') { // array is an object
+      for (var key in data) {
+        const item = document.createElement('li');
+        const li = ul.appendChild(item);
+        li.innerHTML = `${key}`;
+
+        li.addEventListener('click', e => {
+          const child = e.target.firstElementChild;
+          const action = child?.classList.contains('hidden') ? 'remove' : 'add';
+          action && child?.classList[action]('hidden');
+          e.stopPropagation();
+        })
+        el.appendChild(ul);
+
+        if (typeof data[key] === 'object') {
+          FormatJSON.render(li, data[key], ++level);
+        } else  {
+          item.innerHTML = `${key}: ${data[key]}`;
+        }
+      }
+    }
+  }
+
+  static expandLevel = 1;
+
+  static css = `<style>
+    ul.format-json li { cursor: initial; }
+    ul.format-json li:has(> ul.hidden) { list-style: '+ ' }
+    ul.format-json li:has(> ul) { list-style: '- '; cursor: pointer; }
+    ul.format-json.hidden { display: none; }
+  </style>`;
+}
+
+var data = {
+  Droids: {
+    Astromech: { R2_Units: [ 'R2-D2', 'R2-KT' ], 'R5-D4': 'I am R5 D4', },
+    Protocol: { 'C-3PO': 1, 'TC-3': 2, },
+  },
+  Aliens: [ 'Greedo', 'Hammerhead', 'Snaggletooth', { foo: 1, bar: 2 } ]
+}
+
+// FormatJSON.expandLevel = 1;
+FormatJSON.render(document.getElementById('app'), data);
+</script>
