@@ -1,8 +1,6 @@
-import { ComponentMeta } from '@storybook/react';
 import * as React from 'react';
 import { useRef, useState } from 'react';
 import FormDiagram from "./form-diagram";
-import CustomDocumentation from './form-diagram.mdx';
 
 (!customElements.get('form-diagram')) && customElements.define('form-diagram', FormDiagram);
 
@@ -18,7 +16,7 @@ export default {
   title: 'Components/form-diagram',
   component: FormDiagram,
   parameters: {
-    docs: { page: CustomDocumentation },
+    // docs: { page: CustomDocumentation },
   },
   argTypes: {
     data: { control: 'object' },
@@ -43,8 +41,6 @@ const Template:any = (args: any) => {
     <button onClick={getData}>Get Data</button>
     <button onClick={getImage}>Get Image</button>
     <button onClick={getInstance}>Get Instance</button>
-    <hr/>
-    data: {JSON.stringify(args.data)}
   </>
 };
 

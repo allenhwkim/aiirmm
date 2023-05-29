@@ -1,14 +1,7 @@
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  ArgsTable,
-  Stories,
-  PRIMARY_STORY,
-} from '@storybook/addon-docs';
+import { Canvas, Meta, Story } from '@storybook/blocks';
+import * as FormflowChartStories from './FormflowChart.stories';
 
-<Title />
+<Meta of={FormflowChartStories} />
 
 The React component used by form-diagram.
 It provides functionality of interactivity with nodes and edges by providing initial nodes and edges as well as
@@ -16,6 +9,4 @@ It provides functionality of interactivity with nodes and edges by providing ini
  * `onEdgeClick(edge, nodes, edges)` function
  * `onInit(reactFlowInstance)` function
 
-<Primary />
-<ArgsTable story={PRIMARY_STORY} />
-{/* <Stories /> */}
+<Canvas of={FormflowChartStories.Primary} />

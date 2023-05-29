@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { FormDesigner } from "./form-designer";
-import CustomDocumentation from './custom-documentation.mdx';
 (!customElements.get('form-designer')) && customElements.define('form-designer', FormDesigner);
 
 declare global {
@@ -14,12 +13,6 @@ declare global {
 export default {
   title: 'Components/form-designer',
   component: FormDesigner,
-  parameters: {
-    docs: { page: CustomDocumentation },
-  },
-  // argTypes: {
-  //   data: { control: 'object' },
-  // }
 };
 
 const Template = (args?: any) => {

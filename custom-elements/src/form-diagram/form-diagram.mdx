@@ -1,20 +1,11 @@
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  ArgsTable,
-  Stories,
-  PRIMARY_STORY,
-} from '@storybook/addon-docs';
+import { Canvas, Meta, Story } from '@storybook/blocks';
+import * as FormDiagramStories from './form-diagram.stories';
 
-<Title />
+<Meta of={FormDiagramStories} />
 
 This makes use of react component, FormflowChart, expanding its functionality by getting data, image and instance.
 
-<Primary />
-{/* <ArgsTable story={PRIMARY_STORY} /> */}
-{/* <Stories /> */}
+<Canvas of={FormDiagramStories.Primary} />
 
 ### Functions
 <table>

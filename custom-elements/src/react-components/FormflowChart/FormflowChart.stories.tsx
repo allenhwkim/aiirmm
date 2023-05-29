@@ -3,19 +3,15 @@ import { ComponentMeta } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import FormflowChart from './FormflowChart';
-import CustomDocumentation from './FormflowChart.mdx';
 
 export default { 
   title: 'React Components/FormflowChart',
   component: FormflowChart,
-  parameters: {
-    docs: { page: CustomDocumentation },
-  },
   argTypes : {
     nodes: { control: 'object' },
     edges: { control: 'object' },
   }
-} as ComponentMeta<typeof FormflowChart>;
+};
 
 const Template:any = (args: any) => {
   return <>
@@ -29,8 +25,8 @@ const Template:any = (args: any) => {
   </>;
 };
 
-export const Default: any = Template.bind({});
-Default.args = {
+export const Primary: any = Template.bind({});
+Primary.args = {
   nodes:[
     {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
     {id: '1', type: 'custom', data: {label: 'Hello'}, position: { x: 100, y: 100 }},
