@@ -9,24 +9,39 @@ export const FormStepper = customElement({
     formController : FormController
   },
 
-  events: {
-    click(event: UIEvent) {
+  constructorCallback() {
+    this.addEventListener('click', function(event: UIEvent) {
       const formLinkEl = (event.target as any).closest('.form-link');
       const formStepEl = (event.target as any).closest('.form-step');
       const visitable = !formStepEl.classList.contains('incomplete');
-      const formName = formLinkEl.dataset.name;
-      if (visitable) {
+      const formName = formLinkEl.dataset?.name;
+      if (formName && visitable) {
         const customEvent = new CustomEvent('form-goto', {bubbles: true, detail: formName}) as any;
-        this.dispatchEvent(customEvent);
+        event.target?.dispatchEvent(customEvent);
       }
+    });
+  },
+
+  connectedCallback() {
+    this.formController = new FormController();
+
+    if (this.forms) { // data-form attribute
+      this.formController.forms = this.forms;
+      this.formController.steps = Object.keys(this.forms);
     }
+
+    this.formController.initForm();
+  },
+
+  disconnectedCallback() {
+    this.formController.removeEventListeners();
   },
 
   render() {
-    if (!this._props?.formController?.forms) return;
+    if (!this.formController?.forms) return;
 
     this.innerHTML = '';
-    const formCtrl = this._props?.formController;
+    const formCtrl = this.formController;
     formCtrl.steps.forEach( (formName: string, index: number) => {
       const activeClass = formName === formCtrl.currentForm ? ' active' : '';
       const formProp = formCtrl.forms[formName];
@@ -46,22 +61,4 @@ export const FormStepper = customElement({
     });
   },
 
-  connectedCallback: function(this:any) {
-    if (this._props) {
-      this._props.formController = new FormController();
-      this.render?.();
-      this._props.formController.initForm();
-
-      if (this.forms) { // data-form attribute
-        this._props.formController.forms = this.forms;
-        this._props.formController.steps = Object.keys(this.forms);
-      }
-    }
-
-  },
-
-  disconnectedCallback: function() {
-    this._props?.formController.removeEventListeners();
-  }
 });
-

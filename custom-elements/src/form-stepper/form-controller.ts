@@ -25,13 +25,17 @@ export class FormController {
 
   _docClickListener = (event: any) => {
     if (event.target.classList.contains('form-review')) {
+      console.log('FormController._docClickListener.form-review', event);
       const isCurrentReviewForm = this.forms[this.currentForm].type === 'review';
       this.initForm('review'); 
     } else if (event.target.classList.contains('form-submit')) {
+      console.log('FormController._docClickListener.form-submit', event);
       this.initForm('submit');
     } else if (event.target.classList.contains('form-prev')) {
+      console.log('FormController._docClickListener.form-prev', event);
       this.initForm('prev'); 
     } else if (event.target.classList.contains('form-next')) { 
+      console.log('FormController._docClickListener.form-next', event);
       if (!this.setErrors()) { // set error classes and contents of .form-errors 
         const formEl = document.querySelector('form.form-flow') as HTMLFormElement;
         const formElData = Object.fromEntries(new FormData(formEl).entries())
@@ -39,6 +43,8 @@ export class FormController {
           FormController.setUserData(this.currentForm, formElData);
         }
         this.initForm('next');
+      } else {
+        console.log('FormController._docClickListener.form-next errors', this.setErrors());
       }
     }
   }
