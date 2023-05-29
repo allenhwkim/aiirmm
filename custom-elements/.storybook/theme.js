@@ -47,8 +47,7 @@ export default create({
   booleanSelectedBg: '#FFFFFF',
 
   // Brand
-  brandTitle: 'My custom storybook',
-  brandUrl: 'https://example.com',
-  brandImage: '/logo.png',
+  brandTitle: 'Formflow custom elements',
+  brandUrl: '/',
   brandTarget: '_self',
 });
