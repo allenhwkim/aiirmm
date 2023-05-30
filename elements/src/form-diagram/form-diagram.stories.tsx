@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useRef, useState } from 'react';
-import { FormDiagram } from "./form-diagram";
 
-import '../index.d';
-(!customElements.get('form-diagram')) && customElements.define('form-diagram', FormDiagram);
+import { FormDiagram } from "../index";
+customElements.define('form-diagram', FormDiagram);
 
 export default {
   title: 'Components/form-diagram',

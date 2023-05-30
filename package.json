@@ -3,13 +3,13 @@
   "version": "0.1.2",
   "description": "form-flow",
   "workspaces": [
-    "custom-elements",
+    "elements",
     "dashboard"
   ],
   "scripts": {
     "start": "npm start -w dashboard",
-    "start:custom-elements": "npm start -w custom-elements",
-    "build": "npm run build -w dashboard -w custom-elements",
+    "start:elements": "npm start -w elements",
+    "build": "npm run build -w dashboard -w elements",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "overrides": {

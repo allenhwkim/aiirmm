@@ -1,3 +1,5 @@
+import './index.d';
+
 export * from "./react-components/FormflowChart/FormflowChart"
 export * from './form-diagram/form-diagram';
 export * from './form-designer/form-designer';

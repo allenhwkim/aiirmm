@@ -1,5 +1,5 @@
 <script>
-  import { ResizeDivs } from '@form-flow/custom-elements/src';
+  import { ResizeDivs } from '@formflow/elements/src';
   (!customElements.get('resize-divs')) && customElements.define('resize-divs', ResizeDivs);
 </script>
 

@@ -27,12 +27,14 @@ export class FormDiagram extends HTMLElement {
   }
   
   disconnectedCallback() {
-    this.root.unmount();
+    setTimeout( () => this.root.unmount());
   }
 
   setData(data: any) {
-    this.root?.unmount();
-    this.mount(data.nodes, data.edges);
+    setTimeout(() => { // to avoid warning, asynchornously unmount a root while React was already rendering.
+      this.root?.unmount();
+      this.mount(data.nodes, data.edges);
+    })
   }
 
   getData() {

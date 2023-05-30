@@ -1,10 +1,9 @@
 import * as React from 'react';
-import '../index.d';
-import { FormStepper } from "./form-stepper"; // Shares the same FormController
 import { useEffect, useRef, useState } from 'react';
 import { FormController } from './form-controller';
 
-(!customElements.get('form-stepper')) && customElements.define('form-stepper', FormStepper);
+import { FormStepper } from "../index"; // Shares the same FormController
+customElements.define('form-stepper', FormStepper);
 
 
 export default {

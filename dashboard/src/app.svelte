@@ -1,6 +1,6 @@
 <script lang='ts' context="module">
   declare const bootstrap: any;
-  import type { FormDiagram } from '@form-flow/custom-elements/src';
+  import type { FormDiagram } from '@formflow/elements/src';
 
   let chartEl: FormDiagram;
   function handleReactflowEvent(e) {

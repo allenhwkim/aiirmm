@@ -1,4 +1,4 @@
-import { ResizeDivs, FormDiagram, FormDesigner, FormStepper, InputMask, Combobox } from '@form-flow/custom-elements/src';
+import { ResizeDivs, FormDiagram, FormDesigner, FormStepper, InputMask, Combobox } from '@formflow/elements/src';
 
 !customElements.get('resize-divs') && customElements.define('resize-divs', ResizeDivs);
 !customElements.get('form-diagram') && customElements.define('form-diagram', FormDiagram);

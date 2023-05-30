@@ -1,12 +1,12 @@
 {
-  "name": "@form-flow/custom-elements",
+  "name": "@formflow/elements",
   "version": "0.1.0",
   "description": "custom elements for form-flow application",
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run storybook",
     "storybook": "storybook dev -p 6006",
-    "build": "storybook build -o ../dist/custom-elements",
+    "build": "storybook build -o ../dist/elements",
     "build:lib": "tsup src/index.ts",
     "build-storybook": "storybook build"
   },

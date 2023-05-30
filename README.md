@@ -9,7 +9,7 @@ Mono-repo using npm workspaces with the following packages
   * Run(preview) form app.
   * Handles server-side activity
 
-* **custom-elements**: Collection of custom elements including
+* **elements**: Collection of custom elements including
   * form-diagram: Show steps of all forms graphically using Reactflow
   * form-designer: Grapejs form editor with bootstrap5 style
   * form-stepper: Show steps of all forms in HTML

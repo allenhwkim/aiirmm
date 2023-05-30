@@ -3,7 +3,7 @@
 /* start/end node styles */
 .react-flow__node-start .container,
 .react-flow__node-end .container {
-  width: 120px;
+  width: 175px;
   background: #CCC;
   text-align: center;
   padding: 12px;

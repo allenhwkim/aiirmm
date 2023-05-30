@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { ResizeHandle } from "./resize-handle"; // Shares the same FormController
 import './resize-handle.stories.css';
-import { useRef, useEffect } from 'react';
+import { useEffect } from 'react';
 import { XTouchSwipe } from './touch-swipe';
 
-import '../index.d';
-(!customElements.get('resize-handle')) && customElements.define('resize-handle', ResizeHandle);
+import { ResizeHandle } from "../index"; 
+customElements.define('resize-handle', ResizeHandle);
 
 export default {
   title: 'Components/resize-handle',
@@ -44,7 +43,7 @@ const Template = (args?: any) => {
     return () => document.removeEventListener('x-swipe', touchListener);
   }, []); // This runs only on mount (when the component appears)
 
-  return <>
+  return <div style={{height: 200}}>
     <div className="border-solid flex-center draggable" 
       style={{position: 'absolute', width: '400px', height: '100px', background: '#FFF'}}>
       Resizable DIV
@@ -58,7 +57,7 @@ const Template = (args?: any) => {
       Resizable DIV
       <resize-handle bottom right></resize-handle>
     </div>
-  </>
+  </div>
 }; 
 
 export const Primary = Template.bind({});
