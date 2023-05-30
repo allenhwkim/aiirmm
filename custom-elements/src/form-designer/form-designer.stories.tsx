@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { FormDesigner } from "./form-designer";
+
+import '../index.d';
 (!customElements.get('form-designer')) && customElements.define('form-designer', FormDesigner);
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'form-designer': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
-}
 
 export default {
   title: 'Components/form-designer',

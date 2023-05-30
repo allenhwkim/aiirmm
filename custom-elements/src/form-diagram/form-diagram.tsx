@@ -3,7 +3,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client'
 import { Node, Edge, ReactFlowInstance } from 'reactflow';
 import { toPng } from 'html-to-image';
-import FormflowChart from '../react-components/FormflowChart/FormflowChart';
+import { FormflowChart } from '../react-components/FormflowChart/FormflowChart';
 
 const initialNodes: Node[] = [
   {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
@@ -14,7 +14,7 @@ const initialEdges: Edge[]  = [
   {id: 'start-end', source: 'start', target: 'end', type: 'custom'},
 ];
 
-export default class FormDiagram extends HTMLElement {
+export class FormDiagram extends HTMLElement {
   root: any;
   reactflowInstance!: ReactFlowInstance;
 

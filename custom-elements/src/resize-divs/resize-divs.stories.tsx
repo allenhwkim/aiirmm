@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ResizeDivs } from './resize-divs';
 import './resize-divs.stories.css';
 
+import '../index.d';
 (!customElements.get('resize-divs')) && customElements.define('resize-divs', ResizeDivs);
 
 declare global {

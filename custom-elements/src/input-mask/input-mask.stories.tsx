@@ -1,34 +1,19 @@
 import * as React from 'react';
 import { InputMask } from "./input-mask"; // Shares the same FormController
 
+import '../index.d';
 (!customElements.get('input-mask')) && customElements.define('input-mask', InputMask);
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'input-mask': any;
-    }
-  }
-}
 
 export default {
   title: 'Components/input-mask',
   component: InputMask,
-  parameters: {
-    // docs: { page: CustomDocumentation },
-  },
-  // argTypes: {
-  //   data: { control: 'object' },
-  // }
 };
 
 const Template = (args?: any) => {
-
   return <>
-
-<p>
-'Y', 'M', 'D', '9', '_', '#'' for number. 'X' for string
-</p>
+    <p>
+    'Y', 'M', 'D', '9', '_', '#'' for number. 'X' for string
+    </p>
 
     <input-mask mask="yyyy-mm-dd">
       <input value="202312" /> Date

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { ComponentMeta } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import FormflowChart from './FormflowChart';
+import { FormflowChart } from './FormflowChart';
 
 export default { 
   title: 'React Components/FormflowChart',

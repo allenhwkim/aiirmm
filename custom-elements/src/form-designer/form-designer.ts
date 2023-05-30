@@ -1,4 +1,4 @@
-import { customElement } from '@pgjs/core';
+import { customElement } from '../../lib';
 
 import { initGrapesJs } from './init-grapejs';
 import themeCSS from './theme.css';

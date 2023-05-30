@@ -1,5 +1,5 @@
 {
-  "name": "form-flow",
+  "name": "formflow",
   "version": "0.1.0",
   "description": "form-flow",
   "workspaces": [
@@ -23,7 +23,6 @@
   "author": "Allen Kim<allenhwkim@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@pgjs/core": "^0.1.11",
-    "@types/react-dom": "^18.2.4"
+    "postcss-prefix-selector": "^1.16.0"
   }
 }

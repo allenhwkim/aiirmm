@@ -4,25 +4,12 @@ import './resize-handle.stories.css';
 import { useRef, useEffect } from 'react';
 import { XTouchSwipe } from './touch-swipe';
 
+import '../index.d';
 (!customElements.get('resize-handle')) && customElements.define('resize-handle', ResizeHandle);
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'resize-handle': any;
-    }
-  }
-}
 
 export default {
   title: 'Components/resize-handle',
   component: ResizeHandle,
-  parameters: {
-    // docs: { page: CustomDocumentation },
-  },
-  // argTypes: {
-  //   data: { control: 'object' },
-  // }
 };
 
 const Template = (args?: any) => {

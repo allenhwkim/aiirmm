@@ -1,16 +1,9 @@
 import * as React from 'react';
 import { useRef, useState } from 'react';
-import FormDiagram from "./form-diagram";
+import { FormDiagram } from "./form-diagram";
 
+import '../index.d';
 (!customElements.get('form-diagram')) && customElements.define('form-diagram', FormDiagram);
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'form-diagram': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
-}
 
 export default {
   title: 'Components/form-diagram',

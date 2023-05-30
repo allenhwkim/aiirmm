@@ -1,18 +1,11 @@
 import * as React from 'react';
+import '../index.d';
 import { FormStepper } from "./form-stepper"; // Shares the same FormController
 import { useEffect, useRef, useState } from 'react';
 import { FormController } from './form-controller';
 
 (!customElements.get('form-stepper')) && customElements.define('form-stepper', FormStepper);
 
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'form-stepper': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
-}
 
 export default {
   title: 'Components/form-stepper',

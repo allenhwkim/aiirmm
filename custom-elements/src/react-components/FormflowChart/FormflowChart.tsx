@@ -16,7 +16,7 @@ export interface FormflowChartProps {
   onInit?: (instance: ReactFlowInstance) => void,
 }
 
-function FormflowChart(props: FormflowChartProps) {
+export function FormflowChart(props: FormflowChartProps) {
   const {
     nodes,
     edges,
@@ -83,5 +83,3 @@ function FormflowChart(props: FormflowChartProps) {
     </ReactFlow>
   );
 }
-
-export default FormflowChart;

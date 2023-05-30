@@ -1,4 +1,4 @@
-import { customElement } from '@pgjs/core';
+import { customElement } from '../../lib';
 import css from './form-stepper.css';
 
 import { FormController } from './form-controller';
