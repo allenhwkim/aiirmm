@@ -81,3 +81,16 @@ export function getReactProp(el: HTMLElement, propName: string) {
   const reactPropKey = Object.keys(el).find( key => key.startsWith('__reactProps$')) // react 17+
   return reactPropKey ? el[reactPropKey][propName] : el[propName];
 }
+
+export function hash(str: string) {
+  var hash = 0, i:number, chr: number;
+  if (!str) return hash;
+  if (str.length === 0) return hash;
+  for (i = 0; i < str.length; i++) {
+    chr = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  hash = hash > 0 ? hash : hash *= -1
+  return 'h' + hash.toString(36);
+}

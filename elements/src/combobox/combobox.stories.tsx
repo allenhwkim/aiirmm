@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Combobox } from '../index';
-customElements.define('x-combobox', Combobox);
+import { ComboBox } from '../index';
+customElements.define('combo-box', ComboBox);
 
 export default {
   title: 'Components/combobox',
@@ -18,7 +18,7 @@ const Template = (args?: any) => {
     <p>
       This is combobox with keyboard navigation and selection enabled.
     </p>
-    <x-combobox>
+    <combo-box>
       <input placeholder="Choose one value" autoComplete="off" defaultValue="Hello World" />
       <ul>
         <li data-value="">Choose One</li>
@@ -28,8 +28,8 @@ const Template = (args?: any) => {
         <li className="disabled">Disabled</li>
         <li>Foo Bar</li>
       </ul>
-    </x-combobox>
-    <pre>{`<x-combobox>
+    </combo-box>
+    <pre>{`<combo-box>
       <input placeholder="Choose one value" autoComplete="off" defaultValue="Hello World" />
       <ul>
         <li data-value="">Choose One</li>
@@ -39,32 +39,32 @@ const Template = (args?: any) => {
         <li className="disabled">Disabled</li>
         <li>Foo Bar</li>
       </ul>
-    </x-combobox>`}</pre>
+    </combo-box>`}</pre>
 
-    <x-combobox>
+    <combo-box>
       <input placeholder="Readonly dropdown" readOnly />
-    </x-combobox>
+    </combo-box>
 
-    <x-combobox>
+    <combo-box>
       <input placeholder="Disabled dropdown" disabled />
-    </x-combobox>
-    <x-combobox>
+    </combo-box>
+    <combo-box>
       <input placeholder="Long list dropdown" autoComplete="off" defaultValue="13" />
       <ul>
         <li data-value="">Choose One</li>
         <li>1</li> <li>2</li> <li>3</li> <li>4</li> <li>5</li> <li>6</li> <li>7</li> <li>8</li> <li>9</li> <li>10</li>
         <li>11</li> <li>12</li> <li>13</li> <li>14</li> <li>15</li> <li>16</li> <li>17</li> <li>18</li> <li>19</li> <li>20</li>
       </ul>
-    </x-combobox>
+    </combo-box>
 
     <h3>Functionality Checklist</h3>
     <h3> Asynchronous src</h3>
-    <x-combobox src={srcFunc}>
+    <combo-box src={srcFunc}>
       <input placeholder="Search a product" style={{width: 800}}/>
       <ul>
         <li data-value="[[id]]-[[title]]">[[brand]] - [[description]]</li>
       </ul>
-    </x-combobox>
+    </combo-box>
     <pre>{`
     function srcFunc(search: string) {
       return fetch('https://dummyjson.com/products/search?q='+search)
@@ -72,12 +72,12 @@ const Template = (args?: any) => {
         .then(res => res.products || [])
     }
 
-    <x-combobox src={srcFunc}>
+    <combo-box src={srcFunc}>
       <input placeholder="Search a product" style={{width: 800}}/>
       <ul>
         <li data-value="[[id]]-[[title]]">[[brand]] - [[description]]</li>
       </ul>
-    </x-combobox>`}</pre>
+    </combo-box>`}</pre>
 
     <ul>
       <li> When attribute 'data-value' is given, it shows the value</li>

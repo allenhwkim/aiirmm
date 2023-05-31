@@ -13,7 +13,7 @@ export function customElement(opts: {[key:string]: any}) {
   class PagejsCustomElement extends HTMLElement {
     props = {};
     attrs = {};
-    host: HTMLElement | ShadowRoot;
+    host: HTMLElement | ShadowRoot | undefined;
 
     static get observedAttributes() {
       return opts.observedAttributes || [];
@@ -22,7 +22,7 @@ export function customElement(opts: {[key:string]: any}) {
     constructor() { 
       super();
 
-      this.props = opts.props;
+      this.props = {...opts.props};
       for (let key in this['props']) {  //  getter and setters of all reactive props
         Object.defineProperty(this, key, {
           get() { return this.props[key]; },
@@ -34,19 +34,19 @@ export function customElement(opts: {[key:string]: any}) {
         });
       }
 
+      opts.constructorCallback?.call(this);
+    }
+  
+    async connectedCallback() {
       if (opts.shadow) {
         this.host = this.attachShadow({ mode: 'open'});
         const template = document.createElement('template')
-        template.innerHTML = this.innerHTML;
+        template.innerHTML = this.innerHTML; // this should not be in a constructor
         this.host.appendChild(template.content.cloneNode(true));
       } else {
         this.host = this;
       }
 
-      opts.constructorCallback?.call(this);
-    }
-  
-    async connectedCallback() {
       if (!this.isConnected) return; ///  connected(directly or indirectly) to DOM
       if (opts.css) {
         if (opts.shadow) {
@@ -90,6 +90,10 @@ export function customElement(opts: {[key:string]: any}) {
               return { ...acc, [attrVar]: attrVal };
             }, {})
 
+          if (caller === 'connectedCallback') {
+            await opts.connectedCallback?.call(this);
+          }
+
           const newHTML = await opts.render.bind(this)({attrs: this.attrs, props: this.props});
           if (typeof newHTML === 'string') {
             const updated = document.createElement('div');
@@ -99,8 +103,7 @@ export function customElement(opts: {[key:string]: any}) {
             updated.innerHTML += newHTML;
             morphdom( this.host /*fromNode*/, updated /*toNode*/, { childrenOnly: true }); 
           }
-        }
-        if (caller === 'connectedCallback') {
+        } else if (caller === 'connectedCallback') { // in case !opts.render
           await opts.connectedCallback?.call(this);
         }
       }, 50);

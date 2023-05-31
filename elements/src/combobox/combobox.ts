@@ -1,7 +1,7 @@
-import { customElement, debounce, getReactProp } from '@formflow/elements/lib';
+import { customElement, debounce, getReactProp } from '../../lib';
 import css from './combobox.css';
 
-export const Combobox = customElement({
+export const ComboBox = customElement({
   shadow: false, // shadow works, but better to follow document input styling
   props: { listTemplate: '' },
   css,
@@ -10,6 +10,10 @@ export const Combobox = customElement({
     const ulEl = this.host.querySelector('ul');
     const attrPropName = this.getAttribute('src');
     const srcFunc = attrPropName ? (this[attrPropName] || globalThis[attrPropName]) :  getReactProp(this as any, 'src');
+    console.log('srcFunc', srcFunc);
+    console.log('srcFunc 1', this[attrPropName]);
+    console.log('srcFunc 2', globalThis[attrPropName]);
+    console.log('srcFunc 3', getReactProp(this as any, 'src'));
     if (srcFunc && ulEl) {
       this.listTemplate = ulEl.children[0]?.outerHTML;
       ulEl.innerHTML = '';
