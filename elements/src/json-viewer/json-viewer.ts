@@ -12,10 +12,11 @@ export const JsonViewer = customElement({
     ul.format-json.hidden { display: none; }
   `,
   observedAttributes: ['level'],
-  props : { obj: {} },
+  props : { data: {} },
   render() {
     const attrPropName = this.getAttribute('data');
     this.data = getReactProp(this as any, 'data') || this[attrPropName] || globalThis[attrPropName];
+    this.innerHTML = '';
     this.writeDOM(this, this.data);
   },
   writeDOM(el: HTMLElement, data: any, level=0) {
@@ -40,8 +41,13 @@ export const JsonViewer = customElement({
         li.addEventListener('click', toggleList);
         el.appendChild(ul);
 
-        (typeof data[key] === 'object') ? 
-          this.writeDOM(li, data[key], ++level) : (item.innerHTML = `${key}: ${data[key]}`);
+        if (typeof data[key] === 'object') {
+          this.writeDOM(li, data[key], ++level);
+        } else if (typeof data[key] === 'function') {
+          item.innerHTML = `${key}: ${data[key]}`;
+        } else {
+          item.innerHTML = `${key}: ${data[key]}`;
+        }
       }
     }
   }

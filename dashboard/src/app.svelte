@@ -1,40 +1,51 @@
 <script lang='ts' context="module">
-  declare const bootstrap: any;
   import type { FormDiagram } from '@formflow/elements/src';
 
+  declare const bootstrap: any;
+  const dq = document.querySelector.bind(document);
+  const dqa = document.querySelectorAll.bind(document);
   let chartEl: FormDiagram;
-  function handleReactflowEvent(e) {
+
+  function handleReactflowEvent(e: any) {
     const {action, type, node, edge} = e.detail;
     const id = node?.id || edge?.id || '';
-    console.log({type, action, node, edge});
-    (<any>document.querySelector('#event-type')).innerText = type || '';
-    (<any>document.querySelector('#event-id')).innerText = id;
-    (<any>document.querySelector('#event-label')).innerText = node?.data?.label || edge?.data?.label || '';
-    (<any>document.querySelector('#event-action')).innerText = action || '';
-    (<any>document.querySelector('#event-detail')).innerText = (node || edge) ? JSON.stringify(node || edge, null, '  ') : '';
+    console.log('handleReactflowEvent', {type, action, node, edge});
 
-    document.querySelectorAll('.collapse.show').forEach(el => new bootstrap.Collapse(el));
+    dq('#event-type').innerText = type || '';
+    dq('#event-id').innerText = id;
+    dq('#event-label').innerText = node?.data?.label || edge?.data?.label || '';
+    dq('#event-action').innerText = action || '';
+    dq('#event-detail').innerText = (node || edge) ? JSON.stringify(node || edge, null, '  ') : '';
+
+    dqa('.collapse.show').forEach(el => new bootstrap.Collapse(el));
     if (node?.type === 'start' || node?.type === 'end' || edge?.type === 'custom') {
       new bootstrap.Collapse(document.querySelector('#properties'));
     } else if (node?.type === 'custom') {
       new bootstrap.Collapse(document.querySelector('#form-designer'));
     }
+
+    if (action === 'init') {
+      const {nodes, edges} = chartEl.getData();
+      const node = nodes.find(el => el.id === 'start');
+      chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
+    }
+
   }
 
-  function showJson(obj) {
+  function showJson(obj: any) {
     const newObj = {...obj};
     Object.keys(newObj).forEach(key => typeof newObj[key] === 'function' && (newObj[key] = 'function'));
-    document.querySelectorAll('.dialog-dynamic').forEach((el:any) => el.style.display = 'none');
-    document.querySelector('#dialog-json')['style'].display='';
-    document.querySelector('#dialog-json').innerHTML = JSON.stringify(newObj, null, '  '); 
+    dqa('.dialog-dynamic').forEach((el:any) => el.style.display = 'none');
+    dq('#dialog-json')['style'].display='';
+    dq('#dialog-json').innerHTML = JSON.stringify(newObj, null, '  '); 
     new bootstrap.Modal(document.querySelector('#dialog')).toggle();
   }
 
   async function showImage() {
     const img = await chartEl.getImage()
-    document.querySelectorAll('.dialog-dynamic').forEach((el:any) => el.style.display = 'none');
-    document.querySelector('#dialog-image')['style'].display='';
-    document.querySelector('#dialog-image').setAttribute('src', img); 
+    dqa('.dialog-dynamic').forEach((el:any) => el.style.display = 'none');
+    dq('#dialog-image')['style'].display='';
+    dq('#dialog-image').setAttribute('src', img); 
     new window['bootstrap'].Modal(document.querySelector('#dialog')).toggle();
   }
 </script>

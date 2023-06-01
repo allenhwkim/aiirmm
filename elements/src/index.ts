@@ -22,20 +22,60 @@ declare global {
   }
 }
 
-export * from "./react-components/FormflowChart/FormflowChart"
-export * from './form-diagram/form-diagram';
-export * from './form-designer/form-designer';
-export * from './form-stepper/form-stepper';
-export * from './combobox/combobox';
-export * from './input-mask/input-mask';
-export * from './resize-divs/resize-divs';
-export * from './resize-handle/resize-handle';
-export * from './json-viewer/json-viewer';
-export * from './barcode/barcode';
-export * from './file-select/file-select';
-export * from './ol-map/ol-map';
-export * from './x-pagination/pagination';
-export * from './x-if/index';
-export * from './qr-code/qr-code';
-export * from './syntax-highlight/syntax-highlight';
-export * from './list-select/list-select';
+import { BarCode } from './barcode/barcode';
+import { ComboBox } from './combobox/combobox';
+import { FileSelect } from './file-select/file-select';
+import { FormDesigner } from './form-designer/form-designer';
+import { FormDiagram } from './form-diagram/form-diagram';
+import { FormStepper } from './form-stepper/form-stepper';
+import { FormflowChart } from "./react-components/FormflowChart/FormflowChart"
+import { InputMask } from './input-mask/input-mask';
+import { JsonViewer } from './json-viewer/json-viewer';
+import { ListSelect } from './list-select/list-select';
+import { OlMap } from './ol-map/ol-map';
+import { Pagination } from './x-pagination/pagination';
+import { QrCode } from './qr-code/qr-code';
+import { ResizeDivs } from './resize-divs/resize-divs';
+import { ResizeHandle } from './resize-handle/resize-handle';
+import { SyntaxHighlight } from './syntax-highlight/syntax-highlight';
+import { XBind, XChecks, XIf } from './x-if/index';
+
+export {
+ BarCode,
+ ComboBox,
+ FileSelect,
+ FormDesigner,
+ FormDiagram,
+ FormStepper,
+ FormflowChart,
+ InputMask,
+ JsonViewer,
+ ListSelect,
+ OlMap, 
+ Pagination, 
+ QrCode,
+ ResizeDivs,
+ ResizeHandle,
+ SyntaxHighlight,
+ XBind, XChecks, XIf,
+};
+
+export function defineAll() {
+  customElements.define('bar-code', BarCode);
+  customElements.define('combo-box', ComboBox);
+  customElements.define('file-select', FileSelect);
+  customElements.define('form-designer', FormDesigner);
+  customElements.define('form-diagram', FormDiagram);
+  customElements.define('form-stepper', FormStepper);
+  customElements.define('input-mask', InputMask);
+  customElements.define('json-viewer', JsonViewer);
+  customElements.define('list-select', ListSelect);
+  customElements.define('ol-map', OlMap);
+  customElements.define('qr-code', QrCode);
+  customElements.define('resize-divs', ResizeDivs);
+  customElements.define('resize-handle', ResizeHandle);
+  customElements.define('syntax-highlight', SyntaxHighlight);
+  customElements.define('x-bind', XBind);
+  customElements.define('x-if', XIf);
+  customElements.define('x-pagination', Pagination);
+}

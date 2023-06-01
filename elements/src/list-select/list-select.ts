@@ -30,7 +30,7 @@ export const ListSelect = customElement({
     }
 
     if (['Enter', 'Space'].includes(event.code)) {
-      highlightedEl && hasUlEl && this.toggleAriaExpanded(highlightedEl);
+      this.toggleList(highlightedEl);
       (event.code === 'Enter') && this.fireSelect(highlightedEl);
     } else if (['ArrowUp', 'ArrowLeft'].includes(event.code)) {
       highlightNextEl(ulEl, -1);
@@ -52,14 +52,12 @@ export const ListSelect = customElement({
     const ulEl = this.host.querySelector('ul');
     !ulEl.getAttribute('tabindex') && ulEl.setAttribute('tabindex', '0');
     ulEl.querySelectorAll('li > ul, li > * > ul').forEach(el => {
-      const liEl = el.closest('li');
-      liEl.parentElement.setAttribute('aria-has-popup','');
-      expanded && liEl.setAttribute('aria-expanded', '');
+      !expanded && el.setAttribute('hidden', '') 
     });
     ulEl.querySelectorAll('li').forEach(el => {
       el.addEventListener('click', (event) => {
         const liEl = event.target.closest('li');
-        liEl.querySelector('ul') && this.toggleAriaExpanded(liEl);
+        liEl.querySelector('ul') && this.toggleList(event);
         highlightEl(ulEl, liEl);
         this.fireSelect(liEl);
         event.stopPropagation();
@@ -71,22 +69,23 @@ export const ListSelect = customElement({
     const liEl = ulEl.querySelector('#'+ selected || 'unknown');
     if (liEl) {
       liEl.classList.add('x-highlighted');
-      let expandable = liEl.parentElement.closest('li:has(ul)');
+      let expandable = liEl.parentElement.closest('ul');
       while(expandable && ulEl.contains(expandable)) { 
-        expandable.setAttribute('aria-expanded', '');
-        expandable = expandable.parentElement.closest('li:has(ul)');
+        expandable.removeAttribute('hidden');
+        expandable = expandable.parentElement?.closest('ul');
       }
       this.fireSelect(ulEl.querySelector('.x-highlighted'));
     }
   },
-  toggleAriaExpanded(el) {
-    const expanded = el.getAttribute('aria-expanded') !== null;
-    if (expanded) {
-      el.removeAttribute('aria-expanded');
-    } else {
-      el.setAttribute('aria-expanded', '');
+  toggleList(eventOrEl) {
+    const liEl = eventOrEl.target || eventOrEl;
+    const child = liEl.querySelector('ul');
+    if (child) {
+      child.getAttribute('hidden') !== null ?
+        child.removeAttribute('hidden') : child.setAttribute('hidden', '');
     }
   },
+
   fireSelect(el) {
     // unselect prev highlighted ones, and highlight and fire event
     const ulEl = el.closest('ul');

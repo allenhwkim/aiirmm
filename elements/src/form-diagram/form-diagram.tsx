@@ -7,11 +7,13 @@ import { FormflowChart } from '../react-components/FormflowChart/FormflowChart';
 
 const initialNodes: Node[] = [
   {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
-  {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 150 }},
+  {id: '1', type: 'custom', data: { label: 'Page 1' }, position: { x: 87.5, y: 120 }, },
+  {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 270 }},
 ] as Node[];
 
 const initialEdges: Edge[]  = [
-  {id: 'start-end', source: 'start', target: 'end', type: 'custom'},
+  {id: 'start-1', source: 'start', target: '1', type: 'custom'},
+  {id: '1-end', source: '1', target: 'end', type: 'custom'},
 ];
 
 export class FormDiagram extends HTMLElement {
@@ -40,7 +42,8 @@ export class FormDiagram extends HTMLElement {
   getData() {
     const data = this.reactflowInstance.toObject()
     console.log(data);
-    alert(JSON.stringify(data))
+    // alert(JSON.stringify(data))
+    return data;
   }
 
   async getImage() {
@@ -54,31 +57,33 @@ export class FormDiagram extends HTMLElement {
       }
     );
     console.log(blobUrl);
-    alert(blobUrl);
+    // alert(blobUrl);
+    return blobUrl;
   };
 
   getInstance() {
-    console.log(this.reactflowInstance);
-    alert(JSON.stringify(this.reactflowInstance) + '\nFor more, check console');
+    // console.log(this.reactflowInstance);
+    // alert(JSON.stringify(this.reactflowInstance) + '\nFor more, check console');
+    return this.reactflowInstance;
   }
 
-  private fireCustomEvent(detail: any) {
+  fireEvent(detail: any) {
     const customEvent = new CustomEvent('reactflow', { detail, bubbles: true});
     this.dispatchEvent( customEvent );
   }
 
   mount(nodes: Node[] = initialNodes, edges: Edge[] = initialEdges) {
     const onNodeClick = (node: Node, nodes: Node[], edges: Edge[]) => {
-      this.fireCustomEvent({ action: 'selected', type: 'node', node, nodes, edges })
+      this.fireEvent({ action: 'selected', type: 'node', node, nodes, edges })
     };
   
     const onEdgeClick =(edge: Edge, nodes: Node[], edges: Edge[]) => {
-      this.fireCustomEvent({ action: 'selected', type: 'edge', edge, nodes, edges })
+      this.fireEvent({ action: 'selected', type: 'edge', edge, nodes, edges })
     };
   
     const onInit = (event: ReactFlowInstance) => {
       this.reactflowInstance = event;
-      this.fireCustomEvent({ action: 'init', event })
+      this.fireEvent({ action: 'init', event })
     }
   
     this.root = createRoot(this);

@@ -24,6 +24,7 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
+    "jsx": "react",
     "paths": {
       "$lib": [
         "src/lib"

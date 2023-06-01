@@ -7,7 +7,7 @@ export default {
   title: 'Components/list-select',
 };
 
-const Template = (args?: any) => {
+const PrimaryStyle = (args?: any) => {
   const listSelect: any = React.useRef();
   const message: any = React.useRef();
   React.useEffect(() => {
@@ -16,11 +16,11 @@ const Template = (args?: any) => {
     });
   }, []);
 
-  function handleSelect(e) {
+  function handleSelect(e: any) {
     console.log(e.detail);
   }
 
-  return <>
+  return <div>
     <p ref={message}></p>
     <list-select selected="file-a" ref={listSelect}>
       <ul>
@@ -65,7 +65,68 @@ const Template = (args?: any) => {
         <li id="help">Help</li>
       </ul>
     </list-select>
-    </>
+  </div>
 };
 
-export const Primary = Template.bind({});
+const MenuStyle = (args?: any) => {
+  const listSelect: any = React.useRef();
+  const message: any = React.useRef();
+  React.useEffect(() => {
+    listSelect.current.addEventListener('select', (e:any) => {
+      message.current.innerText = `"${e.detail.innerText.split('\n')[0]}" is selected`;
+    });
+  }, []);
+
+  function handleSelect(e: any) {
+    console.log(e.detail);
+  }
+
+  return <div style={{minHeight: 200}}>
+    <p ref={message}></p>
+    <list-select selected="file-a" ref={listSelect}>
+      <ul className="menu">
+        <li> File
+          <ul>
+            <li id="new">New</li>
+            <li>Open
+              <ul>
+                <li> Recent Files 
+                  <ul>
+                    <li id="file-a">File A</li>
+                    <li>File B</li>
+                    <li>File C</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li> Edit
+          <ul>
+            <li>Undo</li>
+            <li id="redo">Redo</li>
+            <li className="disabled">Cut</li>
+            <li className="disabled">Copy</li>
+            <li className="disabled">Paste</li>
+          </ul>
+        </li>
+        <li> Format
+          <ul>
+            <li>Font</li>
+            <li>Text</li>
+          </ul>
+        </li>
+        <li> View
+          <ul>
+            <li>100%</li>
+            <li>Zoom In</li>
+            <li>Zoom Out</li>
+          </ul>
+        </li>
+        <li id="help">Help</li>
+      </ul>
+    </list-select>
+  </div>
+};
+export const Primary = PrimaryStyle.bind({});
+export const Menu = MenuStyle.bind({});
