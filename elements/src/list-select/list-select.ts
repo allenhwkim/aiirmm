@@ -5,7 +5,7 @@ export const ListSelect = customElement({
   shadow: true,
   css, 
   observedAttributes: ['selected', 'expanded'],
-  constructorCallback() {
+  connectedCallback() {
     this.host.addEventListener('keydown', e => this.keydownHandler(e));
   },
   render({attrs}) {
@@ -14,19 +14,19 @@ export const ListSelect = customElement({
   },
   keydownHandler(event) {
     const ulEl = event.target;
-    const highlightedEl = ulEl.querySelector('.x2-highlighted');
+    const highlightedEl = ulEl.querySelector('.x-highlighted');
     const hasUlEl = highlightedEl.querySelector('ul');
 
     const highlightNextEl = (ulEl, inc=1) => {
-      const allEls = ulEl.querySelectorAll('li');
+      const allEls = ulEl.querySelectorAll('li:not(.disabled)');
       const visibles: any = Array.from(allEls)
         .filter((el:any) => el.offsetParent !== null);
-      const highlightedEl = ulEl.querySelector('.x2-highlighted');
+      const highlightedEl = ulEl.querySelector('.x-highlighted');
       const curIndex = visibles.indexOf(highlightedEl);
       const nxtIndex = (visibles.length + curIndex + inc) % visibles.length;
 
-      highlightedEl?.classList.remove('x2-highlighted');
-      visibles[nxtIndex]?.classList.add('x2-highlighted');
+      highlightedEl?.classList.remove('x-highlighted');
+      visibles[nxtIndex]?.classList.add('x-highlighted');
     }
 
     if (['Enter', 'Space'].includes(event.code)) {
@@ -44,9 +44,9 @@ export const ListSelect = customElement({
   }, 
   init(expanded) {
     const highlightEl = (ulEl, el) => {
-      const highlightedEl = ulEl.querySelector('.x2-highlighted');
-      highlightedEl && highlightedEl.classList.remove('x2-highlighted');
-      el.classList.add('x2-highlighted');
+      const highlightedEl = ulEl.querySelector('.x-highlighted');
+      highlightedEl && highlightedEl.classList.remove('x-highlighted');
+      el.classList.add('x-highlighted');
     }
 
     const ulEl = this.host.querySelector('ul');
@@ -59,9 +59,9 @@ export const ListSelect = customElement({
     ulEl.querySelectorAll('li').forEach(el => {
       el.addEventListener('click', (event) => {
         const liEl = event.target.closest('li');
-        const hasUlEl = liEl.querySelector('ul');
-        hasUlEl ? this.toggleAriaExpanded(liEl) : this.fireSelect(liEl);
+        liEl.querySelector('ul') && this.toggleAriaExpanded(liEl);
         highlightEl(ulEl, liEl);
+        this.fireSelect(liEl);
         event.stopPropagation();
       });
     });
@@ -70,13 +70,13 @@ export const ListSelect = customElement({
     const ulEl = this.host.querySelector('ul');
     const liEl = ulEl.querySelector('#'+ selected || 'unknown');
     if (liEl) {
-      liEl.classList.add('x2-highlighted');
+      liEl.classList.add('x-highlighted');
       let expandable = liEl.parentElement.closest('li:has(ul)');
       while(expandable && ulEl.contains(expandable)) { 
         expandable.setAttribute('aria-expanded', '');
         expandable = expandable.parentElement.closest('li:has(ul)');
       }
-      this.fireSelect(ulEl.querySelector('.x2-highlighted'));
+      this.fireSelect(ulEl.querySelector('.x-highlighted'));
     }
   },
   toggleAriaExpanded(el) {
@@ -90,11 +90,11 @@ export const ListSelect = customElement({
   fireSelect(el) {
     // unselect prev highlighted ones, and highlight and fire event
     const ulEl = el.closest('ul');
-    const highlightedEl = ulEl.querySelector('.x2-highlighted');
-    highlightedEl && highlightedEl.classList.remove('x2-highlighted');
+    const highlightedEl = ulEl.querySelector('.x-highlighted');
+    highlightedEl && highlightedEl.classList.remove('x-highlighted');
     if (el && (el.offsetParent !== null)) { // if visible
-      el.classList.add('x2-highlighted');
-      el.dispatchEvent(new CustomEvent('select', { bubbles: true, detail: el }));
+      el.classList.add('x-highlighted');
+      el.dispatchEvent(new CustomEvent('select', { bubbles: true, composed: true, detail: el }));
     }
   }
 });

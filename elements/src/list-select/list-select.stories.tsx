@@ -8,14 +8,21 @@ export default {
 };
 
 const Template = (args?: any) => {
-  function srcFunc(search: string) {
-    return fetch('https://dummyjson.com/products/search?q='+search)
-      .then(res => res.json())
-      .then(res => res.products || [])
+  const listSelect: any = React.useRef();
+  const message: any = React.useRef();
+  React.useEffect(() => {
+    listSelect.current.addEventListener('select', (e:any) => {
+      message.current.innerText = `"${e.detail.innerText.split('\n')[0]}" is selected`;
+    });
+  }, []);
+
+  function handleSelect(e) {
+    console.log(e.detail);
   }
 
   return <>
-    <list-select selected="file-a">
+    <p ref={message}></p>
+    <list-select selected="file-a" ref={listSelect}>
       <ul>
         <li> File
           <ul>
@@ -37,9 +44,9 @@ const Template = (args?: any) => {
           <ul>
             <li>Undo</li>
             <li id="redo">Redo</li>
-            <li data-disabled="disabled">Cut</li>
-            <li data-disabled="disabled">Copy</li>
-            <li data-disabled="disabled">Paste</li>
+            <li className="disabled">Cut</li>
+            <li className="disabled">Copy</li>
+            <li className="disabled">Paste</li>
           </ul>
         </li>
         <li> Format

@@ -8,14 +8,14 @@ export const Pagination = customElement({
    index: 0
  }, 
  observedAttributes: ['total', 'page', 'numPerPage', 'numPages'],
- constructorCallback() {
+ connectedCallback() {
    this.host.addEventListener('click', this.clickListener.bind(this));
  },
  clickListener(event) {
    if (event.target.classList.contains('page')) { 
      this.index = +event.target.getAttribute('index');
      const detail = {...this.attrs, index: this.index};
-     this.dispatchEvent(new CustomEvent('select', {bubbles: true, detail}));
+     this.dispatchEvent(new CustomEvent('select', {bubbles: true, composed: true, detail}));
    }
  },
  render({attrs, props}) {

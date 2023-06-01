@@ -8,13 +8,17 @@ export default {
 };
 
 const Template = (args?: any) => {
-  function srcFunc(search: string) {
-    return fetch('https://dummyjson.com/products/search?q='+search)
-      .then(res => res.json())
-      .then(res => res.products || [])
-  }
+  const container: any = React.useRef();
+  const message: any = React.useRef();
+  React.useEffect(() => {
+    container.current.addEventListener('select', (e:any) => {
+      console.log('pagination select', e.detail);
+      message.current.innerText = `selected "${JSON.stringify(e.detail)}`;
+    });
+  }, []);
 
-  return <>
+  return <div ref={container}>
+    <pre ref={message}></pre>
     <x-pagination></x-pagination>
     <p></p>
     <x-pagination 
@@ -23,7 +27,7 @@ const Template = (args?: any) => {
       num-per-page="20" 
       num-pages="7">
     </x-pagination>
-  </>
+  </div>
 };
 
 export const Primary = Template.bind({});

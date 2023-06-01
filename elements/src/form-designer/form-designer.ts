@@ -6,7 +6,9 @@ import stylesCSS from './styles.css';
 
 const FormDesigner = customElement({
   css: themeCSS + stylesCSS,
-  connectedCallback: () => initGrapesJs('#gjs'),
+  connectedCallback: () => { // called before the first render()
+    setTimeout(() => initGrapesJs('#gjs')); // so that it's called after render() is called
+  },
   render: () => `
     <link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css" />
 

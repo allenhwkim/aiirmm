@@ -8,12 +8,6 @@ export default {
 };
 
 const Template = (args?: any) => {
-  function srcFunc(search: string) {
-    return fetch('https://dummyjson.com/products/search?q='+search)
-      .then(res => res.json())
-      .then(res => res.products || [])
-  }
-
   return <>
     <qr-code id="qrcode" 
       value="Hello QR Code from https://github.com/soldair/node-qrcode">

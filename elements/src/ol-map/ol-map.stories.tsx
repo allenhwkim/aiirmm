@@ -8,12 +8,6 @@ export default {
 };
 
 const Template = (args?: any) => {
-  function srcFunc(search: string) {
-    return fetch('https://dummyjson.com/products/search?q='+search)
-      .then(res => res.json())
-      .then(res => res.products || [])
-  }
-
   return <>
     <ol-map zoom="11" center="Brampton Ontario, Canada"></ol-map>
   </>

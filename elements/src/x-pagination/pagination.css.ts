@@ -1,12 +1,9 @@
 export default /*css*/ `
 :host {
   display: block;
-  &.navitation .prev {
-    display: inline-block;
-  }
-  > .pages {
-    display: inline-block;
-  }
+}
+.navitation .prev {
+  display: inline-block;
 }
 
 .page {
@@ -24,6 +21,10 @@ export default /*css*/ `
   &.next::before { content : '▶'; }
   &.first::before { content : '◀◀'; }
   &.last::before { content : '▶▶'; }
+}
+
+.pages {
+  display: inline-block;
 }
 
 .pages > .page.selected {

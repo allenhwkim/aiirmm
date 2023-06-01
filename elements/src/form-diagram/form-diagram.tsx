@@ -38,7 +38,9 @@ export class FormDiagram extends HTMLElement {
   }
 
   getData() {
-    return this.reactflowInstance.toObject()
+    const data = this.reactflowInstance.toObject()
+    console.log(data);
+    alert(JSON.stringify(data))
   }
 
   async getImage() {
@@ -51,11 +53,13 @@ export class FormDiagram extends HTMLElement {
         )
       }
     );
-    return blobUrl;
+    console.log(blobUrl);
+    alert(blobUrl);
   };
 
   getInstance() {
-    return this.reactflowInstance;
+    console.log(this.reactflowInstance);
+    alert(JSON.stringify(this.reactflowInstance) + '\nFor more, check console');
   }
 
   private fireCustomEvent(detail: any) {

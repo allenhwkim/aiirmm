@@ -10,7 +10,9 @@ export default {
 };
 
 const Template = (args?: any) => {
-  return <form-designer></form-designer>;
+  return <>
+    <form-designer></form-designer>
+  </>;
 }; 
 
 export const Primary = Template.bind({});

@@ -8,7 +8,7 @@ export default /*css*/ `
   padding-left: 0;
 }
 
-.x2-highlighted {
+.x-highlighted {
   background: #ccc;
 }
 
@@ -21,10 +21,9 @@ li {
   margin: 0;
   line-height: 28px;
 
-  &::before {
-    content: '•';
-    display: inline-block;
-    width: 1em;;
+  &.disabled {
+    opacity: .7;
+    cursor: initial;
   }
 
   &:has(ul) {
@@ -45,7 +44,7 @@ li {
         width: 1em;;
       }
 
-      &.x2-highlighted {
+      &.x-highlighted {
         background: #ccc;
       }
 
