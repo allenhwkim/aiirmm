@@ -11,14 +11,17 @@ export default /*css*/ `
   .x-highlighted { background: #ccc; }
 
   ul.menu { display: flex;}
-  ul.menu ul { padding: 0; border: 1px solid #ccc; display: none } /* ignore all [hidden] attribute */
-  ul.menu li { list-style: none; white-space: nowrap; padding: 6px 12px;}
-  ul.menu li:hover { background: #CCC }
-  ul.menu li:hover > ul { display: block; } /* then, only shows dependent on hover */
-  ul.menu li:has(> ul)::before { display: none; } /* hide all list styles */
+  ul.menu ul { padding: 0; border: 1px solid #ccc;} 
+  ul.menu li { list-style: none; white-space: nowrap; padding: 6px 12px;} /* clear all list styles */
+  ul.menu li:has(> ul)::before { display: none; } /* do not show left-side dashed group border */
 
-  ul.menu > li { border: 1px solid #ccc; margin-left: -1px; min-width: 40px; }
-  ul.menu > li > ul { position: absolute;  left: 0; top: 100%; min-width: 100%; }
-  ul.menu > li > ul ul { position: absolute; top: 0; left: 100%;}
+  ul.menu ul {display: none; } /* ignore all [hidden] attribute and hide all dependents */
+  ul.menu > li { border: 1px solid #ccc; margin-left: -1px; min-width: 40px; } /* main list styling */
+  ul.menu > li > ul { position: absolute;  left: 0; top: 100%; min-width: 100%; } /* show first child below */
+  ul.menu > li > ul ul { position: absolute; top: 0; left: 100%;} /* show non-first child on the right-side */
+
+  ul.menu li:is(:has(.x-highlighted), .x-highlighted) > ul {display: block; } /* show only highlighted child */
+  ul.menu li:is(:has(.x-highlighted), .x-highlighted) { display: block;} /* show highlighted list */
+
 }
 `;
