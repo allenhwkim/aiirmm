@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './resize-handle.stories.css';
 import { useEffect } from 'react';
-import { XTouchSwipe } from './touch-swipe';
+import { TouchSwipe } from '../../lib';
 
 import { ResizeHandle } from "../index"; 
 customElements.define('resize-handle', ResizeHandle);
@@ -37,7 +37,7 @@ const Template = (args?: any) => {
   }
 
   useEffect(() => {
-    document.querySelectorAll('.draggable').forEach(el => new XTouchSwipe(el as any));
+    document.querySelectorAll('.draggable').forEach(el => new TouchSwipe(el as any));
     
     document.addEventListener('x-swipe', touchListener);
     return () => document.removeEventListener('x-swipe', touchListener);

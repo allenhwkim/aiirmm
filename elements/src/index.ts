@@ -18,6 +18,7 @@ declare global {
       'x-bind': any;
       'qr-code': any;
       'syntax-highlight': any;
+      'side-bar': any;
     }
   }
 }
@@ -37,6 +38,7 @@ import { Pagination } from './x-pagination/pagination';
 import { QrCode } from './qr-code/qr-code';
 import { ResizeDivs } from './resize-divs/resize-divs';
 import { ResizeHandle } from './resize-handle/resize-handle';
+import { SideBar } from './sidebar/sidebar';
 import { SyntaxHighlight } from './syntax-highlight/syntax-highlight';
 import { XBind, XChecks, XIf } from './x-if/index';
 
@@ -56,6 +58,7 @@ export {
  QrCode,
  ResizeDivs,
  ResizeHandle,
+ SideBar,
  SyntaxHighlight,
  XBind, XChecks, XIf,
 };
@@ -74,6 +77,7 @@ export function defineAll() {
   customElements.define('qr-code', QrCode);
   customElements.define('resize-divs', ResizeDivs);
   customElements.define('resize-handle', ResizeHandle);
+  customElements.define('side-bar', SideBar);
   customElements.define('syntax-highlight', SyntaxHighlight);
   customElements.define('x-bind', XBind);
   customElements.define('x-if', XIf);

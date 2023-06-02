@@ -1,21 +1,4 @@
-import { XTouchSwipe } from './touch-swipe';
-
-function addCss(el: HTMLElement, css: string) {
-  const tagName = el.tagName.toLowerCase();
-  if (!document.querySelector(`style[${tagName}]`)) {
-    const styleEl = document.createElement('style');
-    styleEl.setAttribute(tagName,'');
-    styleEl.appendChild(document.createTextNode(css));
-    document.head.appendChild(styleEl);
-  }
-}
-
-function removeCss(el: HTMLElement) {
-  const tagName = el.tagName.toLowerCase();
-  const numXElements = document.body.querySelectorAll(`${tagName}`).length;
-  const styleEl = document.querySelector(`style[${tagName}]`);
-  (styleEl && numXElements < 1) && document.querySelector(`style[${tagName}]`)?.remove();
-}
+import { TouchSwipe, addCss, removeCss } from '../../lib';
 
 const css = /*css*/`
   resize-handle { position: absolute; }
@@ -56,15 +39,15 @@ export class ResizeHandle extends HTMLElement {
   }
 
   connectedCallback() {
-    new XTouchSwipe(this);
+    new TouchSwipe(this);
     this.containerEl = this.parentElement as HTMLElement;
     document.addEventListener('x-swipe', this.touchListener);
-    addCss(this, css);
+    addCss(this.tagName, css);
   }
 
   disconnectedCallback() {
     document.removeEventListener('x-swipe', this.touchListener);
-    removeCss(this);
+    removeCss(this.tagName);
   }
 
   touchListener =  (event: any) => {
