@@ -44,7 +44,7 @@ export const JsonViewer = customElement({
         if (typeof data[key] === 'object') {
           this.writeDOM(li, data[key], ++level);
         } else if (typeof data[key] === 'function') {
-          item.innerHTML = `${key}: ${data[key]}`;
+          item.innerHTML = `${key}: function`;
         } else {
           item.innerHTML = `${key}: ${data[key]}`;
         }

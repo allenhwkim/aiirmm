@@ -14,6 +14,7 @@ export interface FormflowChartProps {
   onNodeClick?: (node:Node, nodes: Node[], edges:Edge[]) => void,
   onEdgeClick?: (edge:Edge, nodes: Node[], edges:Edge[]) => void,
   onInit?: (instance: ReactFlowInstance) => void,
+  showImage?: any,
 }
 
 export function FormflowChart(props: FormflowChartProps) {
@@ -78,6 +79,7 @@ export function FormflowChart(props: FormflowChartProps) {
       <Controls style={{display: 'flex', backgroundColor: '#FFF'}}>
         <ControlButton onClick={undo}>&#x27F2;</ControlButton>
         <ControlButton onClick={redo}>&#x27F3;</ControlButton>
+        <ControlButton onClick={props.showImage}>&#x1F4F7;</ControlButton>
       </Controls>
       <Background />
     </ReactFlow>

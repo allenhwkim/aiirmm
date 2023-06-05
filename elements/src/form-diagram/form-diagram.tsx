@@ -41,8 +41,6 @@ export class FormDiagram extends HTMLElement {
 
   getData() {
     const data = this.reactflowInstance.toObject()
-    console.log(data);
-    // alert(JSON.stringify(data))
     return data;
   }
 
@@ -85,6 +83,12 @@ export class FormDiagram extends HTMLElement {
       this.reactflowInstance = event;
       this.fireEvent({ action: 'init', event })
     }
+
+    const showImage = async () => {
+      var image = new Image();
+      image.src = await this.getImage();
+      (window as any).open('').document.write(image.outerHTML);
+    }
   
     this.root = createRoot(this);
     this.root.render(
@@ -95,6 +99,7 @@ export class FormDiagram extends HTMLElement {
           onNodeClick={onNodeClick}
           onEdgeClick={onEdgeClick}
           onInit={onInit}
+          showImage={showImage}
         />
       </StrictMode>
     );

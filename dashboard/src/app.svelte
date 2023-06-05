@@ -1,10 +1,14 @@
-<script lang='ts' context="module">
-  import type { FormDiagram } from '@formflow/elements/src';
+<script lang='ts'>
+  import type { FormDiagram, SideBar } from '@formflow/elements/src';
+  import AppDataDialog from './app-data.dialog.svelte';
+  import AppSideBar from './app-sidebar.svelte';
+  import { onMount } from 'svelte';
 
-  declare const bootstrap: any;
   const dq = document.querySelector.bind(document);
   const dqa = document.querySelectorAll.bind(document);
+
   let chartEl: FormDiagram;
+  let dataDialogEl: any;
 
   function handleReactflowEvent(e: any) {
     const {action, type, node, edge} = e.detail;
@@ -17,11 +21,11 @@
     dq('#event-action').innerText = action || '';
     dq('#event-detail').innerText = (node || edge) ? JSON.stringify(node || edge, null, '  ') : '';
 
-    dqa('.collapse.show').forEach(el => new bootstrap.Collapse(el));
+    dqa('.collapse.show').forEach(el => new (window as any).bootstrap.Collapse(el));
     if (node?.type === 'start' || node?.type === 'end' || edge?.type === 'custom') {
-      new bootstrap.Collapse(document.querySelector('#properties'));
+      new (window as any).bootstrap.Collapse(dq('#properties'));
     } else if (node?.type === 'custom') {
-      new bootstrap.Collapse(document.querySelector('#form-designer'));
+      new (window as any).bootstrap.Collapse(dq('#form-designer'));
     }
 
     if (action === 'init') {
@@ -29,24 +33,6 @@
       const node = nodes.find(el => el.id === 'start');
       chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
     }
-
-  }
-
-  function showJson(obj: any) {
-    const newObj = {...obj};
-    Object.keys(newObj).forEach(key => typeof newObj[key] === 'function' && (newObj[key] = 'function'));
-    dqa('.dialog-dynamic').forEach((el:any) => el.style.display = 'none');
-    dq('#dialog-json')['style'].display='';
-    dq('#dialog-json').innerHTML = JSON.stringify(newObj, null, '  '); 
-    new bootstrap.Modal(document.querySelector('#dialog')).toggle();
-  }
-
-  async function showImage() {
-    const img = await chartEl.getImage()
-    dqa('.dialog-dynamic').forEach((el:any) => el.style.display = 'none');
-    dq('#dialog-image')['style'].display='';
-    dq('#dialog-image').setAttribute('src', img); 
-    new window['bootstrap'].Modal(document.querySelector('#dialog')).toggle();
   }
 </script>
 
@@ -55,16 +41,14 @@
 
 <svelte:window on:resize={() => chartEl.getInstance().fitView()} />
 
-<h1 hidden>Form Flow Dashboard</h1>
+<button data-x-target="sidebar" class="position-absolute top-0 start-0 border-0 fs-4" style="z-index: 1">☰</button>
+<h1 hidden>Form Flow Dashboard</h1> <!--for a11y-->
+
+<AppSideBar chartEl={chartEl} dataDialogEl={dataDialogEl}></AppSideBar>
+
 <resize-divs width class="h-100" on:resize-move={() => chartEl.getInstance().fitView()}>
   <div class="position-relative" style="width: 33%">
-    <form-diagram bind:this={chartEl} 
-      on:reactflow={handleReactflowEvent}></form-diagram>
-    <div class="position-absolute bottom-0 end-0 m-3">
-      <button on:click={() => showJson(chartEl.getData())}>Get Data</button>
-      <button on:click={() => showImage()}>Get Image</button>
-      <button on:click={() => showJson(chartEl.getInstance())}>Get Instance</button>
-    </div>
+    <form-diagram bind:this={chartEl} on:reactflow={handleReactflowEvent}></form-diagram>
   </div>
   <div class="accordion flex-fill" id="right-section" role="navigation">
     <div class="accordion-item">
@@ -107,19 +91,4 @@
   </div>
 </resize-divs>
 
-
-<!-- Modal -->
-<div class="modal fade" id="dialog" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="dialog-contents">
-        <pre id="dialog-json" class="dialog-dynamic"></pre>
-        <img id="dialog-image" class="dialog-dynamic w-100" alt="blah" />
-      </div>
-    </div>
-  </div>
-</div>
+<AppDataDialog bind:this={dataDialogEl}></AppDataDialog>
