@@ -1,14 +1,18 @@
 <script lang='ts'>
-  import type { FormDiagram, SideBar } from '@formflow/elements/src';
-  import AppDataDialog from './app-data.dialog.svelte';
+  import type { FormDiagram } from '@formflow/elements/src';
+
   import AppSideBar from './app-sidebar.svelte';
-  import { onMount } from 'svelte';
+  import AppDataDialog from './app-data.dialog.svelte';
+  import AppFileDialog from './app-file.dialog.svelte';
+  import { FormflowFile } from './formflow-file';
 
   const dq = document.querySelector.bind(document);
   const dqa = document.querySelectorAll.bind(document);
 
   let chartEl: FormDiagram;
-  let dataDialogEl: any;
+  let dataDialogData: any = {};
+  let fileDialogMessage: string;
+  let currentFile: FormflowFile;
 
   function handleReactflowEvent(e: any) {
     const {action, type, node, edge} = e.detail;
@@ -34,17 +38,58 @@
       chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
     }
   }
+
+  function handleSideBarClick(event: any) {
+    const command = event.target.innerText;
+    if (command === 'Show data') {
+      dataDialogData.reactflowData = chartEl.getData();
+      dataDialogData.reactflowInstance = chartEl.getInstance();
+      new (window as any).bootstrap.Modal(document.querySelector('#data-dialog')).toggle();
+    } else if (command === 'New') {
+      currentFile = new FormflowFile(chartEl);
+      fileDialogMessage = 'A new file is opened';
+      new (window as any).bootstrap.Modal(document.querySelector('#file-dialog')).toggle();
+    } else if (command === 'Open') {
+      fileDialogMessage = 'listAllFiles';
+      new (window as any).bootstrap.Modal(document.querySelector('#file-dialog')).toggle();
+    } else if (currentFile && command === 'Save') {
+      if (currentFile.name) {
+        currentFile.save();
+        fileDialogMessage = 'listAllFiles';
+      } else {
+        fileDialogMessage = 'getFileName';
+        new (window as any).bootstrap.Modal(document.querySelector('#file-dialog')).toggle();
+      }
+    } else if (command === 'SaveAs') {
+      fileDialogMessage = 'getFileName';
+      new (window as any).bootstrap.Modal(document.querySelector('#file-dialog')).toggle();
+    }
+  }
+
+  function openFile(event) {
+    currentFile.name = event.detail.name;
+    currentFile.data = event.detail.data;
+    currentFile.save();
+    fileDialogMessage = `File ${currentFile.name} opened`;
+    new (window as any).bootstrap.Modal(document.querySelector('#file-dialog')).toggle();
+  }
+
+  function saveFileAs(event) {
+    currentFile.name = event.detail.name;
+    currentFile.save();
+    fileDialogMessage = `Saved file as "${currentFile.name}""`;
+    new (window as any).bootstrap.Modal(document.querySelector('#file-dialog')).toggle();
+  }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
 
 <svelte:window on:resize={() => chartEl.getInstance().fitView()} />
 
 <button data-x-target="sidebar" class="position-absolute top-0 start-0 border-0 fs-4" style="z-index: 1">☰</button>
 <h1 hidden>Form Flow Dashboard</h1> <!--for a11y-->
 
-<AppSideBar chartEl={chartEl} dataDialogEl={dataDialogEl}></AppSideBar>
+<AppSideBar on:click={handleSideBarClick}></AppSideBar>
 
 <resize-divs width class="h-100" on:resize-move={() => chartEl.getInstance().fitView()}>
   <div class="position-relative" style="width: 33%">
@@ -91,4 +136,9 @@
   </div>
 </resize-divs>
 
-<AppDataDialog bind:this={dataDialogEl}></AppDataDialog>
+<AppDataDialog data={dataDialogData}></AppDataDialog>
+<AppFileDialog 
+  message={fileDialogMessage} 
+  on:open-file={openFile} 
+  on:save-file-as={saveFileAs}>
+</AppFileDialog>

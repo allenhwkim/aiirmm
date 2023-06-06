@@ -40,7 +40,7 @@ export class FormDiagram extends HTMLElement {
   }
 
   getData() {
-    const data = this.reactflowInstance.toObject()
+    const data = this.reactflowInstance?.toObject()
     return data;
   }
 

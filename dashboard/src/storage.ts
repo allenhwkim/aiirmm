@@ -1,21 +1,26 @@
 export class Storage {
-  storage: any;
-  defaultValue: any;
-  constructor(storage: any, defaultVal: any) {
-    this.storage = storage;
-    this.defaultValue = defaultVal;
+  static storage: any = 'localStorage';
+  static itemKey: string = 'formflow';
+
+  static getAll() {
+    const storageData = Storage.storage.getItem(Storage.itemKey);
+    return JSON.parse(storageData);
   }
 
-  getItem(key: string) {
-    return this.storage.getItem(key);
+  static getItem(key: string) {
+    const storageData = Storage.storage.getItem(Storage.itemKey);
+    const storageObj = JSON.parse(storageData);
+
+    return storageObj[key];
   }
 
-  setItem(key:string, data: any) {
-    return this.storage.setItem(key, data)
+  static setItem(key:string, data: any) {
+    const storageData = Storage.storage.getItem(Storage.itemKey);
+    const storageObj = JSON.parse(storageData);
+    storageObj[key] = data;
+    const newStorageData = JSON.stringify(storageObj);
+
+    return Storage.storage.setItem(Storage.itemKey, newStorageData);
   }
 
-  new =  () => this.defaultValue;
-  open =  (key: string) => this.getItem(key);
-  save = (key: string, value: any) => this.storage.setItem(key, value);
-  saveAs = (key: string, value: any) => this.storage.setItem(key, value);
 }
