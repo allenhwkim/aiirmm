@@ -3,8 +3,7 @@
   li:not(:has(ul)):hover { background: #EEE;}
 </style>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<side-bar on:click>
+<side-bar on:click on:keydown>
   <ul>
     <li>
       File

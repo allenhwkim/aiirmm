@@ -1,26 +1,42 @@
 export class Storage {
-  static storage: any = 'localStorage';
-  static itemKey: string = 'formflow';
-
-  static getAll() {
-    const storageData = Storage.storage.getItem(Storage.itemKey);
-    return JSON.parse(storageData);
-  }
+  static storage: any = (window as any).sessionStorage;
 
   static getItem(key: string) {
-    const storageData = Storage.storage.getItem(Storage.itemKey);
-    const storageObj = JSON.parse(storageData);
-
-    return storageObj[key];
+    const [groupKey, itemKey] = key.split('.');
+    if (groupKey && itemKey) {
+      const storageData = Storage.storage.getItem(groupKey);
+      const storageObj = JSON.parse(storageData);
+      return storageObj[itemKey];
+    } else {
+      const storageData = Storage.storage.getItem(key);
+      const storageObj = JSON.parse(storageData);
+      return storageObj;
+    }
   }
 
   static setItem(key:string, data: any) {
-    const storageData = Storage.storage.getItem(Storage.itemKey);
-    const storageObj = JSON.parse(storageData);
-    storageObj[key] = data;
-    const newStorageData = JSON.stringify(storageObj);
-
-    return Storage.storage.setItem(Storage.itemKey, newStorageData);
+    const [groupKey, itemKey] = key.split('.');
+    if (groupKey && itemKey) {
+      const storageData = Storage.storage.getItem(groupKey);
+      const storageObj = storageData ? JSON.parse(storageData) : {};
+      storageObj[itemKey] = data;
+      const newStorageData = JSON.stringify(storageObj);
+      return Storage.storage.setItem(groupKey, newStorageData);
+    } else {
+      return Storage.storage.setItem(groupKey, JSON.stringify(data));
+    }
   }
 
+  static removeItem(key) {
+    const [groupKey, itemKey] = key.split('.');
+    if (groupKey && itemKey) {
+      const storageData = Storage.storage.getItem(groupKey);
+      const storageObj = JSON.parse(storageData);
+      delete storageObj[itemKey];
+      const newStorageData = JSON.stringify(storageObj);
+      return Storage.storage.setItem(groupKey, newStorageData);
+    } else {
+      return Storage.storage.removeItem(key);
+    }
+  }
 }

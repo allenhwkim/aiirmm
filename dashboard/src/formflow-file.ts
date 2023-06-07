@@ -15,31 +15,47 @@ const DEFAULT_VALUE =  {
 }
 
 export class FormflowFile {
-  name: string | undefined;
-  data: any;
   storage: any;
   chartEl: any;
+  saved = true;
 
-  constructor(chartEl) {
-    this.data = DEFAULT_VALUE;
-    this.chartEl = chartEl;
+  _data: any;
+  get data() { return this._data; }
+  set data(val) { 
+    this._data = val; 
+    this.chartEl?.setData(val);
+    Storage.setItem('currentFormflow.data', val);
   }
 
-  open(name: string, data: any) {
-    this.name = undefined;
-    this.data = data;
+  _name: any;
+  get name() { return this._name; }
+  set name(val) { 
+    this._name = val; 
+    Storage.setItem('currentFormflow.name', val);
+  }
+
+  constructor(chartEl) {
+    this.chartEl = chartEl;
+    if (Storage.getItem('currentFormflow')) {
+      this.name = Storage.getItem('currentFormflow.name');
+      this.data = Storage.getItem('currentFormflow.data');
+    } else {
+      this.name = 'Untitled';
+      this.data = DEFAULT_VALUE;
+    }
   }
 
   save() {
     if (this.name) {
       this.data = this.chartEl.getData();;
-      Storage.setItem(this.name, this.data);
+      console.log('this.data', this.data);
+      Storage.setItem(`formflows.${this.name}`, this.data);
     }
   }
 
   saveAs(key: string) {
     this.name = key;
     this.data = this.chartEl.getData();
-    Storage.setItem(this.name, this.data);
+    Storage.setItem(`formflows.${this.name}`, this.data);
   }
 }
