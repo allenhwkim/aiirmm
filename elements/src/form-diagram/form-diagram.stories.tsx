@@ -19,9 +19,6 @@ const Template:any = (args: any) => {
   const [data, setData] = useState(args.data);
 
   const chartEl = useRef(null);
-  const getData = (event: any) => console.log((chartEl.current as any).getData());
-  const getImage = async (event: any) => console.log( await (chartEl.current as any).getImage());
-  const getInstance = (event: any) => console.log((chartEl.current as any).getInstance());
 
   React.useEffect( () => {
     setData(args.data);
@@ -30,9 +27,6 @@ const Template:any = (args: any) => {
 
   return <>
     <form-diagram ref={chartEl}></form-diagram>
-    <button onClick={getData}>Get Data</button>
-    <button onClick={getImage}>Get Image</button>
-    <button onClick={getInstance}>Get Instance</button>
   </>
 };
 

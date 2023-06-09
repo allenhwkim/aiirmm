@@ -6,8 +6,6 @@ import {
   OnEdgeUpdateFunc,
 } from 'reactflow';
 
-// addNodeOn(edgeId, options): TAddNode
-// addNodeBeside(nodeId, options): TAddNode
 export type TAddNodeOptions = {
   nodes: Node[];
   edges: Edge[];
@@ -32,8 +30,9 @@ export type TStoreState = {
   onConnect: OnConnect;
   updateNodeLabel: (nodeId: string, label: string) => void;
   updateEdgeLabel: (nodeId: string, label: string) => void;
-  addNodeOn: (edgeId: string) => void;
   addNodeBeside: (nodeId: string) => void;
+  addNodeBelow: (nodeId: string) => void;
+  addNodeAbove: (nodeId: string) => void;
   undo: () => void;
   redo: () => void;
 };

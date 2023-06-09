@@ -17,18 +17,13 @@ export default function CustomEdge({
   style = {}, 
   label
 }: EdgeProps): React.ReactElement {
-  const { updateEdgeLabel, addNodeOn } = useStore();
-  const { fitView } = useReactFlow();
+  const { updateEdgeLabel } = useStore();
   
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX, sourceY, targetX, targetY,
     sourcePosition, targetPosition,
   });
 
-  const onClick = () => {
-    addNodeOn(id);
-    setTimeout(() => fitView({duration: 500}));
-  };
   const markerId = `triangle-${Math.ceil(Math.random()*10^6)}`;
 
   return (
@@ -64,10 +59,6 @@ export default function CustomEdge({
           defaultValue={label as string}
           onChange={evt => updateEdgeLabel(id, evt.target.value)} 
         />
-        <br/>
-        <button className="add-node-button" onClick={onClick}>
-          +
-        </button>
       </foreignObject>
 
       <foreignObject
@@ -79,8 +70,6 @@ export default function CustomEdge({
         style={{textAlign: 'center', border: '1px dashed none'}}
         requiredExtensions="http://www.w3.org/1999/xhtml">
         <div className="label-display">{label}</div>
-        <br/>
-        <span className="add-node-button" onClick={onClick}>+</span>
       </foreignObject>
     </>
   );

@@ -44,11 +44,11 @@
       new (window as any).bootstrap.Collapse(dq('#properties'));
     } else if (node?.type === 'custom') {
       new (window as any).bootstrap.Collapse(dq('#form-designer'));
-      setTimeout(_ => Storage.setItem('currentFormflow.data', chartEl.getData()));
+      setTimeout(() => Storage.setItem('currentFormflow.data', chartEl.getData()));
       currentFile.saved = false;
     } else if (edge?.type === 'custom') {
       new (window as any).bootstrap.Collapse(dq('#properties'));
-      setTimeout(_ => Storage.setItem('currentFormflow.data', chartEl.getData()));
+      setTimeout(() => Storage.setItem('currentFormflow.data', chartEl.getData()));
       currentFile.saved = false;
     }
   }
@@ -80,7 +80,7 @@
     } else if (command === 'Save') {
       currentFile.save();
       fileDialogMessage = 'listAllFiles';
-    } else if (command === 'SaveAs') {
+    } else if (command === 'Save As') {
       fileDialogMessage = 'getFileName';
       fileDialog.show();
     } else {

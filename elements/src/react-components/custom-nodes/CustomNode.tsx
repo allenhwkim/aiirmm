@@ -4,7 +4,7 @@ import { Handle,  Node, Position, useReactFlow, getIncomers, getOutgoers } from 
 import useStore from '../store';
 
 function CustomNode({ id, data }: Node): React.ReactElement {
-  const { nodes, edges, updateNodeLabel, addNodeBeside } = useStore();
+  const { nodes, edges, updateNodeLabel, addNodeBeside, addNodeAbove, addNodeBelow } = useStore();
   const { fitView} = useReactFlow();
   const containerRef = useRef(null);
 
@@ -15,10 +15,21 @@ function CustomNode({ id, data }: Node): React.ReactElement {
     numOutgoers = getOutgoers(node, nodes, edges).length;
   }
 
-  const onClick = () => {
+  const addNodeToRight = () => {
     addNodeBeside(id);
     setTimeout(() => fitView({duration: 500}));
   }
+
+  const addNodeAboveThis = () => {
+    addNodeAbove(id);
+    setTimeout(() => fitView({duration: 500}));
+  }
+
+  const addNodeBelowThis = () => {
+    addNodeBelow(id);
+    setTimeout(() => fitView({duration: 500}));
+  }
+
 
   const onLabelInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateNodeLabel(id, event.target.value);
@@ -36,7 +47,9 @@ function CustomNode({ id, data }: Node): React.ReactElement {
       >
         {data.label}
       </div>
-      <span className="add-node-button" onClick={onClick}>+</span>
+      <span className="add-node-button right" onClick={addNodeToRight}>+</span>
+      <span className="add-node-button bottom" onClick={addNodeBelowThis}>+</span>
+      <span className="add-node-button top" onClick={addNodeAboveThis}>+</span>
       <Handle type="source" position={Position.Bottom} />
     </div>
   );

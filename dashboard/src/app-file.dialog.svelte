@@ -4,9 +4,12 @@
 
   export let message;
 
-  let fileName;
   const dispatch = createEventDispatcher();
-  const allFiles = Object.entries(Storage.getItem('formflows') || []);
+
+  let fileName;
+  function getAllFiles() {
+    return Object.entries(Storage.getItem('formflows') || []);
+  }
 </script>
 
 <style>
@@ -24,7 +27,7 @@
       <div class="modal-body" id="dialog-contents">
       {#if message==='listAllFiles'}
         <ul>
-          {#each Object.entries(allFiles) as [_ndx, [name, data]]}
+          {#each getAllFiles() as [name, data]}
             <li>
               nodes: {data.nodes.length}, edges: {data.edges.length}
               <button on:click={() => dispatch('open-file', {name, data})}>{name}</button>

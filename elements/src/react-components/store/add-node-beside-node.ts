@@ -4,7 +4,7 @@ import { TAddNode, TAddNodeOptions} from '../types';
 const NODE_GAP_H = 40;
 const NODE_WIDTH = 200;
 
-export function addNodeBeside(
+export function addNodeBesideNode(
   nodeId: string, 
   options: TAddNodeOptions
 ) : TAddNode {

@@ -6,11 +6,12 @@ import {
   updateEdge,
 } from 'reactflow';
 
-import { addNodeOn } from './add-node-on';
-import { addNodeBeside } from './add-node-beside';
 import { initialEdges, initialNodes } from './initial-nodes-edges';
 import { TStoreState } from '../types';
 import { UndoRedo } from './undo-redo';
+import { addNodeAboveNode } from './add-node-above-node';
+import { addNodeBelowNode } from './add-node-below-node';
+import { addNodeBesideNode } from './add-node-beside-node';
 
 UndoRedo.addHistory({nodes: initialNodes, edges: initialEdges});
 
@@ -122,19 +123,6 @@ const useStore = create<TStoreState>((set, get) => ({
     });
   },
 
-  addNodeOn: (edgeId: string) => {
-    set({nextNodeId: get().nextNodeId + 1});
-    const options: any= {
-      nodes: get().nodes,
-      edges: get().edges,
-      nextNodeId: '' + get().nextNodeId
-    }
-    const {nodes, edges} = addNodeOn(edgeId, options);
-    set({nodes, edges});
-
-    UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
-  },
-
   addNodeBeside: (nodeId: string) => {
     set({nextNodeId: get().nextNodeId + 1});
     const options: any = {
@@ -142,7 +130,33 @@ const useStore = create<TStoreState>((set, get) => ({
       edges: get().edges,
       nextNodeId: '' + get().nextNodeId
     }
-    const {nodes, edges} = addNodeBeside(nodeId, options);
+    const {nodes, edges} = addNodeBesideNode(nodeId, options);
+    set({nodes, edges});
+
+    UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
+  },
+
+  addNodeBelow: (nodeId: string) => {
+    set({nextNodeId: get().nextNodeId + 1});
+    const options: any = {
+      nodes: get().nodes,
+      edges: get().edges,
+      nextNodeId: '' + get().nextNodeId
+    }
+    const {nodes, edges} = addNodeBelowNode(nodeId, options);
+    set({nodes, edges});
+
+    UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
+  },
+
+  addNodeAbove: (nodeId: string) => {
+    set({nextNodeId: get().nextNodeId + 1});
+    const options: any = {
+      nodes: get().nodes,
+      edges: get().edges,
+      nextNodeId: '' + get().nextNodeId
+    }
+    const {nodes, edges} = addNodeAboveNode(nodeId, options);
     set({nodes, edges});
 
     UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});

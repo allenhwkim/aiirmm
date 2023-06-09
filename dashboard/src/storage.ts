@@ -1,5 +1,6 @@
 export class Storage {
-  static storage: any = (window as any).sessionStorage;
+  // static storage: any = (window as any).sessionStorage;
+  static storage: any = (window as any).localStorage;
 
   static getItem(key: string) {
     const [groupKey, itemKey] = key.split('.');

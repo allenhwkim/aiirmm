@@ -28,8 +28,8 @@ export const Primary: any = Template.bind({});
 Primary.args = {
   nodes:[
     {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
-    {id: '1', type: 'custom', data: {label: 'Hello'}, position: { x: 100, y: 100 }},
-    {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 200 }},
+    {id: '1', type: 'custom', data: {label: 'Hello'}, position: { x: 100, y: 140 }},
+    {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 300 }},
   ],
   edges: [
     {id: 'start-1', source: 'start', target: '1', type: 'custom'},
