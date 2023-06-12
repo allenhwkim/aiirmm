@@ -5,7 +5,8 @@ const NODE_GAP_H = 40;
 const NODE_WIDTH = 200;
 
 export function addNodeBesideNode(
-  nodeId: string, 
+  nodeId: string,
+  position: string = 'right',
   options: TAddNodeOptions
 ) : TAddNode {
   const nodes = [...options.nodes];
@@ -24,7 +25,8 @@ export function addNodeBesideNode(
     position: { x: newNodeX, y: newNodeY },
   }
   const currentNodeNdx = nodes.findIndex(el => el.id === nodeId);
-  nodes.splice(currentNodeNdx+1, 0, newNode); // splice updates nodes itself
+  const newNodeIndex = position === 'left' ? currentNodeNdx - 1 : currentNodeNdx + 1;
+  nodes.splice(newNodeIndex, 0, newNode); // splice updates nodes itself
 
   // create edges. Then, add it to edges
   const incomer = getIncomers(currentNode, nodes, edges)[0];

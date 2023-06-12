@@ -48,6 +48,10 @@
   transition: opacity .3s;
   box-shadow: 0 0 6px 2px rgb(0 0 0 / 8%);
   opacity: 0;
+} 
+.react-flow__node .add-node-button.left {
+  top: calc(50% - 10px);
+  left: -24px;
 }
 .react-flow__node .add-node-button.right {
   top: calc(50% - 10px);

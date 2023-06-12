@@ -30,7 +30,7 @@ export type TStoreState = {
   onConnect: OnConnect;
   updateNodeLabel: (nodeId: string, label: string) => void;
   updateEdgeLabel: (nodeId: string, label: string) => void;
-  addNodeBeside: (nodeId: string) => void;
+  addNodeBeside: (nodeId: string, position: string) => void;
   addNodeBelow: (nodeId: string) => void;
   addNodeAbove: (nodeId: string) => void;
   undo: () => void;

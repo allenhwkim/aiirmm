@@ -15,8 +15,13 @@ function CustomNode({ id, data }: Node): React.ReactElement {
     numOutgoers = getOutgoers(node, nodes, edges).length;
   }
 
+  const addNodeToLeft = () => {
+    addNodeBeside(id, 'left');
+    setTimeout(() => fitView({duration: 500}));
+  }
+
   const addNodeToRight = () => {
-    addNodeBeside(id);
+    addNodeBeside(id, 'right');
     setTimeout(() => fitView({duration: 500}));
   }
 
@@ -47,9 +52,10 @@ function CustomNode({ id, data }: Node): React.ReactElement {
       >
         {data.label}
       </div>
+      <span className="add-node-button top" onClick={addNodeAboveThis}>+</span>
       <span className="add-node-button right" onClick={addNodeToRight}>+</span>
       <span className="add-node-button bottom" onClick={addNodeBelowThis}>+</span>
-      <span className="add-node-button top" onClick={addNodeAboveThis}>+</span>
+      <span className="add-node-button left" onClick={addNodeToLeft}>+</span>
       <Handle type="source" position={Position.Bottom} />
     </div>
   );

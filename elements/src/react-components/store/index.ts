@@ -123,14 +123,14 @@ const useStore = create<TStoreState>((set, get) => ({
     });
   },
 
-  addNodeBeside: (nodeId: string) => {
+  addNodeBeside: (nodeId: string, position: string = 'right') => {
     set({nextNodeId: get().nextNodeId + 1});
     const options: any = {
       nodes: get().nodes,
       edges: get().edges,
       nextNodeId: '' + get().nextNodeId
     }
-    const {nodes, edges} = addNodeBesideNode(nodeId, options);
+    const {nodes, edges} = addNodeBesideNode(nodeId, position, options);
     set({nodes, edges});
 
     UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
