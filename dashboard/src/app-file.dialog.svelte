@@ -10,6 +10,17 @@
   function getAllFiles() {
     return Object.entries(Storage.getItem('formflows') || []);
   }
+  
+  function saveFileAs() {
+    const sameFileExists = Storage.getItem(`formflows.${fileName}`);
+    if (sameFileExists) {
+      if (window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`)) {
+        dispatch('save-file-as', {fileName});
+      }
+    } else {
+      dispatch('save-file-as', {fileName});
+    }
+  }
 </script>
 
 <style>
@@ -25,18 +36,22 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="dialog-contents">
-      {#if message==='listAllFiles'}
-        <ul>
-          {#each getAllFiles() as [name, data]}
-            <li>
-              nodes: {data.nodes.length}, edges: {data.edges.length}
-              <button on:click={() => dispatch('open-file', {name, data})}>{name}</button>
-            </li>
-          {/each}
-        </ul>
+      {#if message ==='listAllFiles'}
+        {#if getAllFiles().length}
+          <ul>
+            {#each getAllFiles() as [name, data]}
+              <li>
+                nodes: {data.nodes.length}, edges: {data.edges.length}
+                <button on:click={() => dispatch('open-file', {name, data})}>{name}</button>
+              </li>
+            {/each}
+          </ul>
+        {:else}
+          No items to display
+        {/if}
       {:else if message==='getFileName'}
         <input bind:value={fileName} required>
-        <button on:click={() => dispatch('save-file-as', {fileName})}>Save</button>
+        <button on:click={saveFileAs}>Save</button>
       {:else if message}
         {message}
       {/if}

@@ -17,7 +17,13 @@ const DEFAULT_VALUE =  {
 export class FormflowFile {
   storage: any;
   chartEl: any;
-  saved = true;
+
+  _modified = false; // set to true when modified a form
+  get modified() { return this._modified; }
+  set modified(val) { 
+    this._modified = val; 
+    Storage.setItem('currentFormflow.modified', val);
+  }
 
   _data: any;
   get data() { return this._data; }
@@ -27,8 +33,8 @@ export class FormflowFile {
     Storage.setItem('currentFormflow.data', val);
   }
 
-  _name: any;
-  get name() { return this._name; }
+  _name: string;
+  get name() { return this._name || 'Untitled'; }
   set name(val) { 
     this._name = val; 
     Storage.setItem('currentFormflow.name', val);
@@ -40,7 +46,6 @@ export class FormflowFile {
       this.name = Storage.getItem('currentFormflow.name');
       this.data = Storage.getItem('currentFormflow.data');
     } else {
-      this.name = 'Untitled';
       this.data = DEFAULT_VALUE;
     }
   }
@@ -50,6 +55,7 @@ export class FormflowFile {
       this.data = this.chartEl.getData();;
       console.log('this.data', this.data);
       Storage.setItem(`formflows.${this.name}`, this.data);
+      this.modified = false;
     }
   }
 
@@ -57,5 +63,6 @@ export class FormflowFile {
     this.name = key;
     this.data = this.chartEl.getData();
     Storage.setItem(`formflows.${this.name}`, this.data);
+    this.modified = false;
   }
 }

@@ -55,13 +55,10 @@ export class FormDiagram extends HTMLElement {
       }
     );
     console.log(blobUrl);
-    // alert(blobUrl);
     return blobUrl;
   };
 
   getInstance() {
-    // console.log(this.reactflowInstance);
-    // alert(JSON.stringify(this.reactflowInstance) + '\nFor more, check console');
     return this.reactflowInstance;
   }
 

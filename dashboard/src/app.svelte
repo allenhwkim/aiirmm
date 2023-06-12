@@ -45,11 +45,11 @@
     } else if (node?.type === 'custom') {
       new (window as any).bootstrap.Collapse(dq('#form-designer'));
       setTimeout(() => Storage.setItem('currentFormflow.data', chartEl.getData()));
-      currentFile.saved = false;
+      currentFile.modified = true;
     } else if (edge?.type === 'custom') {
       new (window as any).bootstrap.Collapse(dq('#properties'));
       setTimeout(() => Storage.setItem('currentFormflow.data', chartEl.getData()));
-      currentFile.saved = false;
+      currentFile.modified = true;
     }
   }
 
@@ -60,8 +60,8 @@
       dataDialogData.reactflowInstance = chartEl.getInstance();
       dataDialog.show();
     } else if (command === 'New') {
-      if (!currentFile.saved) {
-        fileDialogMessage = 'The current formflow is updated, but not saved. Please save.';
+      if (currentFile.modified === true) {
+        fileDialogMessage = 'The current formflow is modified, but not saved. Please save.';
         fileDialog.show();
       } else {
         Storage.removeItem('currentFormflow');
@@ -70,37 +70,38 @@
         fileDialog.show();
       }
     } else if (command === 'Open') {
-      if (!currentFile.saved) {
-        fileDialogMessage = 'The current formflow is updated, but not saved. Please save.';
+      if (currentFile.modified === true && currentFile.name !== 'Untitled') {
+        fileDialogMessage = 'The current formflow is modified, but not saved. Please save.';
         fileDialog.show();
       } else {
         fileDialogMessage = 'listAllFiles';
         fileDialog.show();
       }
+    } else if (command === 'Save' && currentFile.name === 'Untitled') {
+      fileDialogMessage = 'getFileName';
+      fileDialog.show(); // will call saveFileAs(newFileName)
+    } else if (command === 'Save As') {
+      fileDialogMessage = 'getFileName';
+      fileDialog.show(); // will call saveFileAs(newFileName)
     } else if (command === 'Save') {
       currentFile.save();
       fileDialogMessage = 'listAllFiles';
-    } else if (command === 'Save As') {
-      fileDialogMessage = 'getFileName';
-      fileDialog.show();
     } else {
       console.log('handleSidebarClick', {currentFile, command})
     }
   }
 
   function openFile(event) { // file dialog event handler
-    console.log('openFile....', event.detail);
     currentFile.name = event.detail.name;
     currentFile.data = event.detail.data;
     fileDialogMessage = `File ${currentFile.name} opened`;
   }
 
   function saveFileAs(event) { // file dialog event handler
-    console.log('saveFileAs', event.detail);
     currentFile.name = event.detail.fileName;
     currentFile.save();
     fileDialogMessage = `Saved file as "${currentFile.name}""`;
-    currentFile.saved = true;
+    currentFile.modified = false;
   }
 </script>
 
@@ -121,7 +122,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#properties">
-          Properties of {currentFile?.name || 'Untitled'}
+          Properties of "{currentFile?.name || 'Untitled'}"
         </button>
       </h2>
       <div id="properties" class="accordion-collapse collapse" data-bs-parent="#right-section">

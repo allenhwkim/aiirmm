@@ -7,7 +7,7 @@ export class Storage {
     if (groupKey && itemKey) {
       const storageData = Storage.storage.getItem(groupKey);
       const storageObj = JSON.parse(storageData);
-      return storageObj[itemKey];
+      return storageObj?.[itemKey];
     } else {
       const storageData = Storage.storage.getItem(key);
       const storageObj = JSON.parse(storageData);
