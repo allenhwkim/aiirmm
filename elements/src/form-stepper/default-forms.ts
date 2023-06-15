@@ -40,10 +40,10 @@ export const defaultForms = {
       return { id: 78912 };
     },
     onSuccess: function(resp: Response) {
-      console.log('resp. success', resp);
+      alert('form submission success');
     },
     onError: function(error: Response) {
-      console.log('resp. error', error);
+      alert('form submission error');
     }
   }
 };

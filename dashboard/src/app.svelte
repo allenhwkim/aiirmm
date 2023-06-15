@@ -26,7 +26,6 @@
   function handleReactflowEvent(e: any) {
     const {action, type, node, edge} = e.detail;
     const id = node?.id || edge?.id || '';
-    console.log('handleReactflowEvent', {type, action, node, edge});
 
     dq('#event-type').innerText = type || '';
     dq('#event-id').innerText = id;
@@ -44,11 +43,11 @@
       new (window as any).bootstrap.Collapse(dq('#properties'));
     } else if (node?.type === 'custom') {
       new (window as any).bootstrap.Collapse(dq('#form-designer'));
-      setTimeout(() => Storage.setItem('currentFormflow.data', chartEl.getData()));
+      setTimeout(() => Storage.setItem('currentFormflow.chart', chartEl.getData()));
       currentFile.modified = true;
     } else if (edge?.type === 'custom') {
       new (window as any).bootstrap.Collapse(dq('#properties'));
-      setTimeout(() => Storage.setItem('currentFormflow.data', chartEl.getData()));
+      setTimeout(() => Storage.setItem('currentFormflow.chart', chartEl.getData()));
       currentFile.modified = true;
     }
   }
@@ -87,13 +86,13 @@
       currentFile.save();
       fileDialogMessage = 'listAllFiles';
     } else {
-      console.log('handleSidebarClick', {currentFile, command})
+      console.debug('Unhandled handleSidebarClick', {currentFile, command})
     }
   }
 
   function openFile(event) { // file dialog event handler
-    currentFile.name = event.detail.name;
-    currentFile.data = event.detail.data;
+    console.log('openFile()', {file: event.detail});
+    currentFile = new FormflowFile(chartEl, event.detail);
     fileDialogMessage = `File ${currentFile.name} opened`;
   }
 

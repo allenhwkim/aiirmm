@@ -8,18 +8,14 @@
 
   let fileName;
   function getAllFiles() {
-    return Object.entries(Storage.getItem('formflows') || []);
+    return Storage.getItem('formflows') || [];
   }
   
   function saveFileAs() {
-    const sameFileExists = Storage.getItem(`formflows.${fileName}`);
-    if (sameFileExists) {
-      if (window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`)) {
-        dispatch('save-file-as', {fileName});
-      }
-    } else {
-      dispatch('save-file-as', {fileName});
-    }
+    const allFormflows = Storage.getItem('formflows') || []; // returns array
+    const index = allFormflows.findIndex( el => el.name === fileName);
+    const confirmed = index === -1 ? true : window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`);
+    confirmed && dispatch('save-file-as', {fileName});
   }
 </script>
 
@@ -39,10 +35,10 @@
       {#if message ==='listAllFiles'}
         {#if getAllFiles().length}
           <ul>
-            {#each getAllFiles() as [name, data]}
+            {#each getAllFiles() as file}
               <li>
-                nodes: {data.nodes.length}, edges: {data.edges.length}
-                <button on:click={() => dispatch('open-file', {name, data})}>{name}</button>
+                nodes: {file.chart.nodes.length}, edges: {file.chart.edges.length}
+                <button on:click={() => dispatch('open-file', file)}>{file.name}</button>
               </li>
             {/each}
           </ul>

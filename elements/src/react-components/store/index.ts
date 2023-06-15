@@ -42,7 +42,6 @@ const useStore = create<TStoreState>((set, get) => ({
   },
 
   onNodesChange: (changes: NodeChange[]) => {
-    // console.log('node changes', changes) // change, add, remove
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });

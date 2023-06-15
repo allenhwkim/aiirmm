@@ -12,7 +12,6 @@ const Template = (args?: any) => {
   const message: any = React.useRef();
   React.useEffect(() => {
     container.current.addEventListener('select', (e:any) => {
-      console.log('pagination select', e.detail);
       message.current.innerText = `selected "${JSON.stringify(e.detail)}`;
     });
   }, []);

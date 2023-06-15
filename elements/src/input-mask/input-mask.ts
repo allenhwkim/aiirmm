@@ -125,7 +125,6 @@ export const InputMask = customElement({
     if (isCharInput && !matchingMask) {
       event.preventDefault(); // when too many input, ignore input
     } else if (isCharInput && (event.metaKey || event.ctrlKey)) { // allow copy/paste
-      // console.log('.............. meta keydown', event)
     } else if (isCharInput) { // character input
       const reStr = `^${this.MASK_EXPR[matchingMask.toUpperCase()]}$`; // e.g. `^[0-9]$`;
       const isCharAcceptable = inputChar.match(new RegExp(reStr));
@@ -135,7 +134,6 @@ export const InputMask = customElement({
         event.preventDefault(); // ignore input
       }
     } else { // for special char. e.g. backspace key
-      // console.log('space char', {event, inputChar});
     }
   }
 });

@@ -16,10 +16,6 @@ const PrimaryStyle = (args?: any) => {
     });
   }, []);
 
-  function handleSelect(e: any) {
-    console.log(e.detail);
-  }
-
   return <div>
     <p ref={message}></p>
     <list-select selected="file-a" ref={listSelect}>
@@ -76,10 +72,6 @@ const MenuStyle = (args?: any) => {
       message.current.innerText = `"${e.detail.innerText.split('\n')[0]}" is selected`;
     });
   }, []);
-
-  function handleSelect(e: any) {
-    console.log(e.detail);
-  }
 
   return <div style={{minHeight: 200}}>
     <p ref={message}></p>

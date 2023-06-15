@@ -54,7 +54,6 @@ export class FormDiagram extends HTMLElement {
         )
       }
     );
-    console.log(blobUrl);
     return blobUrl;
   };
 

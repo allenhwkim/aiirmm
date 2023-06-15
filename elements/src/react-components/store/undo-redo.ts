@@ -51,9 +51,7 @@ export const UndoRedo = {
        '=> ' + this.history[this.position] : '';
     const canUndo = this.canUndo();
     const canRedo = this.canRedo();
-    console.log(
-      cmd, {history, position, canUndo, canRedo}, ret
-    );
+    console.debug('UndoRedo', cmd, {history, position, canUndo, canRedo}, ret);
   }
 };
 

@@ -1,16 +1,16 @@
 
-const formScript = function() {
+const formScript = function(this:any) {
   const controls = Array.from(this.elements)
-    .filter( (el: HTMLFormElement) => ['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName));
+    .filter( (el: any) => ['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName));
   
-  controls.forEach( (el: HTMLFormElement) => {
+  controls.forEach( (el: any) => {
     el.addEventListener('blur', event => 
       el.classList.add(el.checkValidity() ? 'is-valid' : 'is-invalid')
     );
   });
 
   this.addEventListener('submit', event => {
-    controls.forEach( (el: HTMLFormElement) => {
+    controls.forEach( (el: any) => {
       el.classList.add(el.checkValidity() ? 'is-valid' : 'is-invalid')
     }); 
     if (!this.checkValidity()) {
@@ -40,25 +40,20 @@ export const formType = {
 
   view: {
     events: {
-      'dblclick button': e => console.log(`dblclick form button`),
+      'dblclick button': e => console.debug(`dblclick form button`),
       submit: 'onFormSubmit'
     },
 
     onFormSubmit(event) {
-      // console.log('form submit');
     },
 
     init({ model }) {
-      // console.log('form init', model, this.model);
-      // this.listenTo(model, 'change:prop', this.handlePropChange);
     },
 
     removed() {
-      // console.log('form removed');
     },
 
     onRender() {
-      // console.log('form onRender', this.el)
     },
   },
 }

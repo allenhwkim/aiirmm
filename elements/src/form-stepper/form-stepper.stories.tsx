@@ -51,10 +51,8 @@ const myForm = {
       return { id: 78912 };
     },
     onSuccess: function(resp: Response) {
-      console.log('resp. success', resp);
     },
     onError: function(error: Response) {
-      console.log('resp. error', error);
     }
   }
 }

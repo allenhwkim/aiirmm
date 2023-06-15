@@ -1,17 +1,15 @@
 import { Storage } from './storage';
 
 const DEFAULT_VALUE =  {
-  reactflow: {
-    nodes:[
-      {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
-      {id: '1', type: 'custom', data: {label: 'Hello'}, position: { x: 100, y: 100 }},
-      {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 200 }},
-    ],
-    edges: [
-      {id: 'start-1', source: 'start', target: '1', type: 'custom'},
-      {id: '1-end', source: '1', target: 'end', type: 'custom'},
-    ]
-  }
+  nodes:[
+    {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
+    {id: '1', type: 'custom', data: {label: 'Hello'}, position: { x: 100, y: 100 }},
+    {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 200 }},
+  ],
+  edges: [
+    {id: 'start-1', source: 'start', target: '1', type: 'custom'},
+    {id: '1-end', source: '1', target: 'end', type: 'custom'},
+  ]
 }
 
 export class FormflowFile {
@@ -25,12 +23,12 @@ export class FormflowFile {
     Storage.setItem('currentFormflow.modified', val);
   }
 
-  _data: any;
-  get data() { return this._data; }
-  set data(val) { 
-    this._data = val; 
+  _chart: any;
+  get chart() { return this._chart; }
+  set chart(val) { 
+    this._chart = val; 
     this.chartEl?.setData(val);
-    Storage.setItem('currentFormflow.data', val);
+    Storage.setItem('currentFormflow.chart', val);
   }
 
   _name: string;
@@ -40,29 +38,34 @@ export class FormflowFile {
     Storage.setItem('currentFormflow.name', val);
   }
 
-  constructor(chartEl) {
+  constructor(chartEl, formflowFile?) {
     this.chartEl = chartEl;
-    if (Storage.getItem('currentFormflow')) {
+    if (formflowFile) {
+      this.name = formflowFile.name;
+      this.chart = formflowFile.chart;
+    } else if (Storage.getItem('currentFormflow')) {
       this.name = Storage.getItem('currentFormflow.name');
-      this.data = Storage.getItem('currentFormflow.data');
+      this.chart = Storage.getItem('currentFormflow.chart');
     } else {
-      this.data = DEFAULT_VALUE;
+      this.chart = DEFAULT_VALUE;
     }
   }
 
   save() {
-    if (this.name) {
-      this.data = this.chartEl.getData();;
-      console.log('this.data', this.data);
-      Storage.setItem(`formflows.${this.name}`, this.data);
-      this.modified = false;
+    const allFormflows = Storage.getItem('formflows') || []; // returns array
+    const index = allFormflows.findIndex( (el:any) => el.name === this.name);
+    this.chart = this.chartEl.getData();
+    const formflow = {name: this.name, chart: this.chart};
+    if (index === -1) {
+      Storage.setItem(`formflows[${allFormflows.length}]`, formflow);
+    } else {
+      Storage.setItem(`formflows[${index}]`, formflow);
     }
+    this.modified = false;
   }
 
   saveAs(key: string) {
     this.name = key;
-    this.data = this.chartEl.getData();
-    Storage.setItem(`formflows.${this.name}`, this.data);
-    this.modified = false;
+    this.save();
   }
 }
