@@ -19,6 +19,7 @@ declare global {
       'qr-code': any;
       'syntax-highlight': any;
       'side-bar': any;
+      'monaco-editor': any;
     }
   }
 }
@@ -40,6 +41,7 @@ import { ResizeDivs } from './resize-divs/resize-divs';
 import { ResizeHandle } from './resize-handle/resize-handle';
 import { SideBar } from './sidebar/sidebar';
 import { SyntaxHighlight } from './syntax-highlight/syntax-highlight';
+import { MonacoEditor } from './monaco-editor/monaco-editor';
 import { XBind, XChecks, XIf } from './x-if/index';
 
 export {
@@ -60,6 +62,7 @@ export {
  ResizeHandle,
  SideBar,
  SyntaxHighlight,
+ MonacoEditor,
  XBind, XChecks, XIf,
 };
 
@@ -73,6 +76,7 @@ export function defineAll() {
   customElements.define('input-mask', InputMask);
   customElements.define('json-viewer', JsonViewer);
   customElements.define('list-select', ListSelect);
+  customElements.define('monaco-editor', MonacoEditor);
   customElements.define('ol-map', OlMap);
   customElements.define('qr-code', QrCode);
   customElements.define('resize-divs', ResizeDivs);
