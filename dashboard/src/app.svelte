@@ -8,14 +8,13 @@
   import { FormflowFile } from './formflow-file';
   import { Storage } from './storage';
 
-  const dq = document.querySelector.bind(document);
-  const dqa = document.querySelectorAll.bind(document);
-
   let chartEl: FormDiagram;
   let dataDialogData: any = {};
   let fileDialogMessage: string;
   let currentFile: FormflowFile;
   let fileDialog: any, dataDialog: any;
+
+  let formData = Storage.getItem('currentFormflow.formData') || {default: {}};
 
   onMount(() => {
     currentFile ||= new FormflowFile(chartEl);
@@ -23,30 +22,27 @@
     fileDialog = new (window as any).bootstrap.Modal(document.querySelector('#file-dialog'));
   });
 
+  function formDataChanged(e: any) {
+    Storage.setItem('currentFormflow.formData', JSON.parse(e.detail));
+  }
+
   function handleReactflowEvent(e: any) {
-    const {action, type, node, edge} = e.detail;
-    const id = node?.id || edge?.id || '';
+    console.debug(e.detail)
 
-    dq('#event-type').innerText = type || '';
-    dq('#event-id').innerText = id;
-    dq('#event-label').innerText = node?.data?.label || edge?.data?.label || '';
-    dq('#event-action').innerText = action || '';
-    dq('#event-detail').innerText = (node || edge) ? JSON.stringify(node || edge, null, '  ') : '';
-
-    dqa('.collapse.show').forEach(el => new (window as any).bootstrap.Collapse(el));
-
+    document.querySelectorAll('.collapse.show').forEach(el => new (window as any).bootstrap.Collapse(el));
+    const {action, node, edge} = e.detail;
     if (action === 'init') {
       const {nodes, edges} = chartEl.getData();
       const node = nodes.find(el => el.id === 'start');
       chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
     } else if (node?.type === 'start' || node?.type === 'end') {
-      new (window as any).bootstrap.Collapse(dq('#properties'));
+      new (window as any).bootstrap.Collapse(document.querySelector('#properties'));
     } else if (node?.type === 'custom') {
-      new (window as any).bootstrap.Collapse(dq('#form-designer'));
+      new (window as any).bootstrap.Collapse(document.querySelector('#form-designer'));
       setTimeout(() => Storage.setItem('currentFormflow.chart', chartEl.getData()));
       currentFile.modified = true;
     } else if (edge?.type === 'custom') {
-      new (window as any).bootstrap.Collapse(dq('#properties'));
+      new (window as any).bootstrap.Collapse(document.querySelector('#properties'));
       setTimeout(() => Storage.setItem('currentFormflow.chart', chartEl.getData()));
       currentFile.modified = true;
     }
@@ -126,17 +122,11 @@
       </h2>
       <div id="properties" class="accordion-collapse collapse" data-bs-parent="#right-section">
         <div class="accordion-body">
-          <span id="event-type"></span>
-          <span id="event-id"></span>
-          <span id="event-label"></span>
-          <span id="event-action"></span>
-          <pre id="event-detail"></pre>
+          <monaco-editor language="json"
+            data={JSON.stringify(formData, null, '  ')}
+            on:monaco-change={formDataChanged}
+          ></monaco-editor>
         </div>
-        <pre>
-          todo 2
-          * save htmlcss by nodeId to a sessionStorage
-          * restore htmlcss when node is clicked from sessionStorage
-        </pre>
       </div>
     </div>
     <div class="accordion-item">

@@ -22,10 +22,11 @@ export function removeCss(tagName: string) {
 
 export function loadScript(...urls) {
   Array.from(urls).forEach(url => {
-    if (url.tagName === 'SCRIPT' && !document.querySelector(`script[src="${url.getAttribute('src')}"]`)) {
-      document.head.appendChild(url);
-    } else if (url.tagName === 'LINK' && !document.querySelector(`link[href="${url.getAttribute('href')}"]`)) {
-      document.head.appendChild(url);
+    console.log('url.......', url, url.tagName);
+    if (url.tagName === 'SCRIPT') {
+      !document.querySelector(`script[src="${url.getAttribute('src')}"]`) && document.head.appendChild(url);
+    } else if (url.tagName === 'LINK') {
+      !document.querySelector(`link[href="${url.getAttribute('href')}"]`) && document.head.appendChild(url);
     } else if (url.endsWith('.js') && !document.querySelector(`script[src="${url}"]`)) {
       const el = document.createElement('script');
       el.setAttribute('src', url);

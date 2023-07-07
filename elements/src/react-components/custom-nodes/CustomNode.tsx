@@ -35,9 +35,8 @@ function CustomNode({ id, data }: Node): React.ReactElement {
     setTimeout(() => fitView({duration: 500}));
   }
 
-
-  const onLabelInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateNodeLabel(id, event.target.value);
+  const onLabelBlur = (event: React.ChangeEvent<any>) => {
+    updateNodeLabel(id, event.target.textContent);
   }
 
   return (
@@ -48,7 +47,7 @@ function CustomNode({ id, data }: Node): React.ReactElement {
       <div className="nodrag label-input" 
         contentEditable={true} 
         suppressContentEditableWarning={true}
-        onInput={onLabelInput}
+        onBlur={onLabelBlur}
       >
         {data.label}
       </div>

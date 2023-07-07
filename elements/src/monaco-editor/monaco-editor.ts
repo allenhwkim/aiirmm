@@ -17,7 +17,7 @@ export const MonacoEditor = customElement({
 
     await waitFor('window.require');
     const attrPropName = this.getAttribute('data');
-    this.data = getReactProp(this as any, 'data') || this[attrPropName] || globalThis[attrPropName];
+    this.data = getReactProp(this as any, 'data') || this.data || globalThis[attrPropName];
     this.innerHTML = '';
 
     // require is provided by loader.min.js.
@@ -32,6 +32,14 @@ export const MonacoEditor = customElement({
         theme: this.getAttribute('theme')
       });
       this.monacoEditor.setValue(this.data);
+      this.monacoEditor.onDidBlurEditorText(() => {
+        const updated = this.monacoEditor.getValue();
+        if (this.data !== updated) {
+          this.data = updated;
+          const customEvent = new CustomEvent('monaco-change', {detail: updated, bubbles: true});
+          this.dispatchEvent( customEvent );
+        }
+      })
     });
   },
   render() {

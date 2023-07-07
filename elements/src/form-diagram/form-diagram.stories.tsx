@@ -25,8 +25,12 @@ const Template:any = (args: any) => {
     (chartEl.current as any).setData(args.data)
   }, [args.data])
 
+  const getData = () => {
+    console.log((chartEl.current as any)?.getData());
+  }
   return <>
     <form-diagram ref={chartEl}></form-diagram>
+    <button onClick={getData}>getData()</button>
   </>
 };
 
