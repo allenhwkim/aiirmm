@@ -22,7 +22,6 @@ export function removeCss(tagName: string) {
 
 export function loadScript(...urls) {
   Array.from(urls).forEach(url => {
-    console.log('url.......', url, url.tagName);
     if (url.tagName === 'SCRIPT') {
       !document.querySelector(`script[src="${url.getAttribute('src')}"]`) && document.head.appendChild(url);
     } else if (url.tagName === 'LINK') {

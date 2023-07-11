@@ -11,8 +11,9 @@ export default {
 
 const Template = (args?: any) => {
   const monacoEditorRef = useRef();  
+
   useEffect(() => {
-    const changeListener = e => console.log('monaco-editor change event', e);
+    const changeListener = e => console.debug('monaco-editor change event', e);
     if (monacoEditorRef?.current) {
       const monacoEditor: any = monacoEditorRef.current;
       monacoEditor.addEventListener('monaco-change', changeListener);

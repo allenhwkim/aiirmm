@@ -1,5 +1,17 @@
-<script>
-  export let data;
+<script lang="typescript">
+  import { onMount } from "svelte";
+
+  let data;
+  let bootstrapDialog;
+
+  onMount(() => {
+    bootstrapDialog= new (window as any).bootstrap.Modal(document.querySelector('#data-dialog'));
+  });
+  
+  export function show(message: any) {
+    data = message;
+    bootstrapDialog.show();
+  }
 </script>
 
 <!-- Data Dialog -->

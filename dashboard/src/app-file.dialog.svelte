@@ -1,21 +1,46 @@
-<script>
-  import { createEventDispatcher } from 'svelte';
+<script lang="typescript">
+  import { createEventDispatcher, onMount } from 'svelte';
   import { Storage } from './storage';
+  import currentFile from './store';
+    import { CurrentFile } from './current-file';
+    import type { FormDiagram } from '@formflow/elements/src';
 
-  export let message;
+  let message;
+  let fileName;
+  let bootstrapDialog;
 
   const dispatch = createEventDispatcher();
 
-  let fileName;
+  onMount(() => {
+    bootstrapDialog= new (window as any).bootstrap.Modal(document.querySelector('#file-dialog'));
+  });
+
+  export function show(param: any) {
+    message = param;
+    bootstrapDialog.show();
+  }
+
   function getAllFiles() {
     return Storage.getItem('formflows') || [];
   }
   
+  function openFile(formFile: any) { // file dialog event handler
+    const chartEl: FormDiagram = $currentFile.chartEl;
+    $currentFile = new CurrentFile(formFile, chartEl);
+    message = `File ${$currentFile.name} opened`;
+  }
+
   function saveFileAs() {
     const allFormflows = Storage.getItem('formflows') || []; // returns array
     const index = allFormflows.findIndex( el => el.name === fileName);
-    const confirmed = index === -1 ? true : window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`);
-    confirmed && dispatch('save-file-as', {fileName});
+    const confirmed = index === -1 ? 
+      true : window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`);
+    if (confirmed) {
+      $currentFile.name = fileName;
+      $currentFile.save();
+      $currentFile.modified = false;
+      message = `Saved file as "${fileName}"`;
+    }
   }
 </script>
 
@@ -32,20 +57,20 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="dialog-contents">
-      {#if message ==='listAllFiles'}
+      {#if message ==='LIST_ALL_FILES'}
         {#if getAllFiles().length}
           <ul>
             {#each getAllFiles() as file}
               <li>
                 nodes: {file.chart.nodes.length}, edges: {file.chart.edges.length}
-                <button on:click={() => dispatch('open-file', file)}>{file.name}</button>
+                <button on:click={() => openFile(file)}>{file.name}</button>
               </li>
             {/each}
           </ul>
         {:else}
           No items to display
         {/if}
-      {:else if message==='getFileName'}
+      {:else if message==='GET_FILE_NAME'}
         <input bind:value={fileName} required>
         <button on:click={saveFileAs}>Save</button>
       {:else if message}
