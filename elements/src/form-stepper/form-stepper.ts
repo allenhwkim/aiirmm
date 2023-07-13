@@ -1,15 +1,36 @@
-import { customElement } from '../../lib';
+import { addCss, removeCss, customElement } from '../../lib';
 import css from './form-stepper.css';
 
 import { FormController } from './form-controller';
 
-export const FormStepper = customElement({
-  css,
-  props: {
-    formController : FormController
-  },
+export class FormStepper extends HTMLElement {
+  formController: FormController;
 
-  constructorCallback() {
+  get forms() {
+    return this.formController.forms;
+  }
+
+  set forms(arg) {
+    this.formController.forms = arg;
+    this.formController.steps = Object.keys(arg);
+    this.formController.initForm();
+    this.render();
+  }
+
+  _steps = [];
+  get steps() {
+    return this.formController.steps;
+  }
+
+  set steps(arg) {
+    this.formController.steps = Object.keys(arg);
+    this.formController.initForm();
+    this.render();
+  }
+
+  constructor() { 
+    super();
+
     this.addEventListener('click', function(event: UIEvent) {
       const formLinkEl = (event.target as any).closest('.form-link');
       const formStepEl = (event.target as any).closest('.form-step');
@@ -20,10 +41,12 @@ export const FormStepper = customElement({
         event.target?.dispatchEvent(customEvent);
       }
     });
-  },
+
+    this.formController = new FormController();
+  }
 
   connectedCallback() {
-    this.formController = new FormController();
+    addCss('form-stepper', css);
 
     if (this.forms) { // data-form attribute
       this.formController.forms = this.forms;
@@ -31,11 +54,13 @@ export const FormStepper = customElement({
     }
 
     this.formController.initForm();
-  },
+    this.render();
+  }
 
   disconnectedCallback() {
-    this.formController.removeEventListeners();
-  },
+    this.formController?.removeEventListeners?.();
+    removeCss('form-stepper');
+  }
 
   render() {
     if (!this.formController?.forms) return;
@@ -59,6 +84,5 @@ export const FormStepper = customElement({
         </div>
       `)
     });
-  },
-
-});
+  }
+}

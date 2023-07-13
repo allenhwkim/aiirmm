@@ -4,17 +4,17 @@ import { useEffect } from 'react';
 import { TouchSwipe } from '../../lib';
 
 import { ResizeHandle } from "../index"; 
-customElements.define('resize-handle', ResizeHandle);
+!customElements.get('resize-handle') && customElements.define('resize-handle', ResizeHandle);
 
 export default {
   title: 'Components/resize-handle',
   component: ResizeHandle,
 };
 
-const Template = (args?: any) => {
+const Template = () => {
   // const myRef = useRef(null);
   const touchStart = {left: 0, top: 0};
-  const touchListener =  (event: any) => {
+  const touchListener =  (event) => {
     const {type, x0, y0, x1, y1, x2, y2, distanceX, distanceY, distance} = event.detail;
     const {duration, speed, distance0, duration0, speed0, touchStaEl, orgEvent } = event.detail;
     if (!touchStaEl.classList.contains('draggable')) return;

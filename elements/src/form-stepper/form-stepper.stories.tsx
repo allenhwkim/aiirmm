@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FormController } from './form-controller';
 
 import { FormStepper } from "../index"; // Shares the same FormController
-customElements.define('form-stepper', FormStepper);
+!customElements.get('form-stepper') && customElements.define('form-stepper', FormStepper);
 
 
 export default {

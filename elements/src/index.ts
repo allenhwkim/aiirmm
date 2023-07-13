@@ -23,7 +23,7 @@ declare global {
     }
   }
 }
-
+ 
 import { BarCode } from './barcode/barcode';
 import { ComboBox } from './combobox/combobox';
 import { FileSelect } from './file-select/file-select';
@@ -67,23 +67,23 @@ export {
 };
 
 export function defineAll() {
-  customElements.define('bar-code', BarCode);
-  customElements.define('combo-box', ComboBox);
-  customElements.define('file-select', FileSelect);
-  customElements.define('form-designer', FormDesigner);
-  customElements.define('form-diagram', FormDiagram);
-  customElements.define('form-stepper', FormStepper);
-  customElements.define('input-mask', InputMask);
-  customElements.define('json-viewer', JsonViewer);
-  customElements.define('list-select', ListSelect);
-  customElements.define('monaco-editor', MonacoEditor);
-  customElements.define('ol-map', OlMap);
-  customElements.define('qr-code', QrCode);
-  customElements.define('resize-divs', ResizeDivs);
-  customElements.define('resize-handle', ResizeHandle);
-  customElements.define('side-bar', SideBar);
-  customElements.define('syntax-highlight', SyntaxHighlight);
-  customElements.define('x-bind', XBind);
-  customElements.define('x-if', XIf);
-  customElements.define('x-pagination', Pagination);
+  !customElements.get('bar-code') &&         customElements.define('bar-code', BarCode);
+  !customElements.get('combo-box') &&        customElements.define('combo-box', ComboBox);
+  !customElements.get('file-select') &&      customElements.define('file-select', FileSelect);
+  !customElements.get('form-designer') &&    customElements.define('form-designer', FormDesigner);
+  !customElements.get('form-diagram') &&     customElements.define('form-diagram', FormDiagram);
+  !customElements.get('form-stepper') &&     customElements.define('form-stepper', FormStepper);
+  !customElements.get('input-mask') &&       customElements.define('input-mask', InputMask);
+  !customElements.get('json-viewer') &&      customElements.define('json-viewer', JsonViewer);
+  !customElements.get('list-select') &&      customElements.define('list-select', ListSelect);
+  !customElements.get('monaco-editor') &&    customElements.define('monaco-editor', MonacoEditor);
+  !customElements.get('ol-map') &&           customElements.define('ol-map', OlMap);
+  !customElements.get('qr-code') &&          customElements.define('qr-code', QrCode);
+  !customElements.get('resize-divs') &&      customElements.define('resize-divs', ResizeDivs);
+  !customElements.get('resize-handle') &&    customElements.define('resize-handle', ResizeHandle);
+  !customElements.get('side-bar') &&         customElements.define('side-bar', SideBar);
+  !customElements.get('syntax-highlight') && customElements.define('syntax-highlight', SyntaxHighlight);
+  !customElements.get('x-bind') &&           customElements.define('x-bind', XBind);
+  !customElements.get('x-if') &&             customElements.define('x-if', XIf);
+  !customElements.get('x-pagination') &&     customElements.define('x-pagination', Pagination);
 }

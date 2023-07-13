@@ -3,7 +3,8 @@ import * as React from 'react';
 import { MonacoEditor } from '../index';
 import { fixIndent } from '../../lib';
 import { useEffect, useRef } from 'react';
-customElements.define('monaco-editor', MonacoEditor);
+
+!customElements.get('monaco-editor') && customElements.define('monaco-editor', MonacoEditor);
 
 export default {
   title: 'Components/monaco-editor',

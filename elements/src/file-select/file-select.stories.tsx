@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { FileSelect } from '../index';
-customElements.define('file-select', FileSelect);
+!customElements.get('file-select') && customElements.define('file-select', FileSelect);
 
 export default {
   title: 'Components/file-select',

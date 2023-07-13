@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { InputMask } from '../index';
-customElements.define('input-mask', InputMask);
+!customElements.get('input-mask') && customElements.define('input-mask', InputMask);
 
 export default {
   title: 'Components/input-mask',

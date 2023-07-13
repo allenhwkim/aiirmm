@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Pagination } from '../index';
-customElements.define('x-pagination', Pagination);
+!customElements.get('x-pagination') && customElements.define('x-pagination', Pagination);
 
 export default {
   title: 'Components/x-pagination',

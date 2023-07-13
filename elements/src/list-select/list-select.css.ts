@@ -22,6 +22,4 @@ export default /*css*/ `
 
   ul.menu li:is(:has(.x-highlighted), .x-highlighted) > ul {display: block; } /* show only highlighted child */
   ul.menu li:is(:has(.x-highlighted), .x-highlighted) { display: block;} /* show highlighted list */
-
-}
 `;

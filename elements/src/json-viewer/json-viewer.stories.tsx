@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { JsonViewer } from '../index';
-customElements.define('json-viewer', JsonViewer);
+!customElements.get('json-viewer') && customElements.define('json-viewer', JsonViewer);
 
 export default {
   title: 'Components/json-viewer',

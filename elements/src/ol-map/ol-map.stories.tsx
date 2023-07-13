@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { OlMap } from '../index';
-customElements.define('ol-map', OlMap);
+!customElements.get('ol-map') && customElements.define('ol-map', OlMap);
 
 export default {
   title: 'Components/ol-map',

@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { XIf, XBind } from '../index';
-customElements.define('x-if', XIf);
-customElements.define('x-bind', XBind);
+!customElements.get('x-if') && customElements.define('x-if', XIf);
+!customElements.get('x-bind') && customElements.define('x-bind', XBind);
 
 export default {
   title: 'Components/x-if',

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { SyntaxHighlight } from '../index';
-customElements.define('syntax-highlight', SyntaxHighlight);
+!customElements.get('syntax-highlight') && customElements.define('syntax-highlight', SyntaxHighlight);
 
 export default {
   title: 'Components/syntax-highlight',

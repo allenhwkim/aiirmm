@@ -6,8 +6,10 @@ import stylesCSS from './styles.css';
 
 const FormDesigner = customElement({
   css: themeCSS + stylesCSS,
-  connectedCallback: () => { // called before the first render()
-    setTimeout(() => initGrapesJs('#gjs')); // so that it's called after render() is called
+  connectedCallback: function() { // called before the first render()
+    setTimeout(function(this: any) { 
+      this.editor = initGrapesJs('#gjs');
+    }.bind(this)); // so that it's called after render() is called
   },
   render: () => `
     <link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css" />
@@ -29,7 +31,22 @@ const FormDesigner = customElement({
       </div>
 
       <div class="editor-canvas">
-        <div id="gjs"></div>
+        <div id="gjs">
+          <form-stepper></form-stepper> 
+
+          <div className="form-flow form-errors error">
+            Error goes here
+          </div>
+          <form className="form-flow">
+            Form goes here.
+          </form>
+          <div className="form-flow form-buttons">
+            <button className="form-prev">Prev</button>
+            <button className="form-next">Next</button>
+            <button className="form-review">Review</button>
+            <button className="form-submit">Submit</button>
+          </div>
+        </div>
       </div>
     </div>`
 });

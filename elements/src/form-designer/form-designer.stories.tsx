@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { FormDesigner } from "../index";
-customElements.define('form-designer', FormDesigner);
-
+import { FormDesigner, defineAll } from "../index";
+defineAll();
 
 export default {
   title: 'Components/form-designer',

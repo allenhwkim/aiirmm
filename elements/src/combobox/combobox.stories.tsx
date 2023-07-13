@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { ComboBox } from '../index';
-customElements.define('combo-box', ComboBox);
+!customElements.get('combo-box') && customElements.define('combo-box', ComboBox);
 
 export default {
   title: 'Components/combobox',

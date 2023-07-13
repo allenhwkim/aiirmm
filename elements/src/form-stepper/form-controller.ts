@@ -1,5 +1,6 @@
 import { defaultForms } from './default-forms';
-import { IForms, IForm, IFormsSubmit, IUserData} from './types';
+import { IForms, IForm, IUserData, IFormsSubmit} from './types';
+import { FormUserData } from './form-user-data';
 
 export class FormController {
   static instance: FormController;
@@ -9,19 +10,7 @@ export class FormController {
   forms: IForms = defaultForms;
   steps: string[] = Object.keys(defaultForms);
 
-  static get userData() {
-    const userDataJson = window.sessionStorage.getItem('form-user-data');
-    return userDataJson ? JSON.parse(userDataJson) : null;
-  }
-
-  static setUserData(key: string, data?: { [key: string] : any }) : void { // update session storage dat 
-    const formUserData: IUserData = FormController.userData || {};
-    formUserData[key] = data;
-    window.sessionStorage.setItem('form-user-data', JSON.stringify(formUserData));
-    document.body.dispatchEvent(new CustomEvent('form-user-data', {bubbles: true, detail: formUserData}));
-  } 
-
-  _docGotoListener = (event: any) => this.initForm(event.detail);
+  _docGotoStepListener = (event: any) => this.initForm(event.detail);
 
   _docClickListener = (event: any) => {
     if (event.target.classList.contains('form-review')) {
@@ -37,7 +26,7 @@ export class FormController {
         const formEl = document.querySelector('form.form-flow') as HTMLFormElement;
         const formElData = Object.fromEntries(new FormData(formEl).entries())
         if (Object.keys(formElData).length) {
-          FormController.setUserData(this.currentForm, formElData);
+          FormUserData.setUserData(this.currentForm, formElData);
         }
         this.initForm('next');
       }
@@ -53,12 +42,12 @@ export class FormController {
   }
 
   addEventListeners() {
-    document.addEventListener('form-goto', this._docGotoListener);
+    document.addEventListener('form-goto', this._docGotoStepListener);
     document.addEventListener('click', this._docClickListener);
   }
 
   removeEventListeners() {
-    document.removeEventListener('form-goto', this._docGotoListener);
+    document.removeEventListener('form-goto', this._docGotoStepListener);
     document.removeEventListener('click', this._docClickListener);
   }
 
@@ -91,7 +80,7 @@ export class FormController {
   }
 
   getStatus(formId: string): 'complete' | 'incomplete'  { 
-    const userData: IUserData = FormController.userData;
+    const userData: IUserData = FormUserData.getUserData();
     const form: IForm = this.forms[formId];
     if (userData?.[formId]) { // user has visited this formId already and saved data 
       return 'complete';
@@ -122,7 +111,7 @@ export class FormController {
         formEl.innerHTML = `HTML for "${this.currentForm} form" goes here`;
       }
 
-      const formUserData: IUserData = FormController.userData || {};
+      const formUserData: IUserData = FormUserData.getUserData() || {};
       for (var key in formUserData[this.currentForm]) {
         const el = formEl.elements[key as any] as HTMLInputElement;
         const value = formUserData[this.currentForm][key];
@@ -207,21 +196,26 @@ export class FormController {
     return false;
   }
 
-  submitForm(): Promise<Response> {
-    const submitFormName = this.steps.find(formId => this.forms[formId]?.type === 'submit') as string;
-    const formUserData: IUserData = FormController.userData || {};
-    const form = this.forms[submitFormName];
-    const payload = form.payload ? JSON.stringify(form.payload(formUserData)) : JSON.stringify(formUserData);
+  submitForm(): Promise<any> {
+    // const submitFormName = this.steps.find(formId => this.forms[formId]?.type === 'submit') as string;
+    const formUserData: IUserData = FormUserData.getUserData() || {};
+    // const form = this.forms[submitFormName];
+    const submitForm: any = Object.entries(this.forms).find( ([key, form]) => form.type === 'submit');
+    if (submitForm) {
+      const payload = typeof submitForm.payload === 'function' ? 
+        JSON.stringify(submitForm.payload(formUserData)) : JSON.stringify(formUserData);
 
-    document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
-    return window.fetch(form.url, { method: form.method, headers: form.headers, body: payload })
-      .then(response => response.json())
-      .then(response => {
-        form.onSuccess(response);
-        window.sessionStorage.removeItem('form-user-data');
-      })
-      .catch(error => form.onError(error))
-      .finally(() => {
-      })
+      document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
+      return window.fetch(submitForm.url, { method: submitForm.method, headers: submitForm.headers, body: payload })
+        .then(response => response.json())
+        .then(response => {
+          submitForm.onSuccess(response);
+          formUserData.delete();
+        })
+        .catch(error => submitForm.onError(error))
+        .finally(() => {})
+    } else {
+      return Promise.reject('Could not find form type "submit"')
+    }
   }
 }

@@ -53,7 +53,8 @@ export function initGrapesJs(elId: string) {
       ],
       styles: [
         'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css'
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css',
+        '/custom-elements.css'
       ],
     },
     panels: {
@@ -72,10 +73,18 @@ export function initGrapesJs(elId: string) {
         { id: 'show-traits', ...showSidePanel('.traits-container') },
         { id: 'show-blocks', ...showSidePanel('.blocks-container') },
         { id: 'set-device-desktop', run(editor: grapesjs.Editor) { editor.setDevice('Desktop')} },
-        { id: 'set-device-mobile', run(editor: grapesjs.Editor) { editor.setDevice('Mobile')} }
+        { id: 'set-device-mobile', run(editor: grapesjs.Editor) { editor.setDevice('Mobile')} },
       ]
     }
   });
+  
+  editor.Commands.add('set-stepper-data', function(editor, sender, options) {
+    console.log({editor, sender, options});
+    console.log('........... form-designer', document.querySelector('form-designer'));
+    // $0.editor.runCommand('set-stepper-data', {some: 'option'})
+  });
+
+  editor.setStyle('body {padding: 12px;}')
 
   return editor;
 }

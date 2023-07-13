@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { QrCode } from '../index';
-customElements.define('qr-code', QrCode);
+!customElements.get('qr-code') && customElements.define('qr-code', QrCode);
 
 export default {
   title: 'Components/qr-code',

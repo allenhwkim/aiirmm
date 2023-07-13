@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { ListSelect } from '../index';
-customElements.define('list-select', ListSelect);
+!customElements.get('list-select') && customElements.define('list-select', ListSelect);
 
 export default {
   title: 'Components/list-select',
