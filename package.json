@@ -10,7 +10,8 @@
     "start": "npm start -w dashboard",
     "start:elements": "npm start -w elements",
     "build": "npm run build -w dashboard -w elements",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
   },
   "overrides": {
     "react": "^18.2.0",
