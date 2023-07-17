@@ -32,6 +32,22 @@
     dataMessage && appDataDialog.show(dataMessage);
   }
 
+  function setForm(activeNode) {
+    const forms = {}, steps = [];
+    $currentFile.chart.nodes
+      .filter(node => node.type === 'custom')
+      .sort( (a,b) => a.position.y > b.position.y ? 1 : -1)
+      .forEach(node => {
+        forms[node.data.label] = {};
+        steps.push(node.data.label);
+      });
+    $currentFile.modified = true;
+    $currentFile.chart = chartEl?.getData();
+    (document.querySelector('form-designer') as any)?.editor.runCommand(
+      'set-forms-steps', {forms, steps, currentStep: activeNode.data.label}
+    )
+  }
+
   function handleReactflowEvent(e:any) {
     document.querySelectorAll('.collapse.show') // collapse all accordion
       .forEach(el => new (window as any).bootstrap.Collapse(el));
@@ -47,13 +63,11 @@
     } else if (action === 'selected') { 
       if (node?.type === 'start' || node?.type === 'end' || edge?.type === 'custom') {
         new (window as any).bootstrap.Collapse(document.querySelector('#properties'));
-      } else if (node?.type === 'custom') {
+      } 
+      else if (node?.type === 'custom') {
         new (window as any).bootstrap.Collapse(document.querySelector('#form-designer'));
         $currentFile.activeNode = node;
-        if (!equal($currentFile.chart, chartEl?.getData())) {
-          $currentFile.modified = true;
-          setTimeout(() => $currentFile.chart = chartEl?.getData());
-        }
+        setForm(node); // set stepper, html, css
       }
     }
   }

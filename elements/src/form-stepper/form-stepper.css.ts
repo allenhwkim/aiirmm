@@ -36,6 +36,7 @@ export default /* css */ `
     border-color: #b2b2b2;
     color: #1a1a1a;
     background-color: #fff;
+    margin-bottom: 0;
   }
 
   form-stepper .form-step.incomplete .form-link {
@@ -69,8 +70,8 @@ export default /* css */ `
   }
 
   form-stepper .form-step .form-link .form-title {
-    padding-top: .2rem;
-    word-wrap: break-word;
+    text-align: center;
+    line-height: 20px;
   }
 
   form-stepper .form-step .form-link .form-desc {

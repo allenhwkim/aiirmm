@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { FormController } from './form-controller';
-
+import { FormUserData } from './form-user-data';
 import { FormStepper } from "../index"; // Shares the same FormController
+
 !customElements.get('form-stepper') && customElements.define('form-stepper', FormStepper);
 
 
@@ -13,7 +13,7 @@ export default {
 
 const myForm = {
   Hello: {
-    source: () => `
+    html: () => `
       <style>form.error-checked :invalid {outline: 1px solid red;}</style>
       First Name: <input name="first" required> <br>
       Last Name: <input name="last" required>
@@ -31,17 +31,17 @@ const myForm = {
     } 
   }, 
   World: {
-    source: () => `Optional: <br/>  Address: <input name="address" />`,
+    html: () => `Optional: <br/>  Address: <input name="address" />`,
     skippable: true
   }, 
   Review: {
     type: 'review',
-    source: () => `This is a review page.`,
+    html: () => `This is a review page.`,
   },
   Submit: {
     type: 'submit',
     method: 'POST',
-    source: () => 'Thank you',
+    html: () => 'Thank you',
     url: 'https://reqbin.com/echo/post/json',
     headers: {
       'Accept': 'application/json',
@@ -58,7 +58,7 @@ const myForm = {
 }
 
 const Template = (args?: any) => {
-  const [userData, setUserData] = useState(JSON.stringify(FormController.userData));
+  const [userData, setUserData] = useState(FormUserData.getUserData());
   const clearStorage = () => (sessionStorage.clear(), setUserData(''));
   window.addEventListener('form-user-data', (event: any) => setUserData(JSON.stringify(event.detail)));
 

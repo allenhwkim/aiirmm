@@ -11,7 +11,7 @@ export interface IFormsSubmit {
   payload: (userData: any) => any;
   onSuccess?: (resp: Response) => void;
   onError?: (resp: Response) => void;
-  source?: string | (() => string);
+  html?: string | (() => string);
   label?: string;
   title?: string;
   description?: string;
@@ -23,7 +23,7 @@ export interface IForm {
   label?: string;
   title?: string;
   description?: string;
-  source?: string | (() => string);
+  html?: string | (() => string);
   skippable?: boolean;
   getErrors?: (formElData: any) => string[] | null;
 }

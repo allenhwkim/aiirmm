@@ -34,17 +34,16 @@ const FormDesigner = customElement({
         <div id="gjs">
           <form-stepper></form-stepper> 
 
-          <div className="form-flow form-errors error">
-            Error goes here
+          <div class="form-flow form-errors error">
           </div>
-          <form className="form-flow">
+          <form class="form-flow" style="min-height: 320px">
             Form goes here.
           </form>
-          <div className="form-flow form-buttons">
-            <button className="form-prev">Prev</button>
-            <button className="form-next">Next</button>
-            <button className="form-review">Review</button>
-            <button className="form-submit">Submit</button>
+          <div class="form-flow form-buttons">
+            <button class="btn btn-primary me-2 form-prev">Prev</button>
+            <button class="btn btn-primary me-2 form-next">Next</button>
+            <button class="btn btn-primary me-2 form-review">Review</button>
+            <button class="btn btn-primary me-2 form-submit">Submit</button>
           </div>
         </div>
       </div>

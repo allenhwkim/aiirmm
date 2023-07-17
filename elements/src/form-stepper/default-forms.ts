@@ -2,7 +2,7 @@ import { IUserData } from "./types";
 
 export const defaultForms = {
   Name: {
-    source: () => `
+    html: () => `
       <style>form.error-checked :invalid {outline: 1px solid red;}</style>
       First Name: <input name="first" required> <br>
       Last Name: <input name="last" required>
@@ -20,17 +20,17 @@ export const defaultForms = {
     } 
   }, 
   Contact: {
-    source: () => `Optional: <br/>  Address: <input name="address" />`,
+    html: () => `Optional: <br/>  Address: <input name="address" />`,
     skippable: true
   }, 
   Review: {
     type: 'review',
-    source: () => `This is a review page.`,
+    html: () => `This is a review page.`,
   },
   Submit: {
     type: 'submit',
     method: 'POST',
-    source: () => 'Thank you',
+    html: () => 'Thank you',
     url: 'https://reqbin.com/echo/post/json',
     headers: {
       'Accept': 'application/json',

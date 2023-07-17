@@ -1,11 +1,12 @@
 import { defaultForms } from './default-forms';
-import { IForms, IForm, IUserData, IFormsSubmit} from './types';
+import { IForms, IForm, IUserData } from './types';
 import { FormUserData } from './form-user-data';
 
 export class FormController {
   static instance: FormController;
   currentForm: string = '';
   currentFormType: string = '';
+  document: HTMLElement;
 
   forms: IForms = defaultForms;
   steps: string[] = Object.keys(defaultForms);
@@ -23,7 +24,7 @@ export class FormController {
     } else if (event.target.classList.contains('form-next')) { 
       const errors = this.setErrors();
       if (!errors) { // set error classes and contents of .form-errors 
-        const formEl = document.querySelector('form.form-flow') as HTMLFormElement;
+        const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
         const formElData = Object.fromEntries(new FormData(formEl).entries())
         if (Object.keys(formElData).length) {
           FormUserData.setUserData(this.currentForm, formElData);
@@ -38,20 +39,24 @@ export class FormController {
       this.addEventListeners();
       FormController.instance = this;
     }
+    this.document = document.body;
     return FormController.instance;
   }
 
   addEventListeners() {
-    document.addEventListener('form-goto', this._docGotoStepListener);
-    document.addEventListener('click', this._docClickListener);
+    if (!this.document) return;
+    this.document.addEventListener('form-goto', this._docGotoStepListener);
+    this.document.addEventListener('click', this._docClickListener);
   }
 
   removeEventListeners() {
-    document.removeEventListener('form-goto', this._docGotoStepListener);
-    document.removeEventListener('click', this._docClickListener);
+    if (!this.document) return;
+    this.document.removeEventListener('form-goto', this._docGotoStepListener);
+    this.document.removeEventListener('click', this._docClickListener);
   }
 
   async initForm(target: string = 'auto') {
+    if (!this.document) return;
     let nextFormIndex = 0;
     if (target === 'auto') {
       nextFormIndex = this.steps.findIndex(formId => this.getStatus(formId) !== 'complete');
@@ -92,21 +97,22 @@ export class FormController {
   }
 
   initStepperEl(): void {
-    const stepperEl: any = document.querySelector('form-stepper');
+    const stepperEl: any = this.document.querySelector('form-stepper');
+    
     stepperEl?.render();
   }
 
   async initFormEl(): Promise<void> { // set innerHTML of <form> element
-    const formEl = document.querySelector('form.form-flow') as HTMLFormElement;
-    const source = this.forms[this.currentForm].source;
+    const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
+    const html = this.forms[this.currentForm].html;
     if (formEl) {
-      if (typeof source === 'string') {
-        window.fetch(source)
+      if (typeof html === 'string' && html.match(/^http/)) {
+        window.fetch(html)
           .then(resp => resp.text())
           .then(resp => formEl.innerHTML = resp)
           .catch(error => formEl.innerHTML = error)
-      } else if (typeof source === 'function') {
-        formEl.innerHTML = source();
+      } else if (typeof html === 'function') {
+        formEl.innerHTML = html();
       } else {
         formEl.innerHTML = `HTML for "${this.currentForm} form" goes here`;
       }
@@ -127,10 +133,10 @@ export class FormController {
   }  
 
   initButtonsEl(): void { // set buttons text and availability
-    const reviewButtonEl = document.querySelector('.form-buttons .form-review') as HTMLButtonElement;
-    const submitButtonEl = document.querySelector('.form-buttons .form-submit') as HTMLButtonElement;
-    const prevButtonEl = document.querySelector('.form-buttons .form-prev') as HTMLButtonElement;
-    const nextButtonEl = document.querySelector('.form-buttons .form-next') as HTMLButtonElement;
+    const reviewButtonEl = this.document.querySelector('.form-buttons .form-review') as HTMLButtonElement;
+    const submitButtonEl = this.document.querySelector('.form-buttons .form-submit') as HTMLButtonElement;
+    const prevButtonEl = this.document.querySelector('.form-buttons .form-prev') as HTMLButtonElement;
+    const nextButtonEl = this.document.querySelector('.form-buttons .form-next') as HTMLButtonElement;
     const currentFormIndex = this.steps.indexOf(this.currentForm);
 
     // 0-1-2-3-current -> enabled,  current-1-2-3-review -> disabled
@@ -148,8 +154,8 @@ export class FormController {
   }
 
   setErrors(): string[] | void {
-    const formEl = document.querySelector('form.form-flow') as HTMLFormElement;
-    const errorsEl = document.querySelector('.form-errors') as HTMLElement;
+    const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
+    const errorsEl = this.document.querySelector('.form-errors') as HTMLElement;
     errorsEl && (errorsEl.innerHTML = '');
     formEl.classList.add('error-checked');
 
@@ -205,7 +211,7 @@ export class FormController {
       const payload = typeof submitForm.payload === 'function' ? 
         JSON.stringify(submitForm.payload(formUserData)) : JSON.stringify(formUserData);
 
-      document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
+      this.document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
       return window.fetch(submitForm.url, { method: submitForm.method, headers: submitForm.headers, body: payload })
         .then(response => response.json())
         .then(response => {
@@ -217,5 +223,15 @@ export class FormController {
     } else {
       return Promise.reject('Could not find form type "submit"')
     }
+  }
+
+  showStep(step: string) {
+    this.currentForm = step;
+    console.log('currentForm', this.currentForm);
+    console.log('forms', this.forms);
+    console.log('steps', this.steps);
+    this.initStepperEl();
+    this.initFormEl();
+    this.initButtonsEl();
   }
 }

@@ -54,7 +54,7 @@ export function initGrapesJs(elId: string) {
       styles: [
         'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css',
         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css',
-        '/custom-elements.css'
+        'https://unpkg.com/formflow/dist/elements/lib/custom-elements.css',
       ],
     },
     panels: {
@@ -78,11 +78,19 @@ export function initGrapesJs(elId: string) {
     }
   });
   
-  editor.Commands.add('set-stepper-data', function(editor, sender, options) {
-    console.log({editor, sender, options});
-    console.log('........... form-designer', document.querySelector('form-designer'));
-    // $0.editor.runCommand('set-stepper-data', {some: 'option'})
-  });
+  editor.Commands.add('set-forms-steps', 
+    function(editor, sender, opts: any) {
+      console.log({editor, sender, opts});
+      console.log('........... form-designer', document.querySelector('form-designer'));
+      // $0.editor.runCommand('set-stepper-data', {some: 'option'})
+      const iframe: any = document.querySelector('form-designer iframe');
+      const formStepper = iframe.contentWindow.document.querySelector('form-stepper');
+      formStepper.formController.forms = opts.forms;
+      formStepper.formController.steps = opts.steps;
+      formStepper.formController.document = formStepper.closest('body');
+      formStepper.formController.showStep(opts.currentStep);
+    }
+  );
 
   editor.setStyle('body {padding: 12px;}')
 
