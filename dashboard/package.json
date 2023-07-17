@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite --open",
-    "build": "vite build --outDir=../dist/dashboard",
+    "build": "vite build --outDir=../../dist/dashboard",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
