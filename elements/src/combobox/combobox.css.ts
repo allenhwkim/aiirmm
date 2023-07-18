@@ -10,7 +10,7 @@ export default /*css*/ `
   
   :host input {
     min-width: 200px;
-    height: 32px;
+    min-height: 32px;
     padding: 0 20px 0 4px;
     border: 1px solid #CCC;
     background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z' fill='%23666' /><path d='M0 0h24v24H0z' fill='none'/></svg>");
