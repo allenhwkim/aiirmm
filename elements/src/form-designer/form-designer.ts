@@ -32,14 +32,14 @@ const FormDesigner = customElement({
 
       <div class="editor-canvas">
         <div id="gjs">
-          <form-stepper></form-stepper> 
+          <form-stepper class="pb-4"></form-stepper> 
 
           <div class="form-flow form-errors error">
           </div>
-          <form class="form-flow" style="min-height: 320px">
+          <form class="form-flow p-2" style="min-height: 320px">
             Form goes here.
           </form>
-          <div class="form-flow form-buttons">
+          <div class="form-flow form-buttons container">
             <button class="btn btn-primary me-2 form-prev">Prev</button>
             <button class="btn btn-primary me-2 form-next">Next</button>
             <button class="btn btn-primary me-2 form-review">Review</button>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client'
-import { Node, Edge, ReactFlowInstance } from 'reactflow';
+import { Node, Edge, ReactFlowInstance, ReactFlowJsonObject } from 'reactflow';
 import { toPng } from 'html-to-image';
 import { FormflowChart } from '../react-components/FormflowChart/FormflowChart';
 
@@ -39,12 +39,12 @@ export class FormDiagram extends HTMLElement {
     })
   }
 
-  getData() {
+  getData(): ReactFlowJsonObject {
     const data = this.reactflowInstance?.toObject()
     return data;
   }
 
-  async getImage() {
+  async getImage(): Promise<string> {
     const blobUrl = await toPng(
       this.querySelector('.react-flow') as HTMLElement, 
       {
@@ -57,7 +57,7 @@ export class FormDiagram extends HTMLElement {
     return blobUrl;
   };
 
-  getInstance() {
+  getInstance(): ReactFlowInstance {
     return this.reactflowInstance;
   }
 

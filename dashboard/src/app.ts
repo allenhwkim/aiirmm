@@ -1,13 +1,14 @@
-import type { IEdge, IForm, INode } from "./global";
+import type { IForm } from "./global";
+import type { ReactFlowJsonObject, Node } from 'reactflow';
 
-function getSteps(chartData: {nodes: INode[], edges: IEdge[]}, activeNode: INode): string[] {
+function getSteps(chartData: ReactFlowJsonObject, activeNode: Node): string[] {
   const steps = [activeNode.data.label];
   const getNodeById = (id: string) => chartData.nodes.find(node => node.id === id);
-  const getOutgoingNodes = (node: INode) => {
+  const getOutgoingNodes = (node: Node) => {
     const outgoingEdges = chartData.edges.filter(edge => edge.source === node.id);
     return outgoingEdges.map(edge => getNodeById(edge.target))
   }
-  const getIncomingNodes = (node: INode) => {
+  const getIncomingNodes = (node: Node) => {
     const incomingEdges = chartData.edges.filter(edge => edge.target === node.id);
     return incomingEdges.map(edge => getNodeById(edge.source))
   }
@@ -29,7 +30,7 @@ function getSteps(chartData: {nodes: INode[], edges: IEdge[]}, activeNode: INode
   return steps;
 }
 
-function getForms(chartData: {nodes: INode[], edges: IEdge[]}, steps: string[]): any {
+function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
   const forms = {};
   steps.forEach( (step: string) => {
     forms[step] = {
@@ -45,7 +46,7 @@ function getForms(chartData: {nodes: INode[], edges: IEdge[]}, steps: string[]):
   return forms;
 }
 
-export function setForm(chartData: {nodes: INode[], edges: IEdge[]}, activeNode: INode) {
+export function setForm(chartData: ReactFlowJsonObject, activeNode: Node) {
   const steps = getSteps(chartData, activeNode).slice(1, -1);
   const forms = getForms(chartData, steps);
   (document.querySelector('form-designer') as any)?.editor.runCommand(

@@ -56,7 +56,7 @@
           $currentFile.modified = true;
           $currentFile.chart = chartEl?.getData();
         }
-        setForm(chartEl?.getData() as any, node); // set stepper, html, css
+        setForm(chartEl?.getData(), node); // set stepper, html, css
       }
     }
   }

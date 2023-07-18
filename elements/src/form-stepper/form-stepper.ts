@@ -73,7 +73,7 @@ export class FormStepper extends HTMLElement {
       const formType = formProp.type ? ` ${formProp.type}` : '';
       const label = formProp.label || index + 1;
       this.insertAdjacentHTML(`beforeend`, `
-        <div class="form-step ${ formCtrl.getStatus(formName) }${activeClass}${formType}">
+        <div class="form-step ${formCtrl.getStatus(formName)}${activeClass}${formType}">
           ${ index ? `<div class="connection-line"></div>`: '' }
           <div class="form-link" data-name="${formName}">
             <!-- ${ formCtrl.getStatus(formName)}${activeClass} -->
