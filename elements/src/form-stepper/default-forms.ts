@@ -1,6 +1,6 @@
-import { IUserData } from "./types";
+import { IForms, IUserData } from "./types";
 
-export const defaultForms = {
+export const defaultForms: IForms = {
   Name: {
     html: () => `
       <style>form.error-checked :invalid {outline: 1px solid red;}</style>

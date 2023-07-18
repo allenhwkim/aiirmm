@@ -1,5 +1,5 @@
 import { defaultForms } from './default-forms';
-import { IForms, IForm, IUserData } from './types';
+import { IForms, IForm, IUserData, ISubmit } from './types';
 import { FormUserData } from './form-user-data';
 
 export class FormController {
@@ -8,14 +8,14 @@ export class FormController {
   currentFormType: string = '';
   document: HTMLElement;
 
-  forms: IForms = defaultForms;
+  forms: IForms;
   steps: string[] = Object.keys(defaultForms);
 
   _docGotoStepListener = (event: any) => this.initForm(event.detail);
 
   _docClickListener = (event: any) => {
     if (event.target.classList.contains('form-review')) {
-      const isCurrentReviewForm = this.forms[this.currentForm].type === 'review';
+      const isCurrentReviewForm = (this.forms[this.currentForm] as IForm).type === 'review';
       this.initForm('review'); 
     } else if (event.target.classList.contains('form-submit')) {
       this.initForm('submit');
@@ -39,6 +39,7 @@ export class FormController {
       this.addEventListeners();
       FormController.instance = this;
     }
+    this.forms = defaultForms;
     this.document = document.body;
     return FormController.instance;
   }
@@ -64,10 +65,10 @@ export class FormController {
       const currentFormIndex = this.steps.indexOf(this.currentForm);
 
       if (target === 'review') {
-        nextFormIndex = this.steps.findIndex(formId => this.forms[formId]?.type === 'review');
+        nextFormIndex = this.steps.findIndex(formId => (this.forms[formId] as IForm)?.type === 'review');
       } else if (target === 'submit') {
         await this.submitForm();
-        nextFormIndex = this.steps.findIndex(formId => this.forms[formId]?.type === 'submit');
+        nextFormIndex = this.steps.findIndex(formId => (this.forms[formId] as IForm)?.type === 'submit');
       } else if (target === 'prev') {
         nextFormIndex = (currentFormIndex - 1) % this.steps.length;
       } else if (target === 'next') {
@@ -78,7 +79,7 @@ export class FormController {
     }
 
     this.currentForm = this.steps[nextFormIndex];
-    this.currentFormType = this.forms[this.currentForm].type;
+    this.currentFormType = '' + (this.forms[this.currentForm] as IForm).type;
     this.initStepperEl();
     this.initFormEl();
     this.initButtonsEl();
@@ -86,7 +87,6 @@ export class FormController {
 
   getStatus(formId: string): 'complete' | 'incomplete'  { 
     const userData: IUserData = FormUserData.getUserData();
-    const form: IForm = this.forms[formId];
     if (userData?.[formId]) { // user has visited this formId already and saved data 
       return 'complete';
     } else {
@@ -114,7 +114,7 @@ export class FormController {
       } else if (typeof html === 'function') {
         formEl.innerHTML = html();
       } else {
-        formEl.innerHTML = `HTML for "${this.currentForm} form" goes here`;
+        formEl.innerHTML = html as string;
       }
 
       const formUserData: IUserData = FormUserData.getUserData() || {};
@@ -174,10 +174,10 @@ export class FormController {
     }
 
     const formElData = Object.fromEntries(new FormData(formEl).entries());
-    const getErrorFunc = this.forms[this.currentForm].getErrors;
+    const getErrorFunc = (this.forms[this.currentForm] as IForm).getErrors;
     const customUserErrors = getErrorFunc && getErrorFunc(formElData);
     if (errorsEl && customUserErrors) {
-      customUserErrors.forEach( (el: HTMLElement) => {
+      customUserErrors.forEach( (el: any) => {
         errorsEl.insertAdjacentHTML('beforeend', `<div class="error">${el}</div>`);
       })
       return customUserErrors;
@@ -190,7 +190,7 @@ export class FormController {
     for (var i = 0; i < this.steps.length; i++) {
       const stepName = this.steps[i];
       const stepStatus = this.getStatus(stepName);
-      const form = this.forms[stepName];
+      const form = this.forms[stepName] as IForm;
       if (form.type === 'review') {
         return true;
       } else if (!(stepStatus === 'complete' || form.skippable)) {
@@ -206,7 +206,8 @@ export class FormController {
     // const submitFormName = this.steps.find(formId => this.forms[formId]?.type === 'submit') as string;
     const formUserData: IUserData = FormUserData.getUserData() || {};
     // const form = this.forms[submitFormName];
-    const submitForm: any = Object.entries(this.forms).find( ([key, form]) => form.type === 'submit');
+    const submitForm: ISubmit = 
+      Object.entries(this.forms).find( ([key, form]) => (form as ISubmit).type === 'submit') as any;
     if (submitForm) {
       const payload = typeof submitForm.payload === 'function' ? 
         JSON.stringify(submitForm.payload(formUserData)) : JSON.stringify(formUserData);
@@ -215,10 +216,10 @@ export class FormController {
       return window.fetch(submitForm.url, { method: submitForm.method, headers: submitForm.headers, body: payload })
         .then(response => response.json())
         .then(response => {
-          submitForm.onSuccess(response);
+          submitForm.onSuccess?.(response);
           formUserData.delete();
         })
-        .catch(error => submitForm.onError(error))
+        .catch(error => submitForm.onError?.(error))
         .finally(() => {})
     } else {
       return Promise.reject('Could not find form type "submit"')
@@ -227,9 +228,6 @@ export class FormController {
 
   showStep(step: string) {
     this.currentForm = step;
-    console.log('currentForm', this.currentForm);
-    console.log('forms', this.forms);
-    console.log('steps', this.steps);
     this.initStepperEl();
     this.initFormEl();
     this.initButtonsEl();

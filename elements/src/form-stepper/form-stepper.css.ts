@@ -76,6 +76,9 @@ export default /* css */ `
 
   form-stepper .form-step .form-link .form-desc {
     color: grey;
+    text-align: center;
+    width: 200px;
+    font-size: small;
   }
 
   form-stepper .form-step .connection-line {

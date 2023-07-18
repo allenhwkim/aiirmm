@@ -27,9 +27,9 @@ import paginationCss from './x-pagination/pagination.css'; // x-pagination/
   });
   try {
     const scopedCss = postcss().use(plugin).process(css, {map: false}).css;
-    console.log(scopedCss.toString());
+    console.info(scopedCss.toString());
   } catch(e) {
-    console.log({tagName, css});
+    console.info({tagName, css});
     throw e;
   }
 });

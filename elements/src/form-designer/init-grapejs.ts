@@ -80,9 +80,6 @@ export function initGrapesJs(elId: string) {
   
   editor.Commands.add('set-forms-steps', 
     function(editor, sender, opts: any) {
-      console.log({editor, sender, opts});
-      console.log('........... form-designer', document.querySelector('form-designer'));
-      // $0.editor.runCommand('set-stepper-data', {some: 'option'})
       const iframe: any = document.querySelector('form-designer iframe');
       const formStepper = iframe.contentWindow.document.querySelector('form-stepper');
       formStepper.formController.forms = opts.forms;
