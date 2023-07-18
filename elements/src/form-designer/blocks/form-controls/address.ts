@@ -8,20 +8,20 @@ export default {
         <div class="col-6">
           <label class="d-block">
             <div class="fw-bold">Street address</div>
-            <input name="address-street" class="form-control">
+            <input name="addressStreet" class="form-control">
           </label>
         </div>
         <div class="col">
           <label class="d-block">
             <div class="fw-bold">City</div>
-            <input name="address-city" class="form-control">
+            <input name="addressCity" class="form-control">
           </label>
         </div>
         <div class="col">
           <label class="d-block">
             <div class="fw-bold">Province</div>
             <combo-box>
-              <input placeholder="Choose one" autoComplete="off" value="ON" class="form-control" />
+              <input name="addressProvince" placeholder="Choose one" autoComplete="off" value="ON" class="form-control" />
                 <ul>
                   <li value="AB">Alberta</li>
                   <li value="BC">British Columbia</li>
@@ -45,7 +45,7 @@ export default {
           <label class="d-block">
             <div class="fw-bold">Postal code</div>
             <input-mask mask="A9A 9A9" >
-              <input  name="address-postal" class="form-control"/>
+              <input  name="addressPostal" class="form-control"/>
             </input-mask>
           </label>
         </div>
