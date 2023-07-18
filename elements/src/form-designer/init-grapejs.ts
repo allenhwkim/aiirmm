@@ -1,6 +1,6 @@
 import grapesjs from 'grapesjs';
 import { showSidePanel } from './custom-commands';
-import { componentBlocks, formBlocks, containerBlocks }  from './blocks';
+import { componentBlocks, formBlocks, containerBlocks, formControlBlocks }  from './blocks';
 import { componentTypes } from './components';
 import {
   topPanel, 
@@ -36,6 +36,7 @@ export function initGrapesJs(elId: string) {
     blockManager: {
       appendTo: '.blocks-container',
       blocks: [
+        ...formControlBlocks,
         ...containerBlocks,
         ...formBlocks,
         ...componentBlocks,

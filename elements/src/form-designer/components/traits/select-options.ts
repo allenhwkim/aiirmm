@@ -5,11 +5,11 @@ export const selectOptionsType ={
     keyup: 'onChange',
   },
 
-  onValueChange() {
+  onValueChange(this: any) {
     const { model, target } = this;
     const optionsStr = model.get('value').trim();
     const options = optionsStr.split('\n');
-    const optComps = [];
+    const optComps: any[] = [];
 
     for (let i = 0; i < options.length; i++) {
       const optionStr = options[i];
@@ -25,9 +25,9 @@ export const selectOptionsType ={
     target.view.render();
   },
 
-  getInputEl() {
+  getInputEl(this: any) {
     if (!this.$input) {
-      const optionsArr = [];
+      const optionsArr: string[] = [];
       const options = this.target.components();
 
       for (let i = 0; i < options.length; i++) {

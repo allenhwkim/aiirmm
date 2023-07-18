@@ -21,7 +21,7 @@ export const buttonType = {
       }]
     },
 
-    init() {
+    init(this: any) {
       const comps = this.components();
       const tChild =  comps.length === 1 && comps.models[0];
       const chCnt = (tChild && tChild.is('textnode') && tChild.get('content')) || '';
@@ -33,7 +33,7 @@ export const buttonType = {
       }
     },
 
-    __onTextChange() {
+    __onTextChange(this: any) {
       this.components(this.get('text'));
     },
   }

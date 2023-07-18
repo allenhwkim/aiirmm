@@ -9,7 +9,7 @@ import sidebarCss from './sidebar/sidebar.css'; // side-bar
 import paginationCss from './x-pagination/pagination.css'; // x-pagination/
 
 [
-  ['combop-box', comboboxCss],
+  ['combo-box', comboboxCss],
   ['file-select', fileSelectCss],
   ['form-stepper', formStepperCss],
   ['input-mask', inputMaskCss],

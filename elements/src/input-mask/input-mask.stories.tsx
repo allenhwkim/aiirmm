@@ -30,7 +30,7 @@ const Template = (args?: any) => {
       <input defaultValue={"1"} />  Phone Number
     </input-mask>
 
-    <input-mask mask="X9X 9X9" >
+    <input-mask mask="A9A 9A9" >
       <input defaultValue={"L7A"} /> Postal Code
     </input-mask>
 
