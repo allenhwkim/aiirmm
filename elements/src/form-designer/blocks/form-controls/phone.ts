@@ -8,7 +8,7 @@ export default {
         <div class="col">
           <label class="d-block">
             <div class="fw-bold">Phone type</div>
-            <combo-box>
+            <combo-box class="d-block">
               <input name="phoneType" placeholder="Choose one" autoComplete="off" value="Mobile" class="form-control" />
                 <ul>
                   <li value="Mobile">Mobile phone</li>
