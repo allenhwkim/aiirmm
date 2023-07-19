@@ -87,3 +87,5 @@ export function defineAll() {
   !customElements.get('x-if') &&             customElements.define('x-if', XIf);
   !customElements.get('x-pagination') &&     customElements.define('x-pagination', Pagination);
 }
+
+export { AppStorage } from './app-storage';

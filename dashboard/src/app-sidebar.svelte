@@ -5,9 +5,9 @@
 
 <script lang="typescript">
   import { createEventDispatcher } from 'svelte';
+  import { AppStorage } from '@formflow/elements/src';
   import currentFile from './store';
-  import { Storage } from './storage';
-    import { CurrentFile } from './current-file';
+  import { CurrentFile } from './current-file';
 
   const dispatch = createEventDispatcher();
   
@@ -25,7 +25,7 @@
     if ($currentFile.modified === true) {
       dispatch('message', {fileMessage: 'The current formflow is modified, but not saved. Please save.'});
     } else {
-      Storage.removeItem('currentFormflow');
+      AppStorage.removeItem('currentFormflow');
       const chartEl = $currentFile.chartEl;
       $currentFile = new CurrentFile(undefined, chartEl);
       dispatch('message', {fileMessage: 'A new file is opened'});

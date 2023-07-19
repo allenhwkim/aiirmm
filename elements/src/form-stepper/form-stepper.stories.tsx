@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { FormUserData } from './form-user-data';
-import { FormStepper } from "../index"; // Shares the same FormController
-
+import { AppStorage, FormStepper } from "../index"; // Shares the same FormController
 !customElements.get('form-stepper') && customElements.define('form-stepper', FormStepper);
-
 
 export default {
   title: 'Components/form-stepper',
@@ -58,9 +55,10 @@ const myForm = {
 }
 
 const Template = (args?: any) => {
-  const [userData, setUserData] = useState(FormUserData.getUserData());
+  const storageUserData = AppStorage.getItem('currentFormflow.userData');
+  const [userData, setUserData] = useState(storageUserData);
   const clearStorage = () => (sessionStorage.clear(), setUserData(''));
-  window.addEventListener('form-user-data', (event: any) => setUserData(JSON.stringify(event.detail)));
+  window.addEventListener('app-storage', (event: any) => setUserData(JSON.stringify(event.detail.data)));
 
   const formStepper = useRef<any>();
   useEffect(() => { formStepper.current.forms = myForm })

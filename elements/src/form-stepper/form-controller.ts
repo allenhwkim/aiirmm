@@ -1,6 +1,6 @@
 import { defaultForms } from './default-forms';
 import { IForms, IForm, IUserData, ISubmit } from './types';
-import { FormUserData } from './form-user-data';
+import { AppStorage } from '../app-storage';
 
 export class FormController {
   static instance: FormController;
@@ -27,7 +27,9 @@ export class FormController {
         const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
         const formElData = Object.fromEntries(new FormData(formEl).entries())
         if (Object.keys(formElData).length) {
-          FormUserData.setUserData(this.currentForm, formElData);
+          const userData = AppStorage.getItem('currentFormflow.userData');
+          userData[this.currentForm] = formElData;
+          AppStorage.setItem('currentFormflow.userData', userData);
         }
         this.initForm('next');
       }
@@ -86,7 +88,7 @@ export class FormController {
   }
 
   getStatus(formId: string): 'complete' | 'incomplete'  { 
-    const userData: IUserData = FormUserData.getUserData();
+    const userData = AppStorage.getItem('currentFormflow.userData');
     if (userData?.[formId]) { // user has visited this formId already and saved data 
       return 'complete';
     } else {
@@ -117,7 +119,7 @@ export class FormController {
         formEl.innerHTML = html as string;
       }
 
-      const formUserData: IUserData = FormUserData.getUserData() || {};
+      const formUserData: IUserData = AppStorage.getItem('currentFormflow.userData');
       for (var key in formUserData[this.currentForm]) {
         const el = formEl.elements[key as any] as HTMLInputElement;
         const value = formUserData[this.currentForm][key];
@@ -203,9 +205,7 @@ export class FormController {
   }
 
   submitForm(): Promise<any> {
-    // const submitFormName = this.steps.find(formId => this.forms[formId]?.type === 'submit') as string;
-    const formUserData: IUserData = FormUserData.getUserData() || {};
-    // const form = this.forms[submitFormName];
+    const formUserData: IUserData = AppStorage.getItem('currentFormflow.userData') || {};
     const submitForm: ISubmit = 
       Object.entries(this.forms).find( ([key, form]) => (form as ISubmit).type === 'submit') as any;
     if (submitForm) {
@@ -217,7 +217,7 @@ export class FormController {
         .then(response => response.json())
         .then(response => {
           submitForm.onSuccess?.(response);
-          formUserData.delete();
+          AppStorage.removeItem('currentFormflow.userData');
         })
         .catch(error => submitForm.onError?.(error))
         .finally(() => {})

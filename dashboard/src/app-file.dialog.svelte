@@ -1,13 +1,13 @@
 <script lang="typescript">
   import { createEventDispatcher, onMount } from 'svelte';
-  import { Storage } from './storage';
+  import type { FormDiagram } from '@formflow/elements/src';
+  import { AppStorage } from '@formflow/elements/src';
   import currentFile from './store';
-    import { CurrentFile } from './current-file';
-    import type { FormDiagram } from '@formflow/elements/src';
+  import { CurrentFile } from './current-file';
 
-  let message;
-  let fileName;
-  let bootstrapDialog;
+  let message: string;
+  let fileName: string;
+  let bootstrapDialog: any;
 
   const dispatch = createEventDispatcher();
 
@@ -21,7 +21,7 @@
   }
 
   function getAllFiles() {
-    return Storage.getItem('formflows') || [];
+    return AppStorage.getItem('formflows') || [];
   }
   
   function openFile(formFile: any) { // file dialog event handler
@@ -31,7 +31,7 @@
   }
 
   function saveFileAs() {
-    const allFormflows = Storage.getItem('formflows') || []; // returns array
+    const allFormflows = AppStorage.getItem('formflows') || []; // returns array
     const index = allFormflows.findIndex( el => el.name === fileName);
     const confirmed = index === -1 ? 
       true : window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`);
