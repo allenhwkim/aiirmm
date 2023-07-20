@@ -55,11 +55,15 @@ form-designer .editor-row .side-bar {
 }
 
 form-designer .editor-row .side-bar .gjs-block {
-  width: auto;
-  height: auto;
   min-height: auto;
   margin: 4px;
   padding: 6px 12px;
+  width: 96px;
+  white-space: nowrap;
+}
+
+form-designer .editor-row .side-bar .gjs-block .gjs-block-label {
+  font-size: 12px;
 }
 
 form-designer .editor-row .side-bar .tabs.panel__switcher {

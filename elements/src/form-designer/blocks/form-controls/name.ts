@@ -1,7 +1,7 @@
 export default {
   id: 'bs5-control-name',
   category: 'Bootstrap5 Form Controls',
-  label: 'First name / Last name',
+  label: 'First/Last name',
   content: `
     <div class="container pb-3">
       <div class="row">

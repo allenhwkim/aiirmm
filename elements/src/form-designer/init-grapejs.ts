@@ -79,18 +79,5 @@ export function initGrapesJs(elId: string) {
     }
   });
   
-  editor.Commands.add('set-forms-steps', 
-    function(editor, sender, opts: any) {
-      const iframe: any = document.querySelector('form-designer iframe');
-      const formStepper = iframe.contentWindow.document.querySelector('form-stepper');
-      formStepper.formController.forms = opts.forms;
-      formStepper.formController.steps = opts.steps;
-      formStepper.formController.document = formStepper.closest('body');
-      formStepper.formController.showStep(opts.currentStep);
-    }
-  );
-
-  editor.setStyle('body {padding: 12px;}')
-
   return editor;
 }

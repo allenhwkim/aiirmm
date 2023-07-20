@@ -24,7 +24,7 @@ export const formType = {
 
   model: {
     defaults: {
-      script: formScript,
+      // script: formScript,
       tagName: 'form',
       testprop: 1,
       droppable: ':not(form)',
@@ -40,8 +40,8 @@ export const formType = {
 
   view: {
     events: {
-      'dblclick button': e => console.debug(`dblclick form button`),
-      submit: 'onFormSubmit'
+      // 'dblclick button': e => console.debug(`dblclick form button`),
+      // submit: 'onFormSubmit'
     },
 
     onFormSubmit(event) {

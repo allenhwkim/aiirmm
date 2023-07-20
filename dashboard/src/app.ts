@@ -33,11 +33,12 @@ function getSteps(chartData: ReactFlowJsonObject, activeNode: Node): string[] {
 function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
   const forms = {};
   steps.forEach( (step: string) => {
+    // this is temporary, this should be from a storage data
     forms[step] = {
       type: 'form',
       // label: step + ' label',
-      // title: step + ' title',
-      // description: step + ' description',
+      title: step + ' title',
+      description: step + ' description',
       html: '',
       skippable: false,
       getErrors: null
@@ -46,11 +47,12 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
   return forms;
 }
 
-export function setForm(chartData: ReactFlowJsonObject, activeNode: Node) {
+export function setForm(chartData: ReactFlowJsonObject, activeNode: Node, html?: string) {
   const steps = getSteps(chartData, activeNode).slice(1, -1);
   const forms = getForms(chartData, steps);
-  (document.querySelector('form-designer') as any)?.editor.runCommand(
-    'set-forms-steps', {forms, steps, currentStep: activeNode.data.label}
+  const currentStep = activeNode.data.label;
+  (document.querySelector('form-designer') as any)?.runCommand(
+    'set-forms-steps', {forms, steps, currentStep, html}
   )
 }
 

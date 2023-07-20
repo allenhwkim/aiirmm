@@ -119,7 +119,7 @@ export class FormController {
         formEl.innerHTML = html as string;
       }
 
-      const formUserData: IUserData = AppStorage.getItem('currentFormflow.userData');
+      const formUserData: IUserData = AppStorage.getItem('currentFormflow.userData') || {};
       for (var key in formUserData[this.currentForm]) {
         const el = formEl.elements[key as any] as HTMLInputElement;
         const value = formUserData[this.currentForm][key];

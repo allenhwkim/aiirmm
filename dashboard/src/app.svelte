@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import type { FormDiagram } from '@formflow/elements/src';
+  import { AppStorage, type FormDesigner, type FormDiagram } from '@formflow/elements/src';
   import { onMount } from 'svelte';
 
   import AppSideBar from './app-sidebar.svelte';
@@ -12,6 +12,7 @@
   // custom elements
   let chartEl: FormDiagram;
   let menuEl: AppSideBar;
+  let formDesigner: FormDesigner;
   let appDataDialog: AppDataDialog;
   let appFileDialog: AppFileDialog;
 
@@ -19,6 +20,11 @@
 
   onMount(() => {
     $currentFile.setChartEl(chartEl);
+    formDesigner.on('update', function() { 
+      const htmls = AppStorage.getItem('currentFormflow.htmls') || {};
+      htmls[activeNodeName] = formDesigner.editor.getHtml();
+      AppStorage.setItem('currentFormflow.htmls', htmls);
+    });
   });
 
   $: activeNodeName = $currentFile.activeNode?.data?.label || '';
@@ -56,7 +62,11 @@
           $currentFile.modified = true;
           $currentFile.chart = chartEl?.getData();
         }
-        setForm(chartEl?.getData(), node); // set stepper, html, css
+        const activeNodeName = node.data?.label;
+        if (activeNodeName) {
+          const html = AppStorage.getItem('currentFormflow.htmls')?.[activeNodeName];
+          setForm(chartEl?.getData(), node, html); // set stepper, html, css
+        }
       }
     }
   }
@@ -103,7 +113,7 @@
       </h2>
       <div id="form-designer" class="accordion-collapse collapse" data-bs-parent="#right-section">
         <div class="accordion-body p-0 py-1">
-          <form-designer></form-designer>
+          <form-designer bind:this={formDesigner}></form-designer>
         </div>
       </div>
     </div>
