@@ -1,32 +1,33 @@
 import { defaultForms } from './default-forms';
-import { IForms, IForm, IUserData, ISubmit } from './types';
+import { IForms, IForm, IUserData, ISubmitData } from './types';
 import { AppStorage } from '../app-storage';
 
 export class FormController {
   static instance: FormController;
   document: HTMLElement;
+  addedEventListeners: boolean = false;
 
   forms: IForms;
-  steps: string[];
-  currentForm: IForm | ISubmit = undefined as any;
+  steps: string[]; // ids of reactflow Node
+  currentForm: IForm = undefined as any;
   currentStepIndex: number = -1;
 
-  _currentFormName: string = '';
-  get currentFormName() { return this._currentFormName; }
-  set currentFormName(val: string) {
-    this._currentFormName = val;
+  _currentFormId: string = ''; // id of reactflow Node
+  get currentFormId() { return this._currentFormId; }
+  set currentFormId(val: string) {
+    this._currentFormId = val;
     this.currentForm = this.forms[val];
     this.currentStepIndex = this.steps.indexOf(val);
   }
 
   constructor() {
     if (!FormController.instance) {
-      this.addEventListeners();
       FormController.instance = this;
     }
     this.forms = defaultForms;
     this.steps = Object.keys(defaultForms);
     this.document = document.body;
+    this.addEventListeners();
     return FormController.instance;
   }
 
@@ -45,8 +46,8 @@ export class FormController {
         const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
         const formElData = Object.fromEntries(new FormData(formEl).entries())
         if (Object.keys(formElData).length) {
-          const userData = AppStorage.getItem('currentFormflow.userData');
-          userData[this.currentFormName] = formElData;
+          const userData = AppStorage.getItem('currentFormflow.userData') || {};
+          userData[this.currentFormId] = formElData;
           AppStorage.setItem('currentFormflow.userData', userData);
         }
         this.initForm('next');
@@ -55,7 +56,9 @@ export class FormController {
   }
 
   addEventListeners() {
+    console.log('this.document', this.document);
     if (!this.document) return;
+    if (this.addedEventListeners) return;
     this.document.addEventListener('form-goto', this._docGotoStepListener);
     this.document.addEventListener('click', this._docClickListener);
   }
@@ -86,15 +89,15 @@ export class FormController {
       nextStepIndex = this.steps.indexOf(target);
     }
 
-    this.currentFormName = this.steps[nextStepIndex];
+    this.currentFormId = this.steps[nextStepIndex];
     this.initStepperEl();
     this.initFormEl();
     this.initButtonsEl();
   }
 
-  getStatus(formName: string): 'complete' | 'incomplete'  { 
+  getStatus(formId: string): 'complete' | 'incomplete'  { 
     const userData = AppStorage.getItem('currentFormflow.userData');
-    return userData?.[formName] ? 'complete' : 'incomplete'; // user has visited this formName already and saved data 
+    return userData?.[formId] ? 'complete' : 'incomplete'; // user has visited this formName already and saved data 
   }
 
   initStepperEl(): void {
@@ -119,7 +122,7 @@ export class FormController {
       }
 
       const currentFormUserData = 
-        AppStorage.getItem('currentFormflow.userData')?.[this.currentFormName] || {};
+        AppStorage.getItem('currentFormflow.userData')?.[this.currentFormId] || {};
       for (var key in currentFormUserData) {
         const el = formEl.elements[key as any] as HTMLInputElement;
         const value = currentFormUserData[key];
@@ -146,14 +149,14 @@ export class FormController {
     }
     // 0-1-2-3-current -> disabled, current-1-2-3-review -> enabled
     nextButtonEl && (nextButtonEl.disabled = !(this.currentStepIndex !== this.steps.length - 1));
-    console.log('...........', this.currentFormName, this.isReviewable())
-    if (reviewButtonEl) {
-      reviewButtonEl.style.display = 
-        this.currentForm.type === 'review' ? 'none' :
-        this.isReviewable() ? '' : 'none';
+    if (reviewButtonEl) { // do not set inline style here. Grapejs not handling well by setting it outside
+      const shouldShow = this.isReviewable() && (['review', 'submit'].indexOf(this.currentForm.type) === -1);
+      console.log(this.isReviewable(), ['review', 'submit'].indexOf(this.currentForm.type) !== -1)
+      shouldShow ? reviewButtonEl.removeAttribute('hidden') : reviewButtonEl.setAttribute('hidden', '');
     }
     if (submitButtonEl) {
-      submitButtonEl.style.display = this.currentForm.type !== 'review' ? 'none' : '';
+      const shouldShow = this.currentForm.type === 'review';
+      shouldShow ? submitButtonEl.removeAttribute('hidden') : submitButtonEl.setAttribute('hidden', '');
     }
   }
 
@@ -178,7 +181,7 @@ export class FormController {
     }
 
     const formElData = Object.fromEntries(new FormData(formEl).entries());
-    const getErrorFunc = (this.forms[this.currentFormName] as IForm).getErrors;
+    const getErrorFunc = (this.forms[this.currentFormId] as IForm).getErrors;
     const customUserErrors = getErrorFunc && getErrorFunc(formElData);
     if (errorsEl && customUserErrors) {
       customUserErrors.forEach( (el: any) => {
@@ -208,20 +211,20 @@ export class FormController {
 
   submitForm(): Promise<any> {
     const formUserData: IUserData = AppStorage.getItem('currentFormflow.userData') || {};
-    const submitForm: ISubmit = 
-      Object.entries(this.forms).find( ([key, form]) => (form as ISubmit).type === 'submit') as any;
-    if (submitForm) {
-      const payload = typeof submitForm.payload === 'function' ? 
-        JSON.stringify(submitForm.payload(formUserData)) : JSON.stringify(formUserData);
+    const submitData: ISubmitData = AppStorage.getItem('currentFormflow.submitData') || defaultSubmitData;
+    if (submitData) {
+      const payload = typeof submitData.payload === 'function' ? 
+        JSON.stringify(submitData.payload(formUserData)) : JSON.stringify(formUserData);
 
+      const {url, method, headers, onSuccess, onError} = submitData;
       this.document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
-      return window.fetch(submitForm.url, { method: submitForm.method, headers: submitForm.headers, body: payload })
+      return window.fetch(url, { method: method, headers: headers, body: payload })
         .then(response => response.json())
         .then(response => {
-          submitForm.onSuccess?.(response);
+          onSuccess?.(response);
           AppStorage.removeItem('currentFormflow.userData');
         })
-        .catch(error => submitForm.onError?.(error))
+        .catch(error => onError?.(error))
         .finally(() => {})
     } else {
       return Promise.reject('Could not find form type "submit"')
@@ -229,7 +232,7 @@ export class FormController {
   }
 
   showStep(step: string) {
-    this.currentFormName = step;
+    this.currentFormId = step;
     this.initStepperEl();
     this.initFormEl();
     this.initButtonsEl();
