@@ -1,5 +1,6 @@
 import type { IForm } from "./global";
 import type { ReactFlowJsonObject, Node } from 'reactflow';
+import { DEFAULT_HTML, FormDesigner } from "@formflow/elements/src";
 
 function getSteps(chartData: ReactFlowJsonObject, activeNode: Node): string[] {
   const steps = [activeNode.id];
@@ -50,11 +51,15 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
 }
 
 export function setForm(chartData: ReactFlowJsonObject, activeNode: Node, html?: string) {
+  html ||= DEFAULT_HTML;
+  console.log('<<<<<<<<<<<<<<<<<<,,', html);
+
   const steps = getSteps(chartData, activeNode).slice(1, -1);
   const forms = getForms(chartData, steps);
   const currentStepId = activeNode.id;
-  (document.querySelector('form-designer') as any)?.runCommand(
-    'set-forms-steps', {forms, steps, currentStepId, html}
-  )
+  const formDesigner = document.querySelector('form-designer') as FormDesigner;
+  formDesigner.setHtml(html);
+  formDesigner.setStyle('form.form-flow { min-height: 320px;}')
+  formDesigner.runCommand('set-forms-steps', {forms, steps, currentStepId})
 }
 

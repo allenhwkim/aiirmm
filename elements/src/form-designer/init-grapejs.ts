@@ -18,7 +18,7 @@ const devices = [
 export function initGrapesJs(elId: string) {
   const editor = grapesjs.init({
     container: elId,
-    fromElement: true, // initial html is from innerHTMl
+    // fromElement: true, // initial html is from innerHTMl
     height: '100%', // default 900px,
     plugins: [
       componentTypes,

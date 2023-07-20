@@ -22,7 +22,7 @@
     $currentFile.setChartEl(chartEl);
     formDesigner.on('update', function() { 
       const formData = AppStorage.getItem('currentFormflow.formData') || {};
-      formData[activeNodeId] ||= {};
+      formData[activeNodeId] ||= {}; 
       formData[activeNodeId].html = 
         formDesigner.getHtml().replace(/^<body>/,'').replace(/<\/body>$/,'');
       AppStorage.setItem('currentFormflow.formData', formData);
@@ -65,11 +65,12 @@
           $currentFile.modified = true;
           $currentFile.chart = chartEl?.getData();
         }
-        if (activeNodeName) {
-          const formData = AppStorage.getItem('currentFormflow.formData') || {};
-          const html = formData?.[$currentFile.activeNode.id].html;
-          setForm(chartEl?.getData(), $currentFile.activeNode, html); // set stepper, html, css
-        }
+
+        const formData = AppStorage.getItem('currentFormflow.formData') || {};
+        formData[node.id] ||= {};
+        const html = formData[node.id].html;
+        console.log('>>>>>>>>>>>>>>>>>>>..', html);
+        setForm(chartEl?.getData(), node, html); // set stepper, html, css
       }
     }
   }

@@ -26,19 +26,7 @@ const html = /*html*/`
     </div>
 
     <div class="editor-canvas">
-      <div id="gjs">
-        <div class="p-3">
-          <form-stepper class="pb-4"></form-stepper> 
-          <div class="form-flow form-errors error"></div>
-          <form class="form-flow p-2" style="min-height: 320px"></form>
-          <div class="form-flow form-buttons container">
-            <button class="btn btn-primary me-2 form-prev">Prev</button>
-            <button class="btn btn-primary me-2 form-next">Next</button>
-            <button class="btn btn-primary me-2 form-review">Review</button>
-            <button class="btn btn-primary me-2 form-submit">Submit</button>
-          </div>
-        </div>
-      </div>
+      <div id="gjs"></div>
     </div>
   </div>
 `;
@@ -77,15 +65,16 @@ export class FormDesigner extends HTMLElement {
     this.editor.on(eventName, eventListener);
   }
 
-  getCurrentForm() {
-    return this.formController.currentForm;
+  /* utility functions */
+  getCurrentForm() { return this.formController.currentForm; }
+  getHtml() { return this.editor.getHtml(); }
+  setStyle(css: string) { this.editor.setStyle(css); }
+  setHtml(html: string) { 
+    this.editor.setComponents(html); 
+    // <form> element is losing its innerHTML by grapesjs, donno why
+    const formHTML = html.match(/<form.*?>(.*?)<\/form>/)?.[1] || '';
+    if (this.formController) {
+      (this.formController.document.querySelector('form.form-flow') as any).innerHTML = formHTML;
+    }
   }
-
-  getHtml() {
-    return this.editor.getHtml();
-  }
-
-  // setHtml() {
-  //   return this.editor.getHtml();
-  // }
 }
