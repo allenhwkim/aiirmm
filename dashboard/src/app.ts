@@ -52,7 +52,6 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
 
 export function setForm(chartData: ReactFlowJsonObject, activeNode: Node, html?: string) {
   html ||= DEFAULT_HTML;
-  console.log('<<<<<<<<<<<<<<<<<<,,', html);
 
   const steps = getSteps(chartData, activeNode).slice(1, -1);
   const forms = getForms(chartData, steps);

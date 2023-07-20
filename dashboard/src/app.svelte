@@ -69,7 +69,6 @@
         const formData = AppStorage.getItem('currentFormflow.formData') || {};
         formData[node.id] ||= {};
         const html = formData[node.id].html;
-        console.log('>>>>>>>>>>>>>>>>>>>..', html);
         setForm(chartEl?.getData(), node, html); // set stepper, html, css
       }
     }
