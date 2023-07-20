@@ -23,14 +23,10 @@ export const defaultForms: IForms = {
     html: () => `Optional: <br/>  Address: <input name="address" />`,
     skippable: true
   }, 
-  Review: {
-    type: 'review',
-    html: () => `This is a review page.`,
-  },
   Submit: {
-    type: 'submit',
+    type: 'review-n-submit',
     method: 'POST',
-    html: () => 'Thank you',
+    html: () => `This is a review page.`,
     url: 'https://reqbin.com/echo/post/json',
     headers: {
       'Accept': 'application/json',

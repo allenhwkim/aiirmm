@@ -35,12 +35,12 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
   steps.forEach( (step: string) => {
     // this is temporary, this should be from a storage data
     forms[step] = {
-      type: 'form',
+      type: step.indexOf('Review') === -1 ? 'form' : 'review',
       // label: step + ' label',
       title: step + ' title',
       description: step + ' description',
       html: '',
-      skippable: false,
+      skippable: true,
       getErrors: null
     } as IForm; // TODO
   });

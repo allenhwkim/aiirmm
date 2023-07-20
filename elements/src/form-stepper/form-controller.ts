@@ -4,21 +4,39 @@ import { AppStorage } from '../app-storage';
 
 export class FormController {
   static instance: FormController;
-  currentForm: string = '';
-  currentFormType: string = '';
   document: HTMLElement;
 
   forms: IForms;
-  steps: string[] = Object.keys(defaultForms);
+  steps: string[];
+  currentForm: IForm | ISubmit = undefined as any;
+  currentStepIndex: number = -1;
+
+  _currentFormName: string = '';
+  get currentFormName() { return this._currentFormName; }
+  set currentFormName(val: string) {
+    this._currentFormName = val;
+    this.currentForm = this.forms[val];
+    this.currentStepIndex = this.steps.indexOf(val);
+  }
+
+  constructor() {
+    if (!FormController.instance) {
+      this.addEventListeners();
+      FormController.instance = this;
+    }
+    this.forms = defaultForms;
+    this.steps = Object.keys(defaultForms);
+    this.document = document.body;
+    return FormController.instance;
+  }
 
   _docGotoStepListener = (event: any) => this.initForm(event.detail);
 
   _docClickListener = (event: any) => {
     if (event.target.classList.contains('form-review')) {
-      const isCurrentReviewForm = (this.forms[this.currentForm] as IForm).type === 'review';
       this.initForm('review'); 
     } else if (event.target.classList.contains('form-submit')) {
-      this.initForm('submit');
+      this.initForm('submit'); // submit and show thankyou message
     } else if (event.target.classList.contains('form-prev')) {
       this.initForm('prev'); 
     } else if (event.target.classList.contains('form-next')) { 
@@ -28,22 +46,12 @@ export class FormController {
         const formElData = Object.fromEntries(new FormData(formEl).entries())
         if (Object.keys(formElData).length) {
           const userData = AppStorage.getItem('currentFormflow.userData');
-          userData[this.currentForm] = formElData;
+          userData[this.currentFormName] = formElData;
           AppStorage.setItem('currentFormflow.userData', userData);
         }
         this.initForm('next');
       }
     }
-  }
-
-  constructor() {
-    if (!FormController.instance) {
-      this.addEventListeners();
-      FormController.instance = this;
-    }
-    this.forms = defaultForms;
-    this.document = document.body;
-    return FormController.instance;
   }
 
   addEventListeners() {
@@ -60,42 +68,33 @@ export class FormController {
 
   async initForm(target: string = 'auto') {
     if (!this.document) return;
-    let nextFormIndex = 0;
+    let nextStepIndex = 0;
     if (target === 'auto') {
-      nextFormIndex = this.steps.findIndex(formId => this.getStatus(formId) !== 'complete');
+      nextStepIndex = this.steps.findIndex(formName => this.getStatus(formName) !== 'complete');
     } else if (['review', 'submit', 'prev', 'next'].includes(target)) {
-      const currentFormIndex = this.steps.indexOf(this.currentForm);
-
       if (target === 'review') {
-        nextFormIndex = this.steps.findIndex(formId => (this.forms[formId] as IForm)?.type === 'review');
+        nextStepIndex = this.steps.findIndex(formName => (this.forms[formName] as IForm)?.type === 'review');
       } else if (target === 'submit') {
         await this.submitForm();
-        nextFormIndex = this.steps.findIndex(formId => (this.forms[formId] as IForm)?.type === 'submit');
+        nextStepIndex = this.steps.findIndex(formName => (this.forms[formName] as IForm)?.type === 'submit');
       } else if (target === 'prev') {
-        nextFormIndex = (currentFormIndex - 1) % this.steps.length;
+        nextStepIndex = (this.currentStepIndex - 1) % this.steps.length;
       } else if (target === 'next') {
-        nextFormIndex = (currentFormIndex + 1) % this.steps.length;
+        nextStepIndex = (this.currentStepIndex + 1) % this.steps.length;
       }
     } else if (this.steps.indexOf(target)) {
-      nextFormIndex = this.steps.indexOf(target);
+      nextStepIndex = this.steps.indexOf(target);
     }
 
-    this.currentForm = this.steps[nextFormIndex];
-    this.currentFormType = '' + (this.forms[this.currentForm] as IForm).type;
+    this.currentFormName = this.steps[nextStepIndex];
     this.initStepperEl();
     this.initFormEl();
     this.initButtonsEl();
   }
 
-  getStatus(formId: string): 'complete' | 'incomplete'  { 
+  getStatus(formName: string): 'complete' | 'incomplete'  { 
     const userData = AppStorage.getItem('currentFormflow.userData');
-    if (userData?.[formId]) { // user has visited this formId already and saved data 
-      return 'complete';
-    } else {
-      const currentFormIndex = Object.keys(this.forms).indexOf(this.currentForm);
-      const formIndex = Object.keys(this.forms).indexOf(formId);
-      return 'incomplete';
-    }
+    return userData?.[formName] ? 'complete' : 'incomplete'; // user has visited this formName already and saved data 
   }
 
   initStepperEl(): void {
@@ -106,7 +105,7 @@ export class FormController {
 
   async initFormEl(): Promise<void> { // set innerHTML of <form> element
     const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
-    const html = this.forms[this.currentForm].html;
+    const html = this.currentForm.html;
     if (formEl) {
       if (typeof html === 'string' && html.match(/^http/)) {
         window.fetch(html)
@@ -119,10 +118,11 @@ export class FormController {
         formEl.innerHTML = html as string;
       }
 
-      const formUserData: IUserData = AppStorage.getItem('currentFormflow.userData') || {};
-      for (var key in formUserData[this.currentForm]) {
+      const currentFormUserData = 
+        AppStorage.getItem('currentFormflow.userData')?.[this.currentFormName] || {};
+      for (var key in currentFormUserData) {
         const el = formEl.elements[key as any] as HTMLInputElement;
-        const value = formUserData[this.currentForm][key];
+        const value = currentFormUserData[key];
         if (el.type === 'checkbox') {
           el.checked = ['on', el.value].includes(value);
         } else if (el.type === 'radio') {
@@ -139,19 +139,21 @@ export class FormController {
     const submitButtonEl = this.document.querySelector('.form-buttons .form-submit') as HTMLButtonElement;
     const prevButtonEl = this.document.querySelector('.form-buttons .form-prev') as HTMLButtonElement;
     const nextButtonEl = this.document.querySelector('.form-buttons .form-next') as HTMLButtonElement;
-    const currentFormIndex = this.steps.indexOf(this.currentForm);
 
     // 0-1-2-3-current -> enabled,  current-1-2-3-review -> disabled
     if (prevButtonEl) {
-      prevButtonEl.disabled = !(currentFormIndex > 0) || this.currentFormType === 'submit';
+      prevButtonEl.disabled = !(this.currentStepIndex > 0) || this.currentForm.type === 'submit';
     }
     // 0-1-2-3-current -> disabled, current-1-2-3-review -> enabled
-    nextButtonEl && (nextButtonEl.disabled = !(currentFormIndex !== this.steps.length - 1));
-    if (submitButtonEl) {
-      submitButtonEl.disabled = this.currentFormType !== 'review';
-    }
+    nextButtonEl && (nextButtonEl.disabled = !(this.currentStepIndex !== this.steps.length - 1));
+    console.log('...........', this.currentFormName, this.isReviewable())
     if (reviewButtonEl) {
-      reviewButtonEl.disabled = this.currentFormType === 'review' || !this.isReviewable();
+      reviewButtonEl.style.display = 
+        this.currentForm.type === 'review' ? 'none' :
+        this.isReviewable() ? '' : 'none';
+    }
+    if (submitButtonEl) {
+      submitButtonEl.style.display = this.currentForm.type !== 'review' ? 'none' : '';
     }
   }
 
@@ -176,7 +178,7 @@ export class FormController {
     }
 
     const formElData = Object.fromEntries(new FormData(formEl).entries());
-    const getErrorFunc = (this.forms[this.currentForm] as IForm).getErrors;
+    const getErrorFunc = (this.forms[this.currentFormName] as IForm).getErrors;
     const customUserErrors = getErrorFunc && getErrorFunc(formElData);
     if (errorsEl && customUserErrors) {
       customUserErrors.forEach( (el: any) => {
@@ -227,7 +229,7 @@ export class FormController {
   }
 
   showStep(step: string) {
-    this.currentForm = step;
+    this.currentFormName = step;
     this.initStepperEl();
     this.initFormEl();
     this.initButtonsEl();

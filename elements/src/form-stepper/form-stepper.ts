@@ -68,7 +68,7 @@ export class FormStepper extends HTMLElement {
     this.innerHTML = '';
     const formCtrl = this.formController;
     formCtrl.steps.forEach( (formName: string, index: number) => {
-      const activeClass = formName === formCtrl.currentForm ? ' active' : '';
+      const activeClass = formName === formCtrl.currentFormName ? ' active' : '';
       const formProp = formCtrl.forms[formName];
       const formType = formProp.type ? ` ${formProp.type}` : '';
       const label = formProp.label || index + 1;
