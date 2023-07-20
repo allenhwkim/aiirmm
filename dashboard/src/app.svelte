@@ -21,12 +21,15 @@
   onMount(() => {
     $currentFile.setChartEl(chartEl);
     formDesigner.on('update', function() { 
-      const htmls = AppStorage.getItem('currentFormflow.htmls') || {};
-      htmls[activeNodeName] = formDesigner.editor.getHtml();
-      AppStorage.setItem('currentFormflow.htmls', htmls);
+      const formData = AppStorage.getItem('currentFormflow.formData') || {};
+      formData[activeNodeId] ||= {};
+      formData[activeNodeId].html = 
+        formDesigner.getHtml().replace(/^<body>/,'').replace(/<\/body>$/,'');
+      AppStorage.setItem('currentFormflow.formData', formData);
     });
   });
 
+  $: activeNodeId = $currentFile.activeNode?.id;
   $: activeNodeName = $currentFile.activeNode?.data?.label || '';
 
   function formPropsChanged(e: any) {
@@ -62,10 +65,10 @@
           $currentFile.modified = true;
           $currentFile.chart = chartEl?.getData();
         }
-        const activeNodeName = node.data?.label;
         if (activeNodeName) {
-          const html = AppStorage.getItem('currentFormflow.htmls')?.[activeNodeName];
-          setForm(chartEl?.getData(), node, html); // set stepper, html, css
+          const formData = AppStorage.getItem('currentFormflow.formData') || {};
+          const html = formData?.[$currentFile.activeNode.id].html;
+          setForm(chartEl?.getData(), $currentFile.activeNode, html); // set stepper, html, css
         }
       }
     }

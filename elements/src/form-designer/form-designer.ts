@@ -77,6 +77,10 @@ export class FormDesigner extends HTMLElement {
     this.editor.on(eventName, eventListener);
   }
 
+  getCurrentForm() {
+    return this.formController.currentForm;
+  }
+
   getHtml() {
     return this.editor.getHtml();
   }
