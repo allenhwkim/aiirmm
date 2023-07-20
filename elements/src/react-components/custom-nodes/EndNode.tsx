@@ -15,7 +15,7 @@ function EndNode({ data }: Node) {
     <div className="container">
       <span className="add-node-button top" onClick={onClick}>+</span>
       <Handle type="target" position={Position.Top} />
-      END 
+      end
     </div>
   );
 }

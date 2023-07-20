@@ -89,3 +89,4 @@ export function defineAll() {
 }
 
 export { AppStorage } from './app-storage';
+export { DEFAULT_CHART } from './default-chart';

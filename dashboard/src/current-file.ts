@@ -1,19 +1,9 @@
 import type { FormDiagram } from '@formflow/elements/src';
-import { AppStorage } from '@formflow/elements/src';
+import { AppStorage, DEFAULT_CHART } from '@formflow/elements/src';
 
 export class CurrentFile {
   static DEFAULT_NAME = 'Untitled';
-  static DEFAULT_CHART =  {
-    nodes:[
-      {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
-      {id: '1', type: 'custom', data: {label: 'Hello'}, position: { x: 100, y: 100 }},
-      {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 200 }},
-    ],
-    edges: [
-      {id: 'start-1', source: 'start', target: '1', type: 'custom'},
-      {id: '1-end', source: '1', target: 'end', type: 'custom'},
-    ]
-  }
+  static DEFAULT_CHART =  DEFAULT_CHART;
 
   storage: any;
   chartEl: FormDiagram

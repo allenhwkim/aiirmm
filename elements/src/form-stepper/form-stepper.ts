@@ -79,7 +79,7 @@ export class FormStepper extends HTMLElement {
             <!-- ${ formCtrl.getStatus(formId)}${activeClass} -->
             <div class="form-label">${label}</div>
             <div class="form-title">${formProp.title || formId}</div>
-            <div class="form-desc">${formProp.description || ''}</div>
+            <div class="form-desc">${formProp.subTitle || ''}</div>
           </div>
         </div>
       `)

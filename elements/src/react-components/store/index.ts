@@ -6,25 +6,26 @@ import {
   updateEdge,
 } from 'reactflow';
 
-import { initialEdges, initialNodes } from './initial-nodes-edges';
 import { TStoreState } from '../types';
 import { UndoRedo } from './undo-redo';
 import { addNodeAboveNode } from './add-node-above-node';
 import { addNodeBelowNode } from './add-node-below-node';
 import { addNodeBesideNode } from './add-node-beside-node';
+import { DEFAULT_CHART } from '../../default-chart';
 
-UndoRedo.addHistory({nodes: initialNodes, edges: initialEdges});
+UndoRedo.addHistory(DEFAULT_CHART);
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create<TStoreState>((set, get) => ({
-  nodes: initialNodes,
-  edges: initialEdges,
+  nodes: DEFAULT_CHART.nodes,
+  edges: DEFAULT_CHART.edges,
   nextNodeId: 1,
 
   setNodes: (nodes: Node[]) => {
-    const nextNodeId = nodes.reduce( 
-      (max, node) => Math.max(max, +node.id || 0), 0
-    );
+    const nextNodeId = nodes.reduce( (max, node) => {
+      const formNum = +node.id.replace(/form/,'');
+      return Math.max(max, +formNum || 0);
+    }, 0);
     nodes = structuredClone(nodes);
     set({nodes, nextNodeId});
   },
@@ -127,7 +128,7 @@ const useStore = create<TStoreState>((set, get) => ({
     const options: any = {
       nodes: get().nodes,
       edges: get().edges,
-      nextNodeId: '' + get().nextNodeId
+      nodeId: 'form' + get().nextNodeId
     }
     const {nodes, edges} = addNodeBesideNode(nodeId, position, options);
     set({nodes, edges});
@@ -140,7 +141,7 @@ const useStore = create<TStoreState>((set, get) => ({
     const options: any = {
       nodes: get().nodes,
       edges: get().edges,
-      nextNodeId: '' + get().nextNodeId
+      nodeId: 'form' + get().nextNodeId
     }
     const {nodes, edges} = addNodeBelowNode(nodeId, options);
     set({nodes, edges});
@@ -153,7 +154,7 @@ const useStore = create<TStoreState>((set, get) => ({
     const options: any = {
       nodes: get().nodes,
       edges: get().edges,
-      nextNodeId: '' + get().nextNodeId
+      nodeId: 'form' + get().nextNodeId
     }
     const {nodes, edges} = addNodeAboveNode(nodeId, options);
     set({nodes, edges});

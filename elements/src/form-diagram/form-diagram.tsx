@@ -4,17 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { Node, Edge, ReactFlowInstance, ReactFlowJsonObject } from 'reactflow';
 import { toPng } from 'html-to-image';
 import { FormflowChart } from '../react-components/FormflowChart/FormflowChart';
-
-const initialNodes: Node[] = [
-  {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
-  {id: '1', type: 'custom', data: { label: 'Page 1' }, position: { x: 87.5, y: 120 }, },
-  {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 270 }},
-] as Node[];
-
-const initialEdges: Edge[]  = [
-  {id: 'start-1', source: 'start', target: '1', type: 'custom'},
-  {id: '1-end', source: '1', target: 'end', type: 'custom'},
-];
+import { DEFAULT_CHART } from '../default-chart';
 
 export class FormDiagram extends HTMLElement {
   root: any;
@@ -66,7 +56,7 @@ export class FormDiagram extends HTMLElement {
     this.dispatchEvent( customEvent );
   }
 
-  mount(nodes: Node[] = initialNodes, edges: Edge[] = initialEdges) {
+  mount(nodes: Node[] = DEFAULT_CHART.nodes, edges: Edge[] = DEFAULT_CHART.edges) {
     const onNodeClick = (node: Node, nodes: Node[], edges: Edge[]) => {
       this.fireEvent({ action: 'selected', type: 'node', node, nodes, edges })
     };

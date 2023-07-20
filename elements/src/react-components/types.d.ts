@@ -9,7 +9,7 @@ import {
 export type TAddNodeOptions = {
   nodes: Node[];
   edges: Edge[];
-  nextNodeId: string;
+  nodeId: string;
 };
 
 export type TAddNode = {

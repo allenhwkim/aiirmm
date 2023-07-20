@@ -2,6 +2,7 @@ import * as React from 'react';
 import { action } from '@storybook/addon-actions';
 
 import { FormflowChart } from './FormflowChart';
+import { DEFAULT_CHART } from '../../default-chart';
 
 export default { 
   title: 'React Components/FormflowChart',
@@ -25,14 +26,4 @@ const Template:any = (args: any) => {
 };
 
 export const Primary: any = Template.bind({});
-Primary.args = {
-  nodes:[
-    {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
-    {id: '1', type: 'custom', data: {label: 'Hello'}, position: { x: 100, y: 140 }},
-    {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 300 }},
-  ],
-  edges: [
-    {id: 'start-1', source: 'start', target: '1', type: 'custom'},
-    {id: '1-end', source: '1', target: 'end', type: 'custom'},
-  ]
-}
+Primary.args = DEFAULT_CHART;

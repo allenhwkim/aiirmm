@@ -11,18 +11,15 @@ export interface ISubmitData {
   payload: (userData: any) => any;
   onSuccess?: (resp: Response) => void;
   onError?: (resp: Response) => void;
-  html?: string | (() => string);
-  label?: string;
-  title?: string;
-  description?: string;
 }
 
 export interface IForm {
   type: 'form' | 'review' | 'submit';
-  title?: string;
-  description?: string;
-  html?: string | (() => string);
-  skippable?: boolean;
+  defaultValues: {[key:string]: string},
+  title: string; // step name below circle
+  subTitle: string; // small text below title
+  skippable: boolean;
+  html: string | (() => string);
   getErrors?: (formElData: any) => string[] | null;
 }
 

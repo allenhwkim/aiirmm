@@ -19,16 +19,16 @@ export function addNodeAboveNode(
 ) : TAddNode {
   const nodes = [...options.nodes];
   const edges = [...options.edges];
-  const nextNodeId = options.nextNodeId;
+  const newNodeId = options.nodeId;
 
   const currentNode = nodes.find(el => el.id === nodeId);
   if (!currentNode) { return {nodes, edges}; }
 
   // create a new node with positionX increased. Then, add it to nodes
   const newNode: Node = {
-    id: nextNodeId,
+    id: newNodeId,
     type: 'custom',
-    data: { label: `Page ${nextNodeId}`},
+    data: { label: newNodeId},
     position: { x: currentNode.position.x, y: currentNode.position.y },
   }
   const currentNodeNdx = nodes.findIndex(el => el.id === nodeId);

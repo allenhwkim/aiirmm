@@ -39,8 +39,9 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
         node.data?.label.indexOf('Review') !== -1 ? 'review' : 
         node.data?.label.indexOf('Thankyou') !== -1 ? 'submit' : 'form',
       title: node.data?.label,
-      description: node.data?.label + ' description',
-      html: '', // this is temporary, this should be from a storage data
+      subTitle: node.data?.label + ' sub-title',
+      html: '',
+      defaultValues: {},
       skippable: true,
       getErrors: null
     } as IForm; // TODO
