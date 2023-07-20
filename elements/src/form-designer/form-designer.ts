@@ -60,7 +60,7 @@ export class FormDesigner extends HTMLElement {
         this.formController.forms = opts.forms;
         this.formController.steps = opts.steps;
         this.formController.document = formStepper.closest('body');
-        this.formController.showStep(opts.currentStep);
+        this.formController.showStep(opts.currentStepId);
       }
     );
   }

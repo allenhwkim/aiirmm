@@ -2,8 +2,7 @@ export interface IUserData {
   [key: string]: any; 
 }
 
-export interface ISubmit {
-  type?: string;
+export interface ISubmitData {
   method: 'GET' | 'POST';
   url: string;
   headers?: {
@@ -19,9 +18,7 @@ export interface ISubmit {
 }
 
 export interface IForm {
-  type?: 'form' | 'submit' | 'review';
-  url?: string;
-  label?: string;
+  type: 'form' | 'review' | 'submit';
   title?: string;
   description?: string;
   html?: string | (() => string);
@@ -30,5 +27,5 @@ export interface IForm {
 }
 
 export interface IForms {
-  [key: string]: IForm | ISubmit;
+  [key: string]: IForm;
 }

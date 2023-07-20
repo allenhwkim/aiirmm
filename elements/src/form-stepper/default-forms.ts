@@ -1,7 +1,9 @@
 import { IForms, IUserData } from "./types";
 
 export const defaultForms: IForms = {
-  Name: {
+  1: {
+    type: 'form',
+    title: 'Name',
     html: () => `
       <style>form.error-checked :invalid {outline: 1px solid red;}</style>
       First Name: <input name="first" required> <br>
@@ -19,27 +21,21 @@ export const defaultForms: IForms = {
       return null;
     } 
   }, 
-  Contact: {
+  2: {
+    type: 'form',
+    title: 'Contact',
     html: () => `Optional: <br/>  Address: <input name="address" />`,
     skippable: true
   }, 
-  Submit: {
-    type: 'review-n-submit',
-    method: 'POST',
+  3: {
+    type: 'review',
+    title: 'Review',
+    html: () => `Optional: <br/>  Address: <input name="address" />`,
+    skippable: true
+  }, 
+  4: {
+    type: 'submit',
+    title: 'Thankyou',
     html: () => `This is a review page.`,
-    url: 'https://reqbin.com/echo/post/json',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    payload: function(formUserData: IUserData): any {
-      return { id: 78912 };
-    },
-    onSuccess: function(resp: Response) {
-      alert('form submission success');
-    },
-    onError: function(error: Response) {
-      alert('form submission error');
-    }
   }
 };

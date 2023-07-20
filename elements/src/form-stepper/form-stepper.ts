@@ -67,18 +67,18 @@ export class FormStepper extends HTMLElement {
 
     this.innerHTML = '';
     const formCtrl = this.formController;
-    formCtrl.steps.forEach( (formName: string, index: number) => {
-      const activeClass = formName === formCtrl.currentFormName ? ' active' : '';
-      const formProp = formCtrl.forms[formName];
+    formCtrl.steps.forEach( (formId: string, index: number) => {
+      const activeClass = formId === formCtrl.currentFormId ? ' active' : '';
+      const formProp = formCtrl.forms[formId];
       const formType = formProp.type ? ` ${formProp.type}` : '';
-      const label = formProp.label || index + 1;
+      const label = index + 1;
       this.insertAdjacentHTML(`beforeend`, `
-        <div class="form-step ${formCtrl.getStatus(formName)}${activeClass}${formType}">
+        <div class="form-step ${formCtrl.getStatus(formId)}${activeClass}${formType}">
           ${ index ? `<div class="connection-line"></div>`: '' }
-          <div class="form-link" data-name="${formName}">
-            <!-- ${ formCtrl.getStatus(formName)}${activeClass} -->
+          <div class="form-link" data-id="${formId}">
+            <!-- ${ formCtrl.getStatus(formId)}${activeClass} -->
             <div class="form-label">${label}</div>
-            <div class="form-title">${formProp.title || formName}</div>
+            <div class="form-title">${formProp.title || formId}</div>
             <div class="form-desc">${formProp.description || ''}</div>
           </div>
         </div>

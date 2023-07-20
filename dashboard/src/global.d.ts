@@ -7,4 +7,4 @@ declare module "*.svelte" {
   export default component;
 }
 
-export {IForm, ISubmit, IUserData, IForms} from '@formflow/elements/src/form-stepper/types';
+export {IForm, ISubmitData, IUserData, IForms} from '@formflow/elements/src/form-stepper/types';
