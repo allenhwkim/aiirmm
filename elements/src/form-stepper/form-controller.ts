@@ -1,8 +1,8 @@
-import { defaultForms } from './default-forms';
+import { DEFAULT_FORMS } from '../default-forms';
 import { IForms, IForm, IUserData, ISubmitData } from './types';
 import { AppStorage } from '../app-storage';
-import { defaultSubmitData } from './default-forms copy';
 import { FormStepper } from './form-stepper';
+import { DEFAULT_SUBMIT_DATA } from '../default-submit-data';
 
 export class FormController extends HTMLElement {
   forms: IForms;
@@ -14,14 +14,14 @@ export class FormController extends HTMLElement {
   get currentFormId() { return this._currentFormId; }
   set currentFormId(val: string) {
     this._currentFormId = val;
-    this.currentForm = this.forms[val];
+    this.currentForm = this.forms[val] || {};
     this.currentStepIndex = this.steps.indexOf(val);
   }
 
   constructor() {
     super();
-    this.forms = defaultForms;
-    this.steps = Object.keys(defaultForms);
+    this.forms = {};
+    this.steps = Object.keys(DEFAULT_FORMS);
   }
 
   connectedCallback() {
@@ -35,25 +35,26 @@ export class FormController extends HTMLElement {
   getButtonsEl = () => this.querySelector('.form-buttons') as HTMLElement;
   
   clickListener = (event: any) => {
-    console.log(event.target, event.target.closest('button'));
     const buttonEl = event.target.closest('.form-review, .form-submit, .form-prev, .form-next');
-    if (buttonEl.classList.contains('form-review')) {
-      this.initForm('review'); 
-    } else if (buttonEl.classList.contains('form-submit')) {
-      this.initForm('submit'); // submit and show thankyou message
-    } else if (buttonEl.classList.contains('form-prev')) {
-      this.initForm('prev'); 
-    } else if (buttonEl.classList.contains('form-next')) { 
-      const errors = this.setErrors();
-      if (!errors) { // set error classes and contents of .form-errors 
-        const formEl = this.getFormEl();
-        const formElData = Object.fromEntries(new FormData(formEl).entries())
-        if (Object.keys(formElData).length) {
-          const userData = AppStorage.getItem('currentFormflow.userData') || {};
-          userData[this.currentFormId] = formElData;
-          AppStorage.setItem('currentFormflow.userData', userData);
+    if (buttonEl) {
+      if (buttonEl.classList.contains('form-review')) {
+        this.initForm('review'); 
+      } else if (buttonEl.classList.contains('form-submit')) {
+        this.initForm('submit'); // submit and show thankyou message
+      } else if (buttonEl.classList.contains('form-prev')) {
+        this.initForm('prev'); 
+      } else if (buttonEl.classList.contains('form-next')) { 
+        const errors = this.setErrors();
+        if (!errors) { // set error classes and contents of .form-errors 
+          const formEl = this.getFormEl();
+          const formElData = Object.fromEntries(new FormData(formEl).entries())
+          if (Object.keys(formElData).length) {
+            const userData = AppStorage.getItem('currentFormflow.userData') || {};
+            userData[this.currentFormId] = formElData;
+            AppStorage.setItem('currentFormflow.userData', userData);
+          }
+          this.initForm('next');
         }
-        this.initForm('next');
       }
     }
   }
@@ -160,7 +161,6 @@ export class FormController extends HTMLElement {
         !nativeErrors.includes(errorMessage) && nativeErrors.push(errorMessage);
       }
     });
-    console.log('>>>>>>>>>>>>..4 ', {errorsEl, nativeErrors});
     if (errorsEl && nativeErrors.length) {
       nativeErrors.forEach(el => errorsEl.insertAdjacentHTML('beforeend', `<div class="error">${el}</div>`))
       return nativeErrors;
@@ -197,7 +197,7 @@ export class FormController extends HTMLElement {
 
   submitForm(): Promise<any> {
     const formUserData: IUserData = AppStorage.getItem('currentFormflow.userData') || {};
-    const submitData: ISubmitData = AppStorage.getItem('currentFormflow.submitData') || defaultSubmitData;
+    const submitData: ISubmitData = AppStorage.getItem('currentFormflow.submitData');
     if (submitData) {
       const payload = typeof submitData.payload === 'function' ? 
         JSON.stringify(submitData.payload(formUserData)) : JSON.stringify(formUserData);
@@ -207,13 +207,13 @@ export class FormController extends HTMLElement {
       return window.fetch(url, { method: method, headers: headers, body: payload })
         .then(response => response.json())
         .then(response => {
-          onSuccess?.(response);
+          submitData.onSuccess?.(response);
           AppStorage.removeItem('currentFormflow.userData');
         })
-        .catch(error => onError?.(error))
+        .catch(error => submitData.onError?.(error))
         .finally(() => {})
     } else {
-      return Promise.reject('Could not find form type "submit"')
+      return Promise.resolve('no submit data provided')
     }
   }
 

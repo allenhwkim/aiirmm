@@ -1,6 +1,6 @@
-import { IForms, IUserData } from "./types";
+import { IForms } from "./form-stepper/types";
 
-export const defaultForms: IForms = {
+export const DEFAULT_FORMS: IForms = {
   form1: {
     type: 'form',
     title: 'Name',

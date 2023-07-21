@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { AppStorage, FormController, FormStepper } from "../index"; // Shares the same FormController
-import { defaultForms } from './default-forms';
+import { DEFAULT_FORMS } from '../default-forms';
+import { AppStorage, DEFAULT_SUBMIT_DATA, FormController, FormStepper } from "../index"; // Shares the same FormController
 !customElements.get('form-stepper') && customElements.define('form-stepper', FormStepper);
 !customElements.get('form-controller') && customElements.define('form-controller', FormController);
-
 
 export default {
   title: 'Components/form-stepper',
@@ -13,12 +12,14 @@ export default {
 
 const Template = (args?: any) => {
   const storageUserData = AppStorage.getItem('currentFormflow.userData');
+  AppStorage.setItem('currentFormflow.submitData', DEFAULT_SUBMIT_DATA);
+  
   const [userData, setUserData] = useState(storageUserData);
   const clearStorage = () => (sessionStorage.clear(), setUserData(''));
   window.addEventListener('app-storage', (event: any) => setUserData(JSON.stringify(event.detail.data)));
 
   const formStepper = useRef<any>();
-  useEffect(() => { formStepper.current.forms = defaultForms })
+  useEffect(() => { formStepper.current.forms = DEFAULT_FORMS })
 
   return <form-controller>
     <form-stepper ref={formStepper}></form-stepper>  {/* forms={myForm} */}

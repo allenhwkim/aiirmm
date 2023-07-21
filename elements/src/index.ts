@@ -95,3 +95,5 @@ export function defineAll() {
 export { AppStorage } from './app-storage';
 export { DEFAULT_CHART } from './default-chart';
 export { DEFAULT_HTML } from './default-html';
+export { DEFAULT_FORMS } from './default-forms';
+export { DEFAULT_SUBMIT_DATA } from './default-submit-data';

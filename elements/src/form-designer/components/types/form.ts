@@ -1,32 +1,21 @@
-export const formType = {
-  isComponent: el => el.tagName === 'FORM',
+export function formType(editor) {
+  const defaultType = editor.DomComponents.getType('default');
 
-  model: {
-    defaults: {
-      tagName: 'form',
-      testprop: 1,
-      droppable: false,
-      draggable: false,
-      traits: [ 'id', 'title', ],
-    },
-  },
-
-  view: {
-    events: {
-      // 'dblclick button': e => console.debug(`dblclick form button`),
-      // submit: 'onFormSubmit'
-    },
-
-    onFormSubmit(event) {
-    },
-
-    init({ model }) {
-    },
-
-    removed() {
-    },
-
-    onRender() {
-    },
-  },
+  return {
+    model: defaultType.model.extend(
+      {
+        tagName: `form`
+      }, 
+      {
+        isComponent(el) {
+          if(el.tagName == 'FORM') {
+            return {type: 'form'}
+          }
+        },
+      }
+    ),
+    view: defaultType.view.extend({
+      tagName: 'div' //<-- in canvas div will be used
+    })
+  };
 }

@@ -68,12 +68,5 @@ export class FormDesigner extends HTMLElement {
   getCurrentForm() { return this.formController.currentForm; }
   getHtml() { return this.editor.getHtml(); }
   setStyle(css: string) { this.editor.setStyle(css); }
-  setHtml(html: string) { 
-    this.editor.setComponents(html); 
-    // <form> element is losing its innerHTML by grapesjs, donno why
-    const formHTML = html.match(/<form.*?>(.*?)<\/form>/)?.[1] || '';
-    if (this.formController) {
-      this.formController.getFormEl().innerHTML = formHTML;
-    }
-  }
+  setHtml(html: string) { this.editor.setComponents(html); }
 }

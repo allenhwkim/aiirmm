@@ -1,6 +1,6 @@
-import { IForms, ISubmitData, IUserData } from "./types";
+import { ISubmitData, IUserData } from "./form-stepper/types";
 
-export const defaultSubmitData: ISubmitData = {
+export const DEFAULT_SUBMIT_DATA: ISubmitData = {
   method: 'POST',
   url: 'https://reqbin.com/echo/post/json',
   headers: {

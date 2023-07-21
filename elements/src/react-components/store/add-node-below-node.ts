@@ -28,7 +28,7 @@ export function addNodeBelowNode(
   const newNode: Node = {
     id: newNodeId,
     type: 'custom',
-    data: { label: `Page ${newNodeId}`},
+    data: { label: `${newNodeId}`},
     position: { x: currentNode.position.x, y: currentNode.position.y + NODE_GAP_V },
   }
   const currentNodeNdx = nodes.findIndex(el => el.id === nodeId);
