@@ -1,4 +1,8 @@
 export default /* css */ `
+  form-controller form.form-flow {
+    min-height: 320px;
+  }
+
   form-stepper {
     --fs-label-size: 32px;
     --fs-width: 100px;

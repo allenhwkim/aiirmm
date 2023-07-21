@@ -2,12 +2,9 @@ import { defaultForms } from './default-forms';
 import { IForms, IForm, IUserData, ISubmitData } from './types';
 import { AppStorage } from '../app-storage';
 import { defaultSubmitData } from './default-forms copy';
+import { FormStepper } from './form-stepper';
 
-export class FormController {
-  static instance: FormController;
-  document: HTMLElement;
-  addedEventListeners: boolean = false;
-
+export class FormController extends HTMLElement {
   forms: IForms;
   steps: string[]; // ids of reactflow Node
   currentForm: IForm = undefined as any;
@@ -22,29 +19,34 @@ export class FormController {
   }
 
   constructor() {
-    if (!FormController.instance) {
-      FormController.instance = this;
-    }
+    super();
     this.forms = defaultForms;
     this.steps = Object.keys(defaultForms);
-    this.document = document.body;
-    this.addEventListeners();
-    return FormController.instance;
   }
 
-  _docGotoStepListener = (event: any) => this.initForm(event.detail);
+  connectedCallback() {
+    this.addEventListener('form-goto', (event: any) => this.initForm(event.detail));
+    this.addEventListener('click', this.clickListener);
+  }
 
-  _docClickListener = (event: any) => {
-    if (event.target.classList.contains('form-review')) {
+  getFormStepper = () => this.querySelector('form-stepper') as FormStepper;
+  getFormErrorsEl = () => this.querySelector('.form-errors') as HTMLElement;
+  getFormEl = () => this.querySelector('form.form-flow') as HTMLFormElement;
+  getButtonsEl = () => this.querySelector('.form-buttons') as HTMLElement;
+  
+  clickListener = (event: any) => {
+    console.log(event.target, event.target.closest('button'));
+    const buttonEl = event.target.closest('.form-review, .form-submit, .form-prev, .form-next');
+    if (buttonEl.classList.contains('form-review')) {
       this.initForm('review'); 
-    } else if (event.target.classList.contains('form-submit')) {
+    } else if (buttonEl.classList.contains('form-submit')) {
       this.initForm('submit'); // submit and show thankyou message
-    } else if (event.target.classList.contains('form-prev')) {
+    } else if (buttonEl.classList.contains('form-prev')) {
       this.initForm('prev'); 
-    } else if (event.target.classList.contains('form-next')) { 
+    } else if (buttonEl.classList.contains('form-next')) { 
       const errors = this.setErrors();
       if (!errors) { // set error classes and contents of .form-errors 
-        const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
+        const formEl = this.getFormEl();
         const formElData = Object.fromEntries(new FormData(formEl).entries())
         if (Object.keys(formElData).length) {
           const userData = AppStorage.getItem('currentFormflow.userData') || {};
@@ -56,22 +58,7 @@ export class FormController {
     }
   }
 
-  addEventListeners() {
-    console.log('this.document', this.document);
-    if (!this.document) return;
-    if (this.addedEventListeners) return;
-    this.document.addEventListener('form-goto', this._docGotoStepListener);
-    this.document.addEventListener('click', this._docClickListener);
-  }
-
-  removeEventListeners() {
-    if (!this.document) return;
-    this.document.removeEventListener('form-goto', this._docGotoStepListener);
-    this.document.removeEventListener('click', this._docClickListener);
-  }
-
   async initForm(target: string = 'auto') {
-    if (!this.document) return;
     let nextStepIndex = 0;
     if (target === 'auto') {
       nextStepIndex = this.steps.findIndex(formName => this.getStatus(formName) !== 'complete');
@@ -102,13 +89,11 @@ export class FormController {
   }
 
   initStepperEl(): void {
-    const stepperEl: any = this.document.querySelector('form-stepper');
-    
-    stepperEl?.render();
+    this.getFormStepper().render();
   }
 
   async initFormEl(): Promise<void> { // set innerHTML of <form> element
-    const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
+    const formEl = this.getFormEl();
     const html = this.currentForm.html;
     if (formEl) {
       if (typeof html === 'string' && html.match(/^http/)) {
@@ -139,10 +124,10 @@ export class FormController {
   }  
 
   initButtonsEl(): void { // set buttons text and availability
-    const reviewButtonEl = this.document.querySelector('.form-buttons .form-review') as HTMLButtonElement;
-    const submitButtonEl = this.document.querySelector('.form-buttons .form-submit') as HTMLButtonElement;
-    const prevButtonEl = this.document.querySelector('.form-buttons .form-prev') as HTMLButtonElement;
-    const nextButtonEl = this.document.querySelector('.form-buttons .form-next') as HTMLButtonElement;
+    const reviewButtonEl = this.getButtonsEl().querySelector('.form-review');
+    const submitButtonEl = this.getButtonsEl().querySelector('.form-submit');
+    const prevButtonEl = this.getButtonsEl().querySelector('.form-prev') as HTMLButtonElement;
+    const nextButtonEl = this.getButtonsEl().querySelector('.form-next') as HTMLButtonElement;
 
     // 0-1-2-3-current -> enabled,  current-1-2-3-review -> disabled
     if (prevButtonEl) {
@@ -152,7 +137,6 @@ export class FormController {
     nextButtonEl && (nextButtonEl.disabled = !(this.currentStepIndex !== this.steps.length - 1));
     if (reviewButtonEl) { // do not set inline style here. Grapejs not handling well by setting it outside
       const shouldShow = this.isReviewable() && (['review', 'submit'].indexOf(this.currentForm.type) === -1);
-      console.log(this.isReviewable(), ['review', 'submit'].indexOf(this.currentForm.type) !== -1)
       shouldShow ? reviewButtonEl.removeAttribute('hidden') : reviewButtonEl.setAttribute('hidden', '');
     }
     if (submitButtonEl) {
@@ -162,8 +146,8 @@ export class FormController {
   }
 
   setErrors(): string[] | void {
-    const formEl = this.document.querySelector('form.form-flow') as HTMLFormElement;
-    const errorsEl = this.document.querySelector('.form-errors') as HTMLElement;
+    const formEl = this.getFormEl();
+    const errorsEl = this.getFormErrorsEl();
     errorsEl && (errorsEl.innerHTML = '');
     formEl.classList.add('error-checked');
 
@@ -176,6 +160,7 @@ export class FormController {
         !nativeErrors.includes(errorMessage) && nativeErrors.push(errorMessage);
       }
     });
+    console.log('>>>>>>>>>>>>..4 ', {errorsEl, nativeErrors});
     if (errorsEl && nativeErrors.length) {
       nativeErrors.forEach(el => errorsEl.insertAdjacentHTML('beforeend', `<div class="error">${el}</div>`))
       return nativeErrors;
@@ -218,7 +203,7 @@ export class FormController {
         JSON.stringify(submitData.payload(formUserData)) : JSON.stringify(formUserData);
 
       const {url, method, headers, onSuccess, onError} = submitData;
-      this.document.querySelectorAll('.form-buttons button').forEach( (el: any) => el.disabled = true);
+      this.getButtonsEl().querySelectorAll('button').forEach( (el: any) => el.disabled = true);
       return window.fetch(url, { method: method, headers: headers, body: payload })
         .then(response => response.json())
         .then(response => {

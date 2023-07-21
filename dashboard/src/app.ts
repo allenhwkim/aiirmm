@@ -58,7 +58,8 @@ export function setForm(chartData: ReactFlowJsonObject, activeNode: Node, html?:
   const currentStepId = activeNode.id;
   const formDesigner = document.querySelector('form-designer') as FormDesigner;
   formDesigner.setHtml(html);
-  formDesigner.setStyle('form.form-flow { min-height: 320px;}')
+  // this can be removed since it's coded in <form-stepper>
+  formDesigner.setStyle('form.form-flow {min-height: 320px;} form-controller {display: block;}')
   formDesigner.runCommand('set-forms-steps', {forms, steps, currentStepId})
 }
 

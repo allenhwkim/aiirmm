@@ -15,10 +15,10 @@ export interface ISubmitData {
 
 export interface IForm {
   type: 'form' | 'review' | 'submit';
-  defaultValues: {[key:string]: string},
+  defaultValues?: {[key:string]: string},
   title: string; // step name below circle
-  subTitle: string; // small text below title
-  skippable: boolean;
+  subTitle?: string; // small text below title
+  skippable?: boolean;
   html: string | (() => string);
   getErrors?: (formElData: any) => string[] | null;
 }

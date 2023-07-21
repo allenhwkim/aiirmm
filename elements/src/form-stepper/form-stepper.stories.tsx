@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { AppStorage, FormStepper } from "../index"; // Shares the same FormController
+import { AppStorage, FormController, FormStepper } from "../index"; // Shares the same FormController
 import { defaultForms } from './default-forms';
 !customElements.get('form-stepper') && customElements.define('form-stepper', FormStepper);
+!customElements.get('form-controller') && customElements.define('form-controller', FormController);
+
 
 export default {
   title: 'Components/form-stepper',
@@ -18,7 +20,7 @@ const Template = (args?: any) => {
   const formStepper = useRef<any>();
   useEffect(() => { formStepper.current.forms = defaultForms })
 
-  return <>
+  return <form-controller>
     <form-stepper ref={formStepper}></form-stepper>  {/* forms={myForm} */}
 
     <div className="form-flow form-errors" style={{padding: 16}}>
@@ -33,9 +35,9 @@ const Template = (args?: any) => {
       <button className="form-review">Review</button>
       <button className="form-submit">Submit</button>
     </div>
-    <pre className="user-form-data"> {userData} </pre>
+    {/* <pre className="user-form-data"> {userData} </pre> */}
     <button className="clear-user-form-data" onClick={clearStorage}>Clear storage</button>
-  </>
+  </form-controller>
 }; 
 
 export const Primary = Template.bind({});

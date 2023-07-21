@@ -1,7 +1,7 @@
 import { IForms, IUserData } from "./types";
 
 export const defaultForms: IForms = {
-  1: {
+  form1: {
     type: 'form',
     title: 'Name',
     html: () => `
@@ -21,19 +21,18 @@ export const defaultForms: IForms = {
       return null;
     } 
   }, 
-  2: {
+  form2: {
     type: 'form',
     title: 'Contact',
+    skippable: true,
     html: () => `Optional: <br/>  Address: <input name="address" />`,
-    skippable: true
   }, 
-  3: {
+  form3: {
     type: 'review',
     title: 'Review',
     html: () => `Optional: <br/>  Address: <input name="address" />`,
-    skippable: true
   }, 
-  4: {
+  form4: {
     type: 'submit',
     title: 'Thankyou',
     html: () => `This is a review page.`,

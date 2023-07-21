@@ -4,7 +4,7 @@ import css from './form-stepper.css';
 import { FormController } from './form-controller';
 
 export class FormStepper extends HTMLElement {
-  formController: FormController;
+  formController: FormController = undefined as any;
 
   get forms() {
     return this.formController.forms;
@@ -41,12 +41,12 @@ export class FormStepper extends HTMLElement {
         event.target?.dispatchEvent(customEvent);
       }
     });
-
-    this.formController = new FormController();
   }
 
   connectedCallback() {
     addCss('form-stepper', css);
+
+    this.formController = this.closest('form-controller') as FormController;
 
     if (this.forms) { // data-form attribute
       this.formController.forms = this.forms;
@@ -58,7 +58,6 @@ export class FormStepper extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.formController?.removeEventListeners?.();
     removeCss('form-stepper');
   }
 

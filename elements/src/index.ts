@@ -2,6 +2,7 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       'combo-box': any;
+      'form-controller': any;
       'form-stepper': any;
       'form-designer': any;
       'form-diagram': any;
@@ -27,6 +28,7 @@ declare global {
 import { BarCode } from './barcode/barcode';
 import { ComboBox } from './combobox/combobox';
 import { FileSelect } from './file-select/file-select';
+import { FormController } from './form-stepper/form-controller';
 import { FormDesigner } from './form-designer/form-designer';
 import { FormDiagram } from './form-diagram/form-diagram';
 import { FormStepper } from './form-stepper/form-stepper';
@@ -48,6 +50,7 @@ export {
  BarCode,
  ComboBox,
  FileSelect,
+ FormController,
  FormDesigner,
  FormDiagram,
  FormStepper,
@@ -70,6 +73,7 @@ export function defineAll() {
   !customElements.get('bar-code') &&         customElements.define('bar-code', BarCode);
   !customElements.get('combo-box') &&        customElements.define('combo-box', ComboBox);
   !customElements.get('file-select') &&      customElements.define('file-select', FileSelect);
+  !customElements.get('form-controller') &&  customElements.define('form-controller', FormController);
   !customElements.get('form-designer') &&    customElements.define('form-designer', FormDesigner);
   !customElements.get('form-diagram') &&     customElements.define('form-diagram', FormDiagram);
   !customElements.get('form-stepper') &&     customElements.define('form-stepper', FormStepper);

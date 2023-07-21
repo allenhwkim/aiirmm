@@ -44,10 +44,9 @@ export class FormDesigner extends HTMLElement {
       (_editor, _sendor, opts: any) => {
         const iframe: any = document.querySelector('form-designer iframe');
         const formStepper = iframe.contentWindow.document.querySelector('form-stepper');
-        this.formController = formStepper.formController;
+        this.formController = formStepper.closest('form-controller');
         this.formController.forms = opts.forms;
         this.formController.steps = opts.steps;
-        this.formController.document = formStepper.closest('body');
         this.formController.showStep(opts.currentStepId);
       }
     );
@@ -74,7 +73,7 @@ export class FormDesigner extends HTMLElement {
     // <form> element is losing its innerHTML by grapesjs, donno why
     const formHTML = html.match(/<form.*?>(.*?)<\/form>/)?.[1] || '';
     if (this.formController) {
-      (this.formController.document.querySelector('form.form-flow') as any).innerHTML = formHTML;
+      this.formController.getFormEl().innerHTML = formHTML;
     }
   }
 }
