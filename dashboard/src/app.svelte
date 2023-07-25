@@ -102,7 +102,7 @@
       <div id="properties" class="accordion-collapse collapse" data-bs-parent="#right-section">
         <div class="accordion-body">
           <monaco-editor language="json"
-            data={JSON.stringify(formProps, null, '  ')}
+            value={JSON.stringify(formProps, null, '  ')}
             on:monaco-change={formPropsChanged}
           ></monaco-editor>
         </div>
