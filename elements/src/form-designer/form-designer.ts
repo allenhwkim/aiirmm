@@ -43,6 +43,8 @@ export class FormDesigner extends HTMLElement {
     this.editor.Commands.add('set-forms-steps', 
       (_editor, _sendor, opts: any) => {
         const iframe: any = document.querySelector('form-designer iframe');
+        console.log('...........................iframe', iframe)
+        iframe.classList.add('nokey');
         const formStepper = iframe.contentWindow.document.querySelector('form-stepper');
         this.formController = formStepper.closest('form-controller');
         this.formController.forms = opts.forms;

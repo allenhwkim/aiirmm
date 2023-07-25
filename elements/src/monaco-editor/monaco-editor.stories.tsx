@@ -31,7 +31,7 @@ const Template = (args?: any) => {
     <h1>Monaco Editor</h1>
     <monaco-editor 
       ref={monacoEditorRef}
-      data={data} 
+      value={data} 
       theme="vs-dark" 
       language="javascript"
     >
