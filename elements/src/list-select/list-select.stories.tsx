@@ -1,13 +1,14 @@
 import * as React from 'react';
+import type { Meta } from '@storybook/react';
 
-import { ListSelect } from '../index';
+import { ListSelect } from './list-select';
 !customElements.get('list-select') && customElements.define('list-select', ListSelect);
 
-export default {
-  title: 'Components/list-select',
-};
+const meta: Meta = { component: ListSelect as any };
 
-const PrimaryStyle = (args?: any) => {
+export default meta;
+
+export const PrimaryStyle = (args?: any) => {
   const listSelect: any = React.useRef();
   const message: any = React.useRef();
   React.useEffect(() => {
@@ -64,7 +65,7 @@ const PrimaryStyle = (args?: any) => {
   </div>
 };
 
-const MenuStyle = (args?: any) => {
+export const MenuStyle = (args?: any) => {
   const listSelect: any = React.useRef();
   const message: any = React.useRef();
   React.useEffect(() => {
@@ -120,5 +121,3 @@ const MenuStyle = (args?: any) => {
     </list-select>
   </div>
 };
-export const Primary = PrimaryStyle.bind({});
-export const Menu = MenuStyle.bind({});

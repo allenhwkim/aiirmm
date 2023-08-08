@@ -1,13 +1,14 @@
 import * as React from 'react';
 
-import { SyntaxHighlight } from '../index';
+import { SyntaxHighlight } from './syntax-highlight';
 !customElements.get('syntax-highlight') && customElements.define('syntax-highlight', SyntaxHighlight);
 
 export default {
-  title: 'Components/syntax-highlight',
+  title: 'syntax-highlight',
+  component: SyntaxHighlight
 };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
   return <>
     <syntax-highlight>{`
       function foo(items) {
@@ -17,5 +18,3 @@ const Template = (args?: any) => {
     `}</syntax-highlight>
     </>
 };
-
-export const Primary = Template.bind({});

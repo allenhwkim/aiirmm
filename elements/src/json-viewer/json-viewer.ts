@@ -1,28 +1,48 @@
-import { customElement, getReactProp } from "../../lib";
+import { addCss, getReactProp, removeCss } from "../../lib";
+const css = `
+  ul.format-json ul { border-left: 1px dashed black; padding-left: 2rem;  margin-left: -12px;}
+  ul.format-json li { cursor: initial; }
+  ul.format-json li small { opacity: .7; }
+  ul.format-json li:has(> ul.hidden) { list-style: '⊞ ' }
+  ul.format-json li:has(> ul) { list-style: '⊟ '; cursor: pointer; }
+  ul.format-json li:has(> ul) sup { display: none; }
+  ul.format-json li:has(> ul.hidden) sup { display: initial; opacity: .8; }
+  ul.format-json.hidden { display: none; }
+`;
 
-export const JsonViewer = customElement({
-  css: `
-    ul.format-json ul { border-left: 1px dashed black; padding-left: 2rem;  margin-left: -12px;}
-    ul.format-json li { cursor: initial; }
-    ul.format-json li small { opacity: .7; }
-    ul.format-json li:has(> ul.hidden) { list-style: '⊞ ' }
-    ul.format-json li:has(> ul) { list-style: '⊟ '; cursor: pointer; }
-    ul.format-json li:has(> ul) sup { display: none; }
-    ul.format-json li:has(> ul.hidden) sup { display: initial; opacity: .8; }
-    ul.format-json.hidden { display: none; }
-  `,
-  observedAttributes: ['level'],
-  props : { data: {} },
+export class JsonViewer extends HTMLElement {
+  static get observedAttributes() { return ['level']; }
+  #data = undefined;
+  get data() { return this.#data;}
+  set data(val) {
+    this.#data = val;
+    this.render();
+  }
+
+  connectedCallback() {
+    addCss(this.tagName, css);
+    this.#data = getReactProp(this as any, 'data') || this.data;
+    this.render();
+  }
+
+  disconnectedCallback() {
+    removeCss(this.tagName);
+  }
+
+  async attributeChangedCallback(name:string, oldValue:string, newValue:string) {
+    (oldValue !== newValue) && this.render();
+  }
+
   render() {
-    const attrPropName = this.getAttribute('data');
-    this.data = getReactProp(this as any, 'data') || this[attrPropName] || globalThis[attrPropName];
     this.innerHTML = '';
-    this.writeDOM(this, this.data);
-  },
+    this.writeDOM(this, this.data); // recursively call
+  }
+
   writeDOM(el: HTMLElement, data: any, level=0) {
     const ul = document.createElement('ul');
+    const attrLevel = +(this.getAttribute('level') as string);
     ul.classList.add('format-json');
-    (level >= this.attrs.level) && (ul.classList.add('hidden'));
+    (level >= attrLevel) && (ul.classList.add('hidden'));
 
     if (typeof data === 'object') { // array is an object
       for (var key in data) {
@@ -51,4 +71,4 @@ export const JsonViewer = customElement({
       }
     }
   }
-});
+}

@@ -8,11 +8,9 @@ declare const window: any;
 
 !customElements.get('monaco-editor') && customElements.define('monaco-editor', MonacoEditor);
 
-export default {
-  title: 'Components/monaco-editor',
-};
+export default { component: MonacoEditor as any };
 
-const TemplateJavascript = (args?: any) => {
+export const JavascriptEditor = (args?: any) => {
   const monacoEditorRef: any = useRef();  
 
   useEffect(() => {
@@ -28,7 +26,6 @@ const TemplateJavascript = (args?: any) => {
       return x;
     }`);
   return <>
-    <h1>Monaco Javascript Editor</h1>
     <monaco-editor 
       ref={monacoEditorRef}
       value={data} 
@@ -39,11 +36,9 @@ const TemplateJavascript = (args?: any) => {
   </>
 };
 
-export const Primary = TemplateJavascript.bind({});
-
 // ------------------------------------------------------
 
-const TemplateJson = (args?: any) => {
+export const JsonEditor = (args?: any) => {
   const monacoEditorRef: any = useRef();  
   const data = fixIndent(`{\n  "foo": 1,\n  "bar": 2\n}`);
   const schemas = {
@@ -59,7 +54,6 @@ const TemplateJson = (args?: any) => {
   };
 
   return <>
-    <h1>Monaco JSON Editor</h1>
     <monaco-editor 
       ref={monacoEditorRef}
       value={data} 
@@ -70,5 +64,3 @@ const TemplateJson = (args?: any) => {
     <button onClick={getJsonErrors}>get JSON errors</button>
   </>
 };
-
-export const JsonEditor = TemplateJson.bind({});

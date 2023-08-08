@@ -13,7 +13,7 @@ declare global {
 }
 
 export default {
-  title: 'Components/resize-divs',
+  title: 'resize-divs',
   component: ResizeDivs,
   parameters: {
     // docs: { page: CustomDocumentation },
@@ -23,7 +23,7 @@ export default {
   // }
 };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
 
   return <>
     <h2 className="header">Drag Resizer</h2>
@@ -44,5 +44,3 @@ const Template = (args?: any) => {
 
   </>
 }; 
-
-export const Primary = Template.bind({});

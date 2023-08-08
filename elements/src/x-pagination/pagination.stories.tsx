@@ -3,11 +3,9 @@ import * as React from 'react';
 import { Pagination } from '../index';
 !customElements.get('x-pagination') && customElements.define('x-pagination', Pagination);
 
-export default {
-  title: 'Components/x-pagination',
-};
+export default { title: 'x-pagination', component: Pagination };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
   const container: any = React.useRef();
   const message: any = React.useRef();
   React.useEffect(() => {
@@ -17,7 +15,6 @@ const Template = (args?: any) => {
   }, []);
 
   return <div ref={container}>
-    <pre ref={message}></pre>
     <x-pagination></x-pagination>
     <p></p>
     <x-pagination 
@@ -26,7 +23,6 @@ const Template = (args?: any) => {
       num-per-page="20" 
       num-pages="7">
     </x-pagination>
+    <pre ref={message}></pre>
   </div>
 };
-
-export const Primary = Template.bind({});

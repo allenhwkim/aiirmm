@@ -3,14 +3,12 @@ import * as React from 'react';
 import { SideBar } from "../index"; 
 !customElements.get('side-bar') && customElements.define('side-bar', SideBar);
 
-export default {
-  title: 'Components/side-bar',
-  component: SideBar,
-};
+export default { title: 'side-bar', component: SideBar };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
   const container: any = React.useRef();
   const message: any = React.useRef();
+  
   React.useEffect(() => {
     container.current.addEventListener('sidebar', (e:any) => {
       const action = e.detail.innerText ? 'sidebar-select' : e.detail;
@@ -18,12 +16,16 @@ const Template = (args?: any) => {
     });
   }, []);
 
+  function alertMe() {
+    alert('Only working without sidebar open')
+  }
+
   return <div ref={container}>
     <button data-x-target="sidebar" 
      style={{border: 0, fontSize: '32px', background: 0, color: '#666', cursor: 'pointer'}}
     >☰</button>
     <pre ref={message}></pre>
-    <a href="javascript:alert('Only working without sidebar open')">Test alert()</a>
+    <a onClick={alertMe}>Test alert()</a>
     <side-bar>
       <div>
         <span>Content</span>
@@ -46,5 +48,3 @@ const Template = (args?: any) => {
     </side-bar>
   </div>;
 }; 
-
-export const Primary = Template.bind({});

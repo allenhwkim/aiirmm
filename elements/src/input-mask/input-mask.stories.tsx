@@ -4,11 +4,11 @@ import { InputMask } from '../index';
 !customElements.get('input-mask') && customElements.define('input-mask', InputMask);
 
 export default {
-  title: 'Components/input-mask',
+  title: 'input-mask',
   component: InputMask,
 };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
   return <>
     <p>
     'Y', 'M', 'D', '9', '_', '#'' for number. 'X' for string
@@ -44,5 +44,3 @@ const Template = (args?: any) => {
 
   </>
 }; 
-
-export const Primary = Template.bind({});

@@ -2,15 +2,16 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { DEFAULT_FORMS } from '../default-forms';
 import { AppStorage, DEFAULT_SUBMIT_DATA, FormController, FormStepper } from "../index"; // Shares the same FormController
+
 !customElements.get('form-stepper') && customElements.define('form-stepper', FormStepper);
 !customElements.get('form-controller') && customElements.define('form-controller', FormController);
 
 export default {
-  title: 'Components/form-stepper',
+  title: 'form-stepper',
   component: FormStepper,
 };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
   const storageUserData = AppStorage.getItem('currentFormflow.userData');
   AppStorage.setItem('currentFormflow.submitData', DEFAULT_SUBMIT_DATA);
   
@@ -21,7 +22,7 @@ const Template = (args?: any) => {
   const formStepper = useRef<any>();
   useEffect(() => { formStepper.current.forms = DEFAULT_FORMS })
 
-  return <form-controller>
+  return <form-controller style={{display:'block', width:800, margin: '0 auto'}}>
     <form-stepper ref={formStepper}></form-stepper>  {/* forms={myForm} */}
 
     <div className="form-flow form-errors" style={{padding: 16}}>
@@ -40,5 +41,3 @@ const Template = (args?: any) => {
     <button className="clear-user-form-data" onClick={clearStorage}>Clear storage</button>
   </form-controller>
 }; 
-
-export const Primary = Template.bind({});

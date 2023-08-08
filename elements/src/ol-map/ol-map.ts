@@ -1,23 +1,35 @@
-import { customElement, loadScript, waitFor } from '../../lib';
+import { addCss, loadScript, removeCss, waitFor } from '../../lib';
 
-export const OlMap = customElement({
-  shadow: false, // document-level ol.css not applying into shadow dom.
-  css: ':host {display: block; height: 300px;}',
-  observedAttributes: ['center', 'zoom'],
-  constructorCallback() {
+const css = ':host {display: block; height: 300px;}';
+
+export class OlMap extends HTMLElement {
+  static get observedAttributes() { return ['center', 'zoom']; }
+  #map: any = undefined;
+
+  async attributeChangedCallback(name:string, oldValue:string, newValue:string) {
+    (oldValue !== newValue) && this.render();
+  }
+
+  async connectedCallback() {
     loadScript('//cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js', '//cdn.jsdelivr.net/npm/ol@v7.2.2/ol.css');
-  },
-  async render({attrs}) {
+    addCss(this.tagName, css);
     await waitFor('window.ol');
-    const {center='Brampton Ontario, Canada', zoom= 11} = attrs;
+    this.#map = new window['ol'].Map({ target: this });
+    this.#map.addLayer(new window['ol'].layer.Tile({source: new window['ol'].source.OSM()}));
+  }
 
-    this.getLonLat(center).then(lonLat => {
-      const map = new window['ol'].Map({ target: this });
-      map.addLayer(new window['ol'].layer.Tile({source: new window['ol'].source.OSM()}));
-      map.getView().setCenter(window['ol'].proj.fromLonLat(lonLat));
-      map.getView().setZoom(zoom);
-    });
-  },
+  disconnectedCallback() {
+    removeCss(this.tagName);
+  }
+
+  async render() {
+    const center = this.getAttribute('center') || 'Brampton Ontario, Canada';
+    const zoom = this.getAttribute('zoom') || 11;
+    const lonLat = await this.getLonLat(center);
+    this.#map.getView().setCenter(window['ol'].proj.fromLonLat(lonLat));
+    this.#map.getView().setZoom(zoom);
+  }
+
   getLonLat(address) {
     return new Promise( resolve => {
       if (typeof address === 'string' && address.match(/[-0-9.]+,\s?[-0-9.]+/)) { //'-99.99, 99'
@@ -33,4 +45,4 @@ export const OlMap = customElement({
       }
     });
   }
-});
+}

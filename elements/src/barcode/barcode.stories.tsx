@@ -1,15 +1,16 @@
 import * as React from 'react';
+import type { Meta } from '@storybook/react';
+import { BarCode } from './barcode';
 
-import { BarCode } from '../index';
 !customElements.get('bar-code') && customElements.define('bar-code', BarCode);
 
-export default {
-  title: 'Components/bar-code',
-};
+const meta: Meta = { component: BarCode as any };
 
-const Template = () => <>
+export default meta;
+
+export const Primary = {
+  render: () => <>
     <bar-code value="Hello Bar Code" format="code128">
     </bar-code>
-  </>;
-
-export const Primary = Template.bind({});
+  </>,
+};

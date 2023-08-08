@@ -4,14 +4,12 @@ import { FormDesigner, defineAll } from "../index";
 defineAll();
 
 export default {
-  title: 'Components/form-designer',
+  title: 'form-designer',
   component: FormDesigner,
 };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
   return <>
-    <form-designer></form-designer>
+    <form-designer style={{maxWidth: 1200}}></form-designer>
   </>;
 }; 
-
-export const Primary = Template.bind({});

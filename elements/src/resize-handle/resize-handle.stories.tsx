@@ -7,11 +7,11 @@ import { ResizeHandle } from "../index";
 !customElements.get('resize-handle') && customElements.define('resize-handle', ResizeHandle);
 
 export default {
-  title: 'Components/resize-handle',
+  title: 'resize-handle',
   component: ResizeHandle,
 };
 
-const Template = () => {
+export const Primary = () => {
   // const myRef = useRef(null);
   const touchStart = {left: 0, top: 0};
   const touchListener =  (event) => {
@@ -60,4 +60,3 @@ const Template = () => {
   </div>
 }; 
 
-export const Primary = Template.bind({});

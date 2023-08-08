@@ -1,16 +1,15 @@
 import * as React from 'react';
+import type { Meta } from '@storybook/react';
+import { FileSelect } from './file-select';
 
-import { FileSelect } from '../index';
 !customElements.get('file-select') && customElements.define('file-select', FileSelect);
 
-export default {
-  title: 'Components/file-select',
-};
+const meta: Meta = { component: FileSelect as any };
 
-const Template = (args?: any) => {
-  return <>
+export default meta;
+
+export const Primary = {
+  render: () => <>
     <file-select></file-select>
-  </>
+  </>,
 };
-
-export const Primary = Template.bind({});

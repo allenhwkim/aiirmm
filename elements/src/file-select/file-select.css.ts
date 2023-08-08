@@ -1,22 +1,24 @@
 export default /* css */ `
-:host {
-  display: inline-block;
-  background: #F5F5F5;
-  padding: 16px;
-  border: 1px solid #F5F5F5;
-  box-sizing: border-box;
-}
-
-.x-file-input {
-  cursor: pointer;
-  & input {
-    display: none;
+  :host {
+    display: inline-block;
+    background: #F5F5F5;
+    padding: 16px;
+    border: 1px solid #F5F5F5;
+    box-sizing: border-box;
   }
-}
 
-.x-file-list {
-  color: #666;
-  .x-file { /* file info */
+  .x-file-input {
+    cursor: pointer;
+    & input {
+      display: none;
+    }
+  }
+
+  .x-file-list {
+    color: #666;
+  }
+
+  .x-file-list .x-file { /* file info */
     display: flex;
     padding: 4px;
     position: relative;
@@ -47,4 +49,4 @@ export default /* css */ `
       cursor: pointer;
     }
   }
-}`;
+`;

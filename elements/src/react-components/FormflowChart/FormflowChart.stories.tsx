@@ -5,7 +5,7 @@ import { FormflowChart } from './FormflowChart';
 import { DEFAULT_CHART } from '../../default-chart';
 
 export default { 
-  title: 'React Components/FormflowChart',
+  title: 'FormflowChart',
   component: FormflowChart,
   argTypes : {
     nodes: { control: 'object' },
@@ -13,7 +13,7 @@ export default {
   }
 };
 
-const Template:any = (args: any) => {
+export const Primary = (args = DEFAULT_CHART) => {
   return <>
     <FormflowChart
         nodes={args.nodes}
@@ -24,6 +24,3 @@ const Template:any = (args: any) => {
       />
   </>;
 };
-
-export const Primary: any = Template.bind({});
-Primary.args = DEFAULT_CHART;

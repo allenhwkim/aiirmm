@@ -1,13 +1,17 @@
-import { customElement, debounce, getReactProp } from '../../lib';
+import { addCss, removeCss, debounce, getReactProp } from '../../lib';
 import css from './combobox.css';
 
-export const ComboBox = customElement({
-  shadow: false, // shadow works, but better to follow document input styling
-  props: { listTemplate: '' },
-  css,
+export class ComboBox extends HTMLElement {
+  listTemplate = '';
+
+  disConnnectedCallback() {
+    removeCss(this.tagName);
+  }
+
   connectedCallback() { 
-    const inputEl = this.host.querySelector('input');
-    const ulEl = this.host.querySelector('ul');
+    addCss(this.tagName, css);
+    const inputEl = this.querySelector('input');
+    const ulEl = this.querySelector('ul');
     const attrPropName = this.getAttribute('src');
     const srcFunc = attrPropName ? (this[attrPropName] || globalThis[attrPropName]) :  getReactProp(this as any, 'src');
     if (srcFunc && ulEl) {
@@ -16,7 +20,7 @@ export const ComboBox = customElement({
     }
     
     if (!inputEl || (!(inputEl.readOnly || inputEl.disabled) && !ulEl)) {
-      this.host.textContent = 'error: requires <input> and <ul>';
+      this.textContent = 'error: requires <input> and <ul>';
       return;
     }
 
@@ -33,13 +37,13 @@ export const ComboBox = customElement({
     });
 
     inputEl.addEventListener('keydown', (event: any) => {
-      const highlightedEl = this.host.querySelector('.x-highlighted:not(.hidden)');
+      const highlightedEl = this.querySelector('.x-highlighted:not(.hidden)');
       if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
         if      (event.key === 'ArrowDown') { this.highlightNext( ulEl, 1); }
         else if (event.key === 'ArrowUp') { this.highlightNext( ulEl, -1); } 
         else if (event.key === 'Escape') { inputEl.blur(); }
         else if (event.key === 'Enter') { 
-          this.host.querySelector('.x-selected')?.classList.remove('x-selected');
+          this.querySelector('.x-selected')?.classList.remove('x-selected');
           this.selectHandler(event, inputEl, highlightedEl);
         }
         event.preventDefault();
@@ -65,8 +69,7 @@ export const ComboBox = customElement({
       ulEl.querySelector('.x-selected')?.classList.remove('x-selected');
       this.selectHandler(event, inputEl, highlightedEl)
     });
-
-  },
+  }
 
   /* action when an dropdown list is selected */
   selectHandler(event: any, inputEl: HTMLInputElement, highlightedEl: any) {
@@ -84,7 +87,8 @@ export const ComboBox = customElement({
       inputEl.value = value;
       inputEl.blur();
     }
-  },
+  }
+
   /**
    * Find an element that has attribute 'value' is the same as the given value from the list element.
    */
@@ -100,7 +104,7 @@ export const ComboBox = customElement({
       nextHighlight.classList.add('x-highlighted', 'x-selected');
       this.scrollIfNeeded(listEl, nextHighlight);
     }
-  },
+  }
 
   /**
    * Rebuild list from the given array
@@ -119,7 +123,7 @@ export const ComboBox = customElement({
       (listEl.lastElementChild).data = row;
     })
     listEl.children[0]?.classList.add('x-highlighted');
-  },
+  }
 
   /**
    * Hide all child elements of list element that does not have search string
@@ -138,7 +142,7 @@ export const ComboBox = customElement({
       return match;
     });
     matches[0]?.classList.add('x-highlighted');
-  },
+  }
 
   /**
    * Find the current highlighted class, and move highting to the next element
@@ -160,7 +164,7 @@ export const ComboBox = customElement({
     highlightedEl?.classList.remove('x-highlighted');
     nextHighlight.classList.add('x-highlighted');
     this.scrollIfNeeded(listEl, nextHighlight);
-  },
+  }
 
   /**
    * scroll to the given element within a container.
@@ -176,4 +180,4 @@ export const ComboBox = customElement({
       }
     }
   }
-});
+}

@@ -5,7 +5,7 @@ import { DEFAULT_CHART, FormDiagram } from "../index";
 !customElements.get('form-diagram') && customElements.define('form-diagram', FormDiagram);
 
 export default {
-  title: 'Components/form-diagram',
+  title: 'form-diagram',
   component: FormDiagram,
   parameters: {
     // docs: { page: CustomDocumentation },

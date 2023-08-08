@@ -4,11 +4,11 @@ import { JsonViewer } from '../index';
 !customElements.get('json-viewer') && customElements.define('json-viewer', JsonViewer);
 
 export default {
-  title: 'Components/json-viewer',
+  title: 'json-viewer',
   component: JsonViewer,
 };
 
-const Template = (args?: any) => {
+export const Primary = (args?: any) => {
   const data = {
     Droids: {
       Astromech: { R2_Units: [ 'R2-D2', 'R2-KT' ], 'R5-D4': 'I am R5 D4', },
@@ -22,4 +22,3 @@ const Template = (args?: any) => {
   </>
 }; 
 
-export const Primary = Template.bind({});
