@@ -1,5 +1,21 @@
 import type { FormDiagram } from '@formflow/elements/src';
-import { AppStorage, DEFAULT_CHART } from '@formflow/elements/src';
+import { AppStorage } from '@formflow/elements/src';
+
+const DEFAULT_CHART =  {
+  nodes:[
+    {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
+    {id: 'form1', type: 'custom', data: {label: 'form1'}, position: { x: 100, y: 87 }},
+    {id: 'review', type: 'custom', data: {label: 'review'}, position: { x: 100, y: 187 }},
+    {id: 'submit', type: 'custom', data: {label: 'submit', type: 'submit'}, position: { x: 100, y: 287 }},
+    {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 400 }},
+  ] as Node[],
+  edges: [
+    {id: 'start-form1', source: 'start', target: 'form1', type: 'custom'},
+    {id: 'form1-review', source: 'form1', target: 'review', type: 'custom'},
+    {id: 'review-submit', source: 'review', target: 'submit', type: 'custom'},
+    {id: 'submit-end', source: 'submit', target: 'end', type: 'custom'},
+  ] as Edge[]
+};
 
 export class CurrentFile {
   static DEFAULT_NAME = 'Untitled';
