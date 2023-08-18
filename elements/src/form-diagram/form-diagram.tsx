@@ -57,8 +57,12 @@ export class FormDiagram extends HTMLElement {
   }
 
   reactChartCalls = {}; // empty! because it's set inside react component
-  setNodeData = (id, data) => this.reactChartCalls['setNodeData'](id, data);
-  setEdgeData = (id, data) => this.reactChartCalls['setNodeData'](id, data);
+  setNodeData(id: string, data: {[key:string]: any}) { 
+    this.reactChartCalls['setNodeData'](id, data) 
+  };
+  setEdgeData(id: string, data: {[key:string]: any}) { 
+    this.reactChartCalls['setNodeData'](id, data) 
+  };
 
   mount(nodes: Node[] = DEFAULT_CHART.nodes, edges: Edge[] = DEFAULT_CHART.edges) {
     const onNodeClick = (node: Node, nodes: Node[], edges: Edge[]) => {

@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { AppStorage, type FormDesigner, type FormDiagram } from '@formflow/elements/src';
+  import type { FormDesigner, FormDiagram } from '@formflow/elements/src';
   import { onMount } from 'svelte';
 
   import AppSideBar from './app-sidebar.svelte';
@@ -21,11 +21,15 @@
   onMount(() => {
     $currentFile.setChartEl(chartEl);
     formDesigner.on('update', function() { 
-      const formData = AppStorage.getItem('currentFormflow.formData') || {};
-      formData[activeNodeId] ||= {}; 
-      formData[activeNodeId].html = 
-        formDesigner.getHtml().replace(/^<body>/,'').replace(/<\/body>$/,'');
-      AppStorage.setItem('currentFormflow.formData', formData);
+      const html = formDesigner.getHtml().replace(/^<body>/,'').replace(/<\/body>$/,''); 
+
+      // update chart node data
+      chartEl.setNodeData(activeNodeId, {html})
+      // update storage node data
+      const nodes = $currentFile.nodes;
+      const nodeIndex = nodes.findIndex(node => node.id == activeNodeId) as number;
+      nodes[nodeIndex].html = html;
+      $currentFile.nodes = nodes;
     });
   });
 
@@ -66,9 +70,9 @@
           $currentFile.chart = chartEl?.getData();
         }
 
-        const formData = AppStorage.getItem('currentFormflow.formData') || {};
-        formData[node.id] ||= {};
-        const html = formData[node.id].html;
+        const nodes = chartEl.getData().nodes;
+        const nodeIndex = nodes.findIndex(el => el.id == node.id) as number;
+        const html = nodes[nodeIndex].data.html;
         setForm(chartEl?.getData(), node, html); // set stepper, html, css
       }
     }

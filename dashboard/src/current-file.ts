@@ -39,6 +39,20 @@ export class CurrentFile {
     AppStorage.setItem('currentFormflow.chart', this.chart);
   }
 
+  _nodes: any;
+  get nodes() { return this._chart.nodes; }
+  set nodes(val) { 
+    this._chart.nodes = val; 
+    AppStorage.setItem('currentFormflow.chart', this.chart);
+  }
+
+  _edges: any;
+  get edges() { return this._chart.edges; }
+  set edges(val) { 
+    this._chart.edges = val; 
+    AppStorage.setItem('currentFormflow.chart', this.chart);
+  }
+
   _name: string;
   get name() { return this._name; }
   set name(val) { 

@@ -35,10 +35,7 @@ export function FormflowChart(props: FormflowChartProps) {
   } = useStore();
 
   props.externalCalls.setNodeData = (id, data) => {
-    setNodeData('form1', {label: 'Hello New Label'});
-  }
-  props.externalCalls.setEdgeData = (id, data) => {
-    setEdgeData('start-form1', {label: 'Hello New Label'});
+    setNodeData(id, data);
   }
 
   React.useEffect( () => {
