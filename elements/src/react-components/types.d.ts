@@ -28,8 +28,9 @@ export type TStoreState = {
   onEdgesChange: OnEdgesChange;
   onEdgeUpdate: OnEdgeUpdateFunc,
   onConnect: OnConnect;
-  updateNodeLabel: (nodeId: string, label: string) => void;
   updateEdgeLabel: (nodeId: string, label: string) => void;
+  setNodeData: (nodeId: string, data: any) => void;
+  setEdgeData: (nodeId: string, data: any) => void;
   addNodeBeside: (nodeId: string, position: string) => void;
   addNodeBelow: (nodeId: string) => void;
   addNodeAbove: (nodeId: string) => void;

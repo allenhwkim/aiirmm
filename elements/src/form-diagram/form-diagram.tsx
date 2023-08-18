@@ -56,6 +56,10 @@ export class FormDiagram extends HTMLElement {
     this.dispatchEvent( customEvent );
   }
 
+  reactChartCalls = {}; // empty! because it's set inside react component
+  setNodeData = (id, data) => this.reactChartCalls['setNodeData'](id, data);
+  setEdgeData = (id, data) => this.reactChartCalls['setNodeData'](id, data);
+
   mount(nodes: Node[] = DEFAULT_CHART.nodes, edges: Edge[] = DEFAULT_CHART.edges) {
     const onNodeClick = (node: Node, nodes: Node[], edges: Edge[]) => {
       this.fireEvent({ action: 'selected', type: 'node', node, nodes, edges })
@@ -86,6 +90,7 @@ export class FormDiagram extends HTMLElement {
           onEdgeClick={onEdgeClick}
           onInit={onInit}
           showImage={showImage}
+          externalCalls={this.reactChartCalls} /* to call a function from outside */
         />
       </StrictMode>
     );

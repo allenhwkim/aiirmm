@@ -12,7 +12,7 @@ const DEFAULT_CHART =  {
   ] as Node[],
   edges: [
     {id: 'start-form1', source: 'start', target: 'form1', type: 'custom'},
-    {id: 'form1-review', source: 'form1', target: 'review', type: 'custom'},
+    {id: 'form1-review', source: 'form1', target: 'review', type: 'custom', data: {hello: 'world'}},
     {id: 'review-submit', source: 'review', target: 'submit', type: 'custom'},
     {id: 'submit-end', source: 'submit', target: 'end', type: 'custom'},
   ] as Edge[]

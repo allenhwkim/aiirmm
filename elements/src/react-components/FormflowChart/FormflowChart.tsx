@@ -9,12 +9,13 @@ import { customNodeTypes } from '../custom-nodes';
 import { customEdgeTypes } from '../custom-edges';
 
 export interface FormflowChartProps {
-  nodes?: Node[],
-  edges?: Edge[],
-  onNodeClick?: (node:Node, nodes: Node[], edges:Edge[]) => void,
-  onEdgeClick?: (edge:Edge, nodes: Node[], edges:Edge[]) => void,
-  onInit?: (instance: ReactFlowInstance) => void,
-  showImage?: any,
+  nodes?: Node[];
+  edges?: Edge[];
+  onNodeClick?: (node:Node, nodes: Node[], edges:Edge[]) => void;
+  onEdgeClick?: (edge:Edge, nodes: Node[], edges:Edge[]) => void;
+  onInit?: (instance: ReactFlowInstance) => void;
+  showImage?: any;
+  externalCalls: { [key:string]: Function };
 }
 
 export function FormflowChart(props: FormflowChartProps) {
@@ -28,8 +29,17 @@ export function FormflowChart(props: FormflowChartProps) {
     onConnect,
     onEdgeUpdate,
     undo,
-    redo
+    redo,
+    setNodeData,
+    setEdgeData,
   } = useStore();
+
+  props.externalCalls.setNodeData = (id, data) => {
+    setNodeData('form1', {label: 'Hello New Label'});
+  }
+  props.externalCalls.setEdgeData = (id, data) => {
+    setEdgeData('start-form1', {label: 'Hello New Label'});
+  }
 
   React.useEffect( () => {
     if (props.nodes) setNodes(props.nodes);

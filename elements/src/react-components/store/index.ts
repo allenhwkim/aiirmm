@@ -101,16 +101,6 @@ const useStore = create<TStoreState>((set, get) => ({
 
   },
 
-  updateNodeLabel: (nodeId: string, label: string) => {
-    const newNodes = get().nodes.map((node) => {
-      if (node.id === nodeId) {
-        node.data = { ...node.data, label }; // it's important to create a new object here
-      }
-      return node;
-    });
-    set( {nodes: newNodes});
-  },
-
   updateEdgeLabel: (edgeId: string, label: string) => {
     set({
       edges: get().edges.map((edge) => {
@@ -121,6 +111,22 @@ const useStore = create<TStoreState>((set, get) => ({
         return edge;
       }),
     });
+  },
+
+  setNodeData: (nodeId: string, data: any) => {
+    const newNodes = get().nodes.map((node) => {
+      (node.id === nodeId) && (node.data = data); // it's important to create a new object here
+      return node;
+    });
+    set( {nodes: newNodes});
+  },
+
+  setEdgeData: (edgeId: string, data: any) => {
+    const newEdges = get().edges.map((edge) => {
+      (edge.id === edgeId) && (edge.data = data);
+      return edge;
+    });
+    set({edges: newEdges});
   },
 
   addNodeBeside: (nodeId: string, position: string = 'right') => {

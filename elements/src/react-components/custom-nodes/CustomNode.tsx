@@ -4,11 +4,11 @@ import { Handle,  Node, Position, useReactFlow, getIncomers, getOutgoers } from 
 import useStore from '../store';
 
 function CustomNode({ id, data }: Node): React.ReactElement {
-  const { nodes, edges, updateNodeLabel, addNodeBeside, addNodeAbove, addNodeBelow } = useStore();
+  const { nodes, edges, setNodeData, addNodeBeside, addNodeAbove, addNodeBelow } = useStore();
   const { fitView} = useReactFlow();
   const containerRef = useRef(null);
 
-  const node = nodes.find(el => el.id === id);
+  const node = nodes.find(el => el.id === id) as Node;
   let [numIncomers, numOutgoers] = [0,0];
   if (node) {
     numIncomers = getIncomers(node, nodes, edges).length;
@@ -36,7 +36,7 @@ function CustomNode({ id, data }: Node): React.ReactElement {
   }
 
   const onLabelBlur = (event: React.ChangeEvent<any>) => {
-    updateNodeLabel(id, event.target.textContent);
+    setNodeData(id, Object.assign(node.data, {label: event.target.textContent}));
   }
 
   return (
