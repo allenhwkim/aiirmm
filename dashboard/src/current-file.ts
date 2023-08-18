@@ -1,5 +1,6 @@
 import type { FormDiagram } from '@formflow/elements/src';
 import { AppStorage } from '@formflow/elements/src';
+import type { Node, Edge } from 'reactflow';
 
 const DEFAULT_CHART =  {
   nodes:[
