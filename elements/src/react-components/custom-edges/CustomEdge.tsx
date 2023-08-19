@@ -55,21 +55,13 @@ export default function CustomEdge({
         style={{textAlign: 'center'}}
         requiredExtensions="http://www.w3.org/1999/xhtml">
 
-        <input className="label-input" aria-label="Enter edge label"
-          defaultValue={label as string}
-          onChange={evt => updateEdgeLabel(id, evt.target.value)} 
-        />
-      </foreignObject>
+        <div className="nodrag label-input" contentEditable={true} 
+          suppressContentEditableWarning={true}
+          onBlur={evt => updateEdgeLabel(id, evt.target.textContent || '')}
+        >{label}</div>
 
-      <foreignObject
-        className="for-display"
-        width="80"
-        height={foreignObjectSize}
-        x={labelX - 80/2}
-        y={labelY - foreignObjectSize / 2}
-        style={{textAlign: 'center', border: '1px dashed none'}}
-        requiredExtensions="http://www.w3.org/1999/xhtml">
-        <div className="label-display">{label}</div>
+        <div className="nodrag label-display">{label}</div> {/* to show ellipsis for long contents */}
+
       </foreignObject>
     </>
   );
