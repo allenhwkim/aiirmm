@@ -23,8 +23,8 @@ const useStore = create<TStoreState>((set, get) => ({
 
   setNodes: (nodes: Node[]) => {
     const nextNodeId = nodes.reduce( (max, node) => {
-      const formNum = +node.id.replace(/form/,'');
-      return Math.max(max, +formNum || 0);
+      const matches = node.id.match(/[0-9]+$/) || [''];
+      return Math.max(max, +matches[0]);
     }, 0);
     nodes = structuredClone(nodes);
     set({nodes, nextNodeId});
@@ -138,8 +138,9 @@ const useStore = create<TStoreState>((set, get) => ({
     const options: any = {
       nodes: get().nodes,
       edges: get().edges,
-      nodeId: 'form' + get().nextNodeId
+      nodeId: 'page' + get().nextNodeId
     }
+    console.log({options});
     const {nodes, edges} = addNodeBesideNode(nodeId, position, options);
     set({nodes, edges});
 
@@ -151,7 +152,7 @@ const useStore = create<TStoreState>((set, get) => ({
     const options: any = {
       nodes: get().nodes,
       edges: get().edges,
-      nodeId: 'form' + get().nextNodeId
+      nodeId: 'page' + get().nextNodeId
     }
     const {nodes, edges} = addNodeBelowNode(nodeId, options);
     set({nodes, edges});
@@ -164,7 +165,7 @@ const useStore = create<TStoreState>((set, get) => ({
     const options: any = {
       nodes: get().nodes,
       edges: get().edges,
-      nodeId: 'form' + get().nextNodeId
+      nodeId: 'page' + get().nextNodeId
     }
     const {nodes, edges} = addNodeAboveNode(nodeId, options);
     set({nodes, edges});

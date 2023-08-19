@@ -25,7 +25,7 @@ export function addNodeBesideNode(
     position: { x: newNodeX, y: newNodeY },
   }
   const currentNodeNdx = nodes.findIndex(el => el.id === nodeId);
-  const newNodeIndex = position === 'left' ? currentNodeNdx - 1 : currentNodeNdx + 1;
+  const newNodeIndex = position === 'left' ? currentNodeNdx : currentNodeNdx + 1;
   nodes.splice(newNodeIndex, 0, newNode); // splice updates nodes itself
 
   // create edges. Then, add it to edges
