@@ -5,14 +5,14 @@ import type { Node, Edge } from 'reactflow';
 const DEFAULT_CHART =  {
   nodes:[
     {id: 'start', type: 'start', deletable: false, position: { x: 100, y: 0 }},
-    {id: 'form1', type: 'custom', data: {label: 'form1'}, position: { x: 100, y: 87 }},
+    {id: 'page1', type: 'custom', data: {label: 'page1'}, position: { x: 100, y: 87 }},
     {id: 'review', type: 'custom', data: {label: 'review'}, position: { x: 100, y: 187 }},
     {id: 'submit', type: 'custom', data: {label: 'submit', type: 'submit'}, position: { x: 100, y: 287 }},
     {id: 'end', type: 'end', deletable: false, position: { x: 100, y: 400 }},
   ] as Node[],
   edges: [
-    {id: 'start-form1', source: 'start', target: 'form1', type: 'custom'},
-    {id: 'form1-review', source: 'form1', target: 'review', type: 'custom', data: {hello: 'world'}},
+    {id: 'start-page1', source: 'start', target: 'page1', type: 'custom'},
+    {id: 'page1-review', source: 'page1', target: 'review', type: 'custom', data: {hello: 'world'}},
     {id: 'review-submit', source: 'review', target: 'submit', type: 'custom'},
     {id: 'submit-end', source: 'submit', target: 'end', type: 'custom'},
   ] as Edge[]
