@@ -1,6 +1,6 @@
 import { addCss, loadScript, removeCss, waitFor } from '../../lib';
 
-const css = ':host {display: block; height: 300px;}';
+const css = 'ol-map {display: block; height: 300px;}';
 
 export class OlMap extends HTMLElement {
   static get observedAttributes() { return ['center', 'zoom']; }

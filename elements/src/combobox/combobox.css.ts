@@ -1,14 +1,14 @@
 export default /*css*/ `
-  :host {
+  combo-box {
     display: inline-block;
     position: relative;
   }
 
-  :host:focus-within ul {
+  combo-box:focus-within ul {
     display: block;
   }
   
-  :host input {
+  combo-box input {
     min-width: 200px;
     min-height: 32px;
     padding: 0 20px 0 4px;
@@ -21,11 +21,11 @@ export default /*css*/ `
     box-sizing: border-box;
   }
 
-  :host input:read-only {
+  combo-box input:read-only {
     pointer-events: none;
   }
 
-  :host ul {
+  combo-box ul {
     display: none;
     padding: 0;
     margin: 0;
@@ -40,23 +40,23 @@ export default /*css*/ `
     z-index: 1;
   }
 
-  :host ul > :is(.x-highlighted, :hover) {
+  combo-box ul > :is(.x-highlighted, :hover) {
     background: #529FFF;
     color: #FFF;
   }
-  :host ul:empty {
+  combo-box ul:empty {
     display: none;
   }
 
-  :host ul > * {
+  combo-box ul > * {
     line-height: 26px;
     padding: 0 2px;
   }
-  :host ul > li.disabled {
+  combo-box ul > li.disabled {
     pointer-events: none;
   }
 
-  :host ul > .x-selected:before {
+  combo-box ul > .x-selected:before {
     content: '✓ ';
   }
 `;

@@ -42,6 +42,7 @@ export class InputMask extends HTMLElement {
   render() {
     const inputEl = this.querySelector('input') as HTMLInputElement;
     const maskEl =  this.querySelector('input + div') as HTMLElement;
+    if (!inputEl || !maskEl) return;
 
     const inputElStyle = getComputedStyle(inputEl);
     maskEl.classList.add('mask');

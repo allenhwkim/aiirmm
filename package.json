@@ -22,8 +22,5 @@
     "dist"
   ],
   "author": "Allen Kim<allenhwkim@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "postcss-prefix-selector": "^1.16.0"
-  }
+  "license": "MIT"
 }

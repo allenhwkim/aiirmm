@@ -10,7 +10,7 @@ export class MonacoEditor extends HTMLElement {
   value: string = '';
 
   async connectedCallback() {
-    addCss(this.tagName, `${this.tagName.toLowerCase()} { display: block;  min-height: 200px;}`)
+    addCss(this.tagName, `monaco-editor { display: block;  min-height: 200px;}`)
 
     this.innerHTML = '';
     this.language = this.getAttribute('language') || 'javascript';

@@ -1,12 +1,12 @@
 export default /*css*/ `
-  :host {
+  x-pagination {
     display: block;
   }
-  .navigation .prev {
+  x-pagination .navigation .prev {
     display: inline-block;
   }
 
-  .page {
+  x-pagination .page {
     border: none;
     background: #FFF;
     min-width: 28px;
@@ -17,17 +17,17 @@ export default /*css*/ `
     color: inherit;
   }
 
-  .page:disabled { color: #CCC; }
-  .page.prev::before { content : '◀'; }
-  .page.next::before { content : '▶'; }
-  .page.first::before { content : '◀◀'; }
-  .page.last::before { content : '▶▶'; }
+  x-pagination .page:disabled { color: #CCC; }
+  x-pagination .page.prev::before { content : '◀'; }
+  x-pagination .page.next::before { content : '▶'; }
+  x-pagination .page.first::before { content : '◀◀'; }
+  x-pagination .page.last::before { content : '▶▶'; }
 
-  .pages {
+  x-pagination .pages {
     display: inline-block;
   }
 
-  .pages > .page.selected {
+  x-pagination .pages > .page.selected {
     color: #FFF;
     background-color: #0B51C1;
     border-radius: 4px;

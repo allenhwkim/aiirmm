@@ -5,7 +5,7 @@
   let bootstrapDialog;
 
   onMount(() => {
-    bootstrapDialog= new (window as any).bootstrap.Modal(document.querySelector('#data-dialog'));
+    bootstrapDialog= new window['bootstrap'].Modal(document.querySelector('#data-dialog'));
   });
   
   export function show(message: any) {

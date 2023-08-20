@@ -34,8 +34,10 @@ export function FormflowChart(props: FormflowChartProps) {
     setEdgeData,
   } = useStore();
 
-  props.externalCalls.setNodeData = (id, data) => {
-    setNodeData(id, data);
+  if (props.externalCalls) {
+    props.externalCalls.setNodeData = (id, data) => {
+      setNodeData(id, data);
+    }
   }
 
   React.useEffect( () => {

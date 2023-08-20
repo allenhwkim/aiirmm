@@ -1,5 +1,5 @@
 export default /*css*/ `
-  :host {
+  side-bar {
     min-width: 200px;
     padding: 12px;
     background-color: #fff;
@@ -12,10 +12,10 @@ export default /*css*/ `
     transition: all 0.5s ease;
     box-shadow: 0 4px 10px 0 #333;
   }
-  :host.visible {
+  side-bar.visible {
     left: 0;
   }
-  .close-button {
+  side-bar .close-button {
     border: none;
     position: absolute;
     right: 0;

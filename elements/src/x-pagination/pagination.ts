@@ -1,5 +1,5 @@
 import morphdom from 'morphdom/dist/morphdom-esm';
-import { addCss, removeCss, customElement } from '../../lib';
+import { addCss, removeCss } from '../../lib';
 import css from './pagination.css';
 
 export class Pagination extends HTMLElement {

@@ -1,13 +1,13 @@
 import { addCss, getReactProp, removeCss } from "../../lib";
 const css = `
-  ul.format-json ul { border-left: 1px dashed black; padding-left: 2rem;  margin-left: -12px;}
-  ul.format-json li { cursor: initial; }
-  ul.format-json li small { opacity: .7; }
-  ul.format-json li:has(> ul.hidden) { list-style: '⊞ ' }
-  ul.format-json li:has(> ul) { list-style: '⊟ '; cursor: pointer; }
-  ul.format-json li:has(> ul) sup { display: none; }
-  ul.format-json li:has(> ul.hidden) sup { display: initial; opacity: .8; }
-  ul.format-json.hidden { display: none; }
+  json-viewer ul.format-json ul { border-left: 1px dashed black; padding-left: 2rem;  margin-left: -12px;}
+  json-viewer ul.format-json li { cursor: initial; }
+  json-viewer ul.format-json li small { opacity: .7; }
+  json-viewer ul.format-json li:has(> ul.hidden) { list-style: '⊞ ' }
+  json-viewer ul.format-json li:has(> ul) { list-style: '⊟ '; cursor: pointer; }
+  json-viewer ul.format-json li:has(> ul) sup { display: none; }
+  json-viewer ul.format-json li:has(> ul.hidden) sup { display: initial; opacity: .8; }
+  json-viewer ul.format-json.hidden { display: none; }
 `;
 
 export class JsonViewer extends HTMLElement {

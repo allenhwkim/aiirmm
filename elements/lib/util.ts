@@ -1,18 +1,8 @@
-import postcss from 'postcss';
-import prefixer from 'postcss-prefix-selector';
-
 export function addCss(tagName: string, css: string) {
   tagName = tagName.toLowerCase();
-  const plugin =  prefixer({
-    prefix: tagName,
-    transform(prefix, selector, prefixedSelector, filePath, rule) { 
-      return selector.match(/^:host/) ? selector.replace(/:host/, prefix):
-        selector.match(new RegExp(`\\s*${tagName}`)) ? selector : `${prefix} ${selector}`;
-    },
-  });
-  const scopedCss = postcss().use(plugin).process(css, {map: false}).css;
-  !(document.querySelector(`style[${tagName}]`)) &&
-    document.head.insertAdjacentHTML('beforeend', `<style ${tagName}>${scopedCss}</style>`);
+  if (!document.querySelector(`style[${tagName}]`)) {
+    document.head.insertAdjacentHTML('beforeend', `<style ${tagName}>${css}</style>`);
+  }
 }
 
 export function removeCss(tagName: string) { 

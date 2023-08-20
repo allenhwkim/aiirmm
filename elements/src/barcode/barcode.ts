@@ -1,5 +1,6 @@
 import morphdom from 'morphdom/dist/morphdom-esm';
 import {loadScript, waitFor} from '../../lib';
+declare const window: any;
 
 export class BarCode extends HTMLElement {
   static get observedAttributes() {
@@ -37,7 +38,6 @@ export class BarCode extends HTMLElement {
   async connectedCallback() {
     loadScript('//unpkg.com/jsbarcode/dist/JsBarcode.all.min.js');
     await waitFor('window.JsBarcode');
-    // addCss(this.tagName, opts.css);
     this.#updateDOM();
   }
 
@@ -50,11 +50,13 @@ export class BarCode extends HTMLElement {
   }
 
   async render() { 
-    const value = this.getAttribute('value') || '123456789012'; 
-    const format = this.getAttribute('format') || 'code128';
-    const svgEl = document.createElement('svg');
-    window['JsBarcode'](svgEl, value, {...this.props, format});
-    return svgEl.outerHTML;
+    if (window.JsBarcode) {
+      const value = this.getAttribute('value') || '123456789012'; 
+      const format = this.getAttribute('format') || 'code128';
+      const svgEl = document.createElement('svg');
+      window.JsBarcode(svgEl, value, {...this.props, format});
+      return svgEl.outerHTML;
+    }
   }
 
   // called when attribute/props changes and connectedCallback
