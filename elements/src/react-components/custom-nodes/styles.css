@@ -59,11 +59,11 @@
   right: -24px;
 }
 .react-flow__node .add-node-button.top {
-  top: -26px;
+  top: -32px;
   left: calc(50% - 10px);
 }
 .react-flow__node .add-node-button.bottom {
-  bottom: -26px;
+  bottom: -32px;
   left: calc(50% - 10px);
 }
 /* .react-flow__node .in-1.out-1 .add-node-button:hover  { */

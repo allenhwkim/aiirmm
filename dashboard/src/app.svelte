@@ -100,7 +100,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#properties">
-           {activeNodeName} Properties of "{$currentFile?.name || 'Untitled'}" 
+           Properties of "{$currentFile?.name || 'Untitled'}" - "{activeNodeName}"
         </button>
       </h2>
       <div id="properties" class="accordion-collapse collapse" data-bs-parent="#right-section">
