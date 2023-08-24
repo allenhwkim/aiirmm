@@ -173,7 +173,6 @@ const useStore = create<TStoreState>((set, get) => ({
       edges: get().edges,
       nodeId: 'page' + get().nextNodeId
     }
-    console.log({options});
     const {nodes, edges} = addNodeBesideNode(nodeId, position, options);
     set({nodes, edges});
 
