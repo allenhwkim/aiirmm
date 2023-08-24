@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import type { FormDesigner, FormDiagram } from '@formflow/elements/src';
+  import { AppStorage, type FormDesigner, type FormDiagram, type IReactflowEvent } from '@formflow/elements/src';
   import { onMount } from 'svelte';
 
   import AppSideBar from './app-sidebar.svelte';
@@ -16,29 +16,22 @@
   let appDataDialog: AppDataDialog;
   let appFileDialog: AppFileDialog;
 
-  let formProps = $currentFile.properties || {default: {}};
+  let formProps = {default: {xxxxxxxxxxxxxxx: 1}};
+  function formPropsChanged(e: any) {
+    console.log(e.detail);
+  }
+
+  $: selectedId = $currentFile.selected?.id;
+  $: selectedType = $currentFile.selected?.source ? 'EDGE' : 'NODE';
+  $: selectedLabel = $currentFile.selected?.data?.label || $currentFile.selected?.label || '';
 
   onMount(() => {
     $currentFile.setChartEl(chartEl);
-    formDesigner.on('update', function() { 
+    formDesigner.on('update', function() {  // html is updated
       const html = formDesigner.getHtml().replace(/^<body>/,'').replace(/<\/body>$/,''); 
-
-      // update chart node data
-      chartEl.setNodeData(activeNodeId, {html})
-      // update storage node data
-      const nodes = $currentFile.nodes;
-      const nodeIndex = nodes.findIndex(node => node.id == activeNodeId) as number;
-      nodes[nodeIndex].html = html;
-      $currentFile.nodes = nodes;
+      selectedType === 'NODE' && chartEl.updateNodeData(selectedId, {html})
     });
   });
-
-  $: activeNodeId = $currentFile.activeNode?.id;
-  $: activeNodeName = $currentFile.activeNode?.data?.label || '';
-
-  function formPropsChanged(e: any) {
-    $currentFile.properties = JSON.parse(e.detail);
-  }
 
   function handleSideBarMessage(event: any) {
     const {dataMessage, fileMessage} = event.detail;
@@ -46,25 +39,33 @@
     dataMessage && appDataDialog.show(dataMessage);
   }
 
-  function handleReactflowEvent(e:any) {
+  function showTab(id) {
+    (document.querySelector('#form-designer-group') as any)
+      .style.display = id === 'node-edge-data' ? 'none' : '';
+   
     document.querySelectorAll('.collapse.show') // collapse all accordion
       .forEach(el => new (window as any).bootstrap.Collapse(el));
-    (document.querySelector('#form-designer-group') as any).style.display =  // if not node, hide designer 
-      e.detail.node?.type === 'custom' ? '': 'none';
+    new (window as any).bootstrap.Collapse(document.getElementById(id));
+  }
 
-    const {action, node, edge} = e.detail;
-    node && ($currentFile.activeNode = node);
+  function handleReactflowEvent(e: {detail: IReactflowEvent}) {
+    const {action, type, node, edge} = e.detail;
     if (action === 'init') { // when init, select the start node
+      showTab('node-edge-data');
       const {nodes, edges} = chartEl.getData();
       const node = nodes.find(el => el.id === 'start');
       chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
     } else if (action === 'selected') { 
-      if (node?.type === 'start' || node?.type === 'end' || edge?.type === 'custom') {
-        new (window as any).bootstrap.Collapse(document.querySelector('#properties'));
-      } 
-      else if (node?.type === 'custom') {
-        new (window as any).bootstrap.Collapse(document.querySelector('#form-designer'));
-        $currentFile.activeNode = node;
+      $currentFile.selected = node || edge;
+
+      if (node?.type === 'start') {
+        showTab('node-edge-data');
+      } else if (node?.type === 'end') {
+        showTab('node-edge-data');
+      } else if (edge?.type === 'custom') {
+        showTab('node-edge-data');
+      } else if (node?.type === 'custom') {
+        showTab('form-designer');
         if (!equal($currentFile.chart, chartEl?.getData())) {
           $currentFile.modified = true;
           $currentFile.chart = chartEl?.getData();
@@ -75,6 +76,8 @@
         const html = nodes[nodeIndex].data.html;
         setForm(chartEl?.getData(), node, html); // set stepper, html, css
       }
+    } else if (action === 'change' && type === 'chart') {
+      AppStorage.setItem('currentFormflow.chart', chartEl.getData());
     }
   }
 </script>
@@ -99,11 +102,11 @@
   <div class="accordion flex-fill" id="right-section" role="navigation">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#properties">
-           Properties of "{$currentFile?.name || 'Untitled'}" - "{activeNodeName}"
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#node-edge-data">
+           Properties of {selectedType.toLowerCase()} "{$currentFile?.name || 'Untitled'}" - "{selectedLabel}"
         </button>
       </h2>
-      <div id="properties" class="accordion-collapse collapse" data-bs-parent="#right-section">
+      <div id="node-edge-data" class="accordion-collapse collapse" data-bs-parent="#right-section">
         <div class="accordion-body">
           <monaco-editor language="json"
             value={JSON.stringify(formProps, null, '  ')}

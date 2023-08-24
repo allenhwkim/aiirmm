@@ -31,32 +31,10 @@ export class CurrentFile {
   storage: any;
   chartEl: FormDiagram
 
-  _modified = false; // set to true when modified a form
-  get modified() { return this._modified; }
-  set modified(val) { 
-    this._modified = val; 
-    AppStorage.setItem('currentFormflow.modified', val);
-  }
-
   _chart: any;
   get chart() { return this._chart; }
   set chart(val) { 
     this._chart = val; 
-    AppStorage.setItem('currentFormflow.chart', this.chart);
-  }
-
-  _nodes: any;
-  get nodes() { return this._chart.nodes; }
-  set nodes(val) { 
-    this._chart.nodes = val; 
-    AppStorage.setItem('currentFormflow.chart', this.chart);
-  }
-
-  _edges: any;
-  get edges() { return this._chart.edges; }
-  set edges(val) { 
-    this._chart.edges = val; 
-    AppStorage.setItem('currentFormflow.chart', this.chart);
   }
 
   _name: string;
@@ -66,18 +44,18 @@ export class CurrentFile {
     AppStorage.setItem('currentFormflow.name', val);
   }
 
-  _properties: any;
-  get properties() { return this._properties; }
-  set properties(val) { 
-    this._properties = val; 
-    AppStorage.setItem('currentFormflow.properties', val);
+  _modified = false; // set to true when modified a form
+  get modified() { return this._modified; }
+  set modified(val) { 
+    this._modified = val; 
+    AppStorage.setItem('currentFormflow.modified', val);
   }
 
-  _activeNode: any;
-  get activeNode() { return this._activeNode; }
-  set activeNode(val) { 
-    this._activeNode = val; 
-    AppStorage.setItem('currentFormflow.activeNode', val);
+  _selected: any;
+  get selected() { return this._selected; }
+  set selected(val) { 
+    this._selected = val; 
+    AppStorage.setItem('currentFormflow.selected', val);
   }
 
   constructor(form?, chartEl?) {

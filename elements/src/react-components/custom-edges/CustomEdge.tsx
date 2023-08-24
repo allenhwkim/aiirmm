@@ -17,7 +17,7 @@ export default function CustomEdge({
   style = {}, 
   label
 }: EdgeProps): React.ReactElement {
-  const { updateEdgeLabel } = useStore();
+  const store = useStore();
   
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX, sourceY, targetX, targetY,
@@ -57,7 +57,7 @@ export default function CustomEdge({
 
         <div className="nodrag label-input" contentEditable={true} 
           suppressContentEditableWarning={true}
-          onBlur={evt => updateEdgeLabel(id, evt.target.textContent || '')}
+          onBlur={evt => store.updateEdgeLabel(id, evt.target.textContent || '')}
         >{label}</div>
 
         <div className="nodrag label-display">{label}</div> {/* to show ellipsis for long contents */}

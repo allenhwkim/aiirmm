@@ -1,3 +1,4 @@
+import { Node, Edge } from 'reactflow';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -97,3 +98,12 @@ export { DEFAULT_CHART } from './default-chart';
 export { DEFAULT_HTML } from './default-html';
 export { DEFAULT_FORMS } from './default-forms';
 export { DEFAULT_SUBMIT_DATA } from './default-submit-data';
+
+export interface IReactflowEvent {
+  action: 'selected' | 'init' | 'change';
+  type: 'node' | 'edge' | 'init' | 'chart';
+  node: Node;
+  edge: Edge;
+  nodes: Node[],
+  edges: Edge[]
+}

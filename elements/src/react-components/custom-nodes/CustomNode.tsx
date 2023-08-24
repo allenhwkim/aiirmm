@@ -4,39 +4,39 @@ import { Handle,  Node, Position, useReactFlow, getIncomers, getOutgoers } from 
 import useStore from '../store';
 
 function CustomNode({ id, data }: Node): React.ReactElement {
-  const { nodes, edges, setNodeData, addNodeBeside, addNodeAbove, addNodeBelow } = useStore();
+  const store = useStore();
   const { fitView} = useReactFlow();
   const containerRef = useRef(null);
 
-  const node = nodes.find(el => el.id === id) as Node;
+  const node = store.nodes.find(el => el.id === id) as Node;
   let [numIncomers, numOutgoers] = [0,0];
   if (node) {
-    numIncomers = getIncomers(node, nodes, edges).length;
-    numOutgoers = getOutgoers(node, nodes, edges).length;
+    numIncomers = getIncomers(node, store.nodes, store.edges).length;
+    numOutgoers = getOutgoers(node, store.nodes, store.edges).length;
   }
 
   const addNodeToLeft = () => {
-    addNodeBeside(id, 'left');
+    store.addNodeBeside(id, 'left');
     setTimeout(() => fitView({duration: 500}));
   }
 
   const addNodeToRight = () => {
-    addNodeBeside(id, 'right');
+    store.addNodeBeside(id, 'right');
     setTimeout(() => fitView({duration: 500}));
   }
 
   const addNodeAboveThis = () => {
-    addNodeAbove(id);
+    store.addNodeAbove(id);
     setTimeout(() => fitView({duration: 500}));
   }
 
   const addNodeBelowThis = () => {
-    addNodeBelow(id);
+    store.addNodeBelow(id);
     setTimeout(() => fitView({duration: 500}));
   }
 
   const onLabelBlur = (event: React.ChangeEvent<any>) => {
-    setNodeData(id, Object.assign(node.data, {label: event.target.textContent}));
+    store.updateNodeData(id, Object.assign(node.data, {label: event.target.textContent}));
   }
 
   return (

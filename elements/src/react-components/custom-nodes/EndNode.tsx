@@ -3,11 +3,11 @@ import { Handle, Position, Node, useReactFlow } from 'reactflow';
 import useStore from '../store';
 
 function EndNode({ data }: Node) {
-  const { addNodeAbove } = useStore();
+  const store = useStore();
   const { fitView} = useReactFlow();
 
   const onClick = () => {
-    addNodeAbove('end');
+    store.addNodeAbove('end');
     setTimeout(() => fitView({duration: 500}));
   }
 

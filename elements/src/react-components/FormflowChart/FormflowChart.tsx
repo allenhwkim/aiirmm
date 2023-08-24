@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {KeyboardEvent, useState} from 'react';
-import ReactFlow, {Controls, ControlButton, Background, Edge, Node, ReactFlowInstance} from 'reactflow';
+import ReactFlow, {Controls, ControlButton, Background, Edge, Node, ReactFlowInstance, OnNodesChange, NodeChange, EdgeChange} from 'reactflow';
 import 'reactflow/dist/style.css';
 import './styles.css';
 
@@ -14,35 +14,22 @@ export interface FormflowChartProps {
   onNodeClick?: (node:Node, nodes: Node[], edges:Edge[]) => void;
   onEdgeClick?: (edge:Edge, nodes: Node[], edges:Edge[]) => void;
   onInit?: (instance: ReactFlowInstance) => void;
+  onNodeChange?: (change?: NodeChange[]) => void;
+  onEdgeChange?: (change?: EdgeChange[]) => void;
   showImage?: any;
-  externalCalls: { [key:string]: Function };
+  externalCalls?: { [key:string]: Function };
 }
 
 export function FormflowChart(props: FormflowChartProps) {
-  const {
-    nodes,
-    edges,
-    setNodes,
-    setEdges,
-    onNodesChange,
-    onEdgesChange,
-    onConnect,
-    onEdgeUpdate,
-    undo,
-    redo,
-    setNodeData,
-    setEdgeData,
-  } = useStore();
+  const store = useStore();
 
   if (props.externalCalls) {
-    props.externalCalls.setNodeData = (id, data) => {
-      setNodeData(id, data);
-    }
+    props.externalCalls.updateNodeData = (id, data) => { store.updateNodeData(id, data); }
   }
 
   React.useEffect( () => {
-    if (props.nodes) setNodes(props.nodes);
-    if (props.edges) setEdges(props.edges);
+    if (props.nodes) store.updateNodes(props.nodes);
+    if (props.edges) store.updateEdges(props.edges);
   }, [props])
 
   const onKeyDown = (event : KeyboardEvent) => {
@@ -51,43 +38,31 @@ export function FormflowChart(props: FormflowChartProps) {
     const meta = event.metaKey ? 'Meta-' : '';
     const shift = event.shiftKey ? 'Shift-' : '';
     const key = `${ctrl}${alt}${shift}${meta}${event.key}`;
-    if (key === 'Meta-z') undo();
-    if (key === 'Shift-Meta-z') redo();
+    if (key === 'Meta-z') store.undo();
+    if (key === 'Shift-Meta-z') store.redo();
   };
-
-  const onNodeClick = (event:React.MouseEvent, node: Node) => {
-    props.onNodeClick && props.onNodeClick(node, nodes, edges);
-  }
-  
-  const onEdgeClick = (event:React.MouseEvent, edge: Edge) => {
-    props.onEdgeClick && props.onEdgeClick(edge, nodes, edges);
-  }
-
-  const onInit = (reactFlowInstance: ReactFlowInstance) => {
-    props.onInit && props.onInit(reactFlowInstance);
-  }
 
   return (
     <ReactFlow 
       style={{minWidth: 300, minHeight: 400}}
       tabIndex={0}
-      nodes={nodes}
-      edges={edges}
+      nodes={store.nodes}
+      edges={store.edges}
       nodeTypes={customNodeTypes}
       edgeTypes={customEdgeTypes}
       onKeyDown={(e) => onKeyDown(e)}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onEdgeUpdate={onEdgeUpdate}
-      onConnect={onConnect}
-      onNodeClick={onNodeClick}
-      onEdgeClick={onEdgeClick}
-      onInit={onInit}
+      onNodesChange={store.updateNodesChange}
+      onEdgesChange={store.updateEdgesChange}
+      onEdgeUpdate={store.updateEdgeConnection}
+      onConnect={store.onConnect}
+      onNodeClick={(e, node) => props.onNodeClick?.(node, store.nodes, store.edges)}
+      onEdgeClick={(e, edge) => props.onEdgeClick?.(edge, store.nodes, store.edges)}
+      onInit={(instance) => props.onInit?.(instance)}
       fitView
     >
       <Controls style={{display: 'flex', backgroundColor: '#FFF'}}>
-        <ControlButton onClick={undo}>&#x27F2;</ControlButton>
-        <ControlButton onClick={redo}>&#x27F3;</ControlButton>
+        <ControlButton onClick={store.undo}>&#x27F2;</ControlButton>
+        <ControlButton onClick={store.redo}>&#x27F3;</ControlButton>
         <ControlButton onClick={props.showImage}>&#x1F4F7;</ControlButton>
       </Controls>
       <Background />

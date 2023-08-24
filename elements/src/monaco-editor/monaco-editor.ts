@@ -16,12 +16,14 @@ export class MonacoEditor extends HTMLElement {
     this.language = this.getAttribute('language') || 'javascript';
     this.schemas ||= getReactProp(this as any, 'schemas');
     this.value ||= getReactProp(this as any, 'value');
+    console.log('................', this.value)
 
     await this.loadLibrary(); // enable window.monaco
 
     this.monacoEditor = window.monaco.editor.create(this, {
       language: this.language,
-      theme: this.getAttribute('theme')
+      theme: this.getAttribute('theme'),
+      automaticLayout: true
     });
     this.monacoEditor.setValue(this.value);
     this.monacoEditor.onDidBlurEditorText(() => {

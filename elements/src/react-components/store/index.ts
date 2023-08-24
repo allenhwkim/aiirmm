@@ -15,34 +15,54 @@ import { DEFAULT_CHART } from '../../default-chart';
 
 UndoRedo.addHistory(DEFAULT_CHART);
 
+let timeout: any;
+function fireReactflowEvent(func, after, before) {
+  const noChangesMade = JSON.stringify(after) === JSON.stringify(before);
+  if (noChangesMade) return; 
+
+  // console.debug('func', func, JSON.stringify(after) === JSON.stringify(before));
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    const customEvent = new CustomEvent('reactflow', {
+      bubbles: true,
+      detail: {
+        action: 'change',
+        type: 'chart',
+        nodes: after.nodes,
+        edges: after.edges 
+      }
+    });
+    document.querySelector('div.react-flow')?.dispatchEvent(customEvent);
+  }, 500);
+}
+
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create<TStoreState>((set, get) => ({
   nodes: DEFAULT_CHART.nodes,
   edges: DEFAULT_CHART.edges,
   nextNodeId: 1,
 
-  setNodes: (nodes: Node[]) => {
+  updateNodes: (nodes: Node[]) => {
+    const before = get();
     const nextNodeId = nodes.reduce( (max, node) => {
       const matches = node.id.match(/[0-9]+$/) || [''];
       return Math.max(max, +matches[0]);
     }, 0);
     nodes = structuredClone(nodes);
     set({nodes, nextNodeId});
+    fireReactflowEvent('updateNodes', get(), before);
   },
 
-  setEdges: (edges: Edge[]) => {
+  updateEdges: (edges: Edge[]) => {
+    const before = get();
     edges = structuredClone(edges);
     set({edges});
     UndoRedo.reset({nodes: get().nodes, edges: get().edges});
+    fireReactflowEvent('updateEdges', get(), before);
   },
 
-  setNextNodeId: () => {
-    const nextNodeId = get().nextNodeId + 1;
-    set({nextNodeId});
-    return nextNodeId.toString();
-  },
-
-  onNodesChange: (changes: NodeChange[]) => {
+  updateNodesChange: (changes: NodeChange[]) => {
+    const before = get();
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });
@@ -50,9 +70,11 @@ const useStore = create<TStoreState>((set, get) => ({
     if (changes.find(el => el.type === 'remove')) {
       UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
     }
+    fireReactflowEvent('updateNodesChange', get(), before);
   },
 
-  onEdgesChange: (changes: EdgeChange[]) => {
+  updateEdgesChange: (changes: EdgeChange[]) => {
+    const before = get();
     const edges = get().edges;
     const connectionEdge: Edge[] = [];
     const pattern = `${changes.length}-${changes[0]?.type}-${changes[1]?.type}`;
@@ -69,9 +91,11 @@ const useStore = create<TStoreState>((set, get) => ({
     if (changes.find(el => el.type === 'remove')) {
       UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
     }
+    fireReactflowEvent('updateEdgesChange', get(), before);
   },
 
-  onEdgeUpdate: (oldEdge, newConnection) => {
+  updateEdgeConnection: (oldEdge, newConnection) => {
+    const before = get();
     // replace the updated edge id as the format of source-target
     const newId = `${newConnection.source}-${newConnection.target}`
     const edges = get().edges;
@@ -84,9 +108,11 @@ const useStore = create<TStoreState>((set, get) => ({
     });
     
     UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
+    fireReactflowEvent('updateEdgeConnection', get(), before);
   },
 
   onConnect: (connection: Connection) => {
+    const before = get();
     const existingEdges: any[] = get().edges;
     const newEdge = {
       id:  `${connection.source}-${connection.target}`,
@@ -98,10 +124,11 @@ const useStore = create<TStoreState>((set, get) => ({
     set({edges: addEdge(connection, edges)});
 
     UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
-
+    fireReactflowEvent('onConnect', get(), before);
   },
 
   updateEdgeLabel: (edgeId: string, label: string) => {
+    const before = get();
     set({
       edges: get().edges.map((edge) => {
         if (edge.id === edgeId) {
@@ -111,9 +138,11 @@ const useStore = create<TStoreState>((set, get) => ({
         return edge;
       }),
     });
+    fireReactflowEvent('updateEdgeLabel', get(), before);
   },
 
-  setNodeData: (nodeId: string, data: any) => {
+  updateNodeData: (nodeId: string, data: any) => {
+    const before = get();
     const newNodes = get().nodes.map((node) => {
       if (node.id === nodeId) {
         node.data = Object.assign({}, node.data, data);
@@ -121,9 +150,11 @@ const useStore = create<TStoreState>((set, get) => ({
       return node;
     });
     set( {nodes: newNodes});
+    fireReactflowEvent('updateNodeData', get(), before);
   },
 
-  setEdgeData: (edgeId: string, data: any) => {
+  updateEdgeData: (edgeId: string, data: any) => {
+    const before = get();
     const newEdges = get().edges.map((edge) => {
       if (edge.id === edgeId) {
         edge.data = Object.assign({}, edge.data || {}, data);
@@ -131,9 +162,11 @@ const useStore = create<TStoreState>((set, get) => ({
       return edge;
     });
     set({edges: newEdges});
+    fireReactflowEvent('updateEdgeData', get(), before);
   },
 
   addNodeBeside: (nodeId: string, position: string = 'right') => {
+    const before = get();
     set({nextNodeId: get().nextNodeId + 1});
     const options: any = {
       nodes: get().nodes,
@@ -145,9 +178,11 @@ const useStore = create<TStoreState>((set, get) => ({
     set({nodes, edges});
 
     UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
+    fireReactflowEvent('addNodeBeside', get(), before);
   },
 
   addNodeBelow: (nodeId: string) => {
+    const before = get();
     set({nextNodeId: get().nextNodeId + 1});
     const options: any = {
       nodes: get().nodes,
@@ -158,9 +193,11 @@ const useStore = create<TStoreState>((set, get) => ({
     set({nodes, edges});
 
     UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
+    fireReactflowEvent('addNodeBelow', get(), before);
   },
 
   addNodeAbove: (nodeId: string) => {
+    const before = get();
     set({nextNodeId: get().nextNodeId + 1});
     const options: any = {
       nodes: get().nodes,
@@ -171,20 +208,25 @@ const useStore = create<TStoreState>((set, get) => ({
     set({nodes, edges});
 
     UndoRedo.addHistory({nodes: get().nodes, edges: get().edges});
+    fireReactflowEvent('addNodeAbove', get(), before);
   },
 
   undo: () => {
+    const before = get();
     const state = UndoRedo.undo();
     if (state) {
       set({nodes: state.nodes, edges: state.edges});
     }
+    fireReactflowEvent('undo', get(), before);
   },
 
   redo: () => {
+    const before = get();
     const state = UndoRedo.redo();
     if (state) {
       set({nodes: state.nodes, edges: state.edges});
     }
+    fireReactflowEvent('redo', get(), before);
   },
 }));
 

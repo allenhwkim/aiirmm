@@ -2,8 +2,8 @@ import type { IForm } from "./global";
 import type { ReactFlowJsonObject, Node } from 'reactflow';
 import { DEFAULT_HTML, FormDesigner } from "@formflow/elements/src";
 
-function getSteps(chartData: ReactFlowJsonObject, activeNode: Node): string[] {
-  const steps = [activeNode.id];
+function getSteps(chartData: ReactFlowJsonObject, selectedNode: Node): string[] {
+  const steps = [selectedNode.id];
   const getNodeById = (id: string) => chartData.nodes.find(node => node.id === id);
   const getOutgoingNodes = (node: Node) => {
     const outgoingEdges = chartData.edges.filter(edge => edge.source === node.id);
@@ -14,14 +14,14 @@ function getSteps(chartData: ReactFlowJsonObject, activeNode: Node): string[] {
     return incomingEdges.map(edge => getNodeById(edge.source))
   }
 
-  let outgoingNodes = getOutgoingNodes(activeNode);
+  let outgoingNodes = getOutgoingNodes(selectedNode);
   while (outgoingNodes.length) {
     const node = outgoingNodes[0];
     steps.push(node.id)
     outgoingNodes = getOutgoingNodes(node);
   }
 
-  let incomingNodes = getIncomingNodes(activeNode);
+  let incomingNodes = getIncomingNodes(selectedNode);
   while (incomingNodes.length) {
     const node = incomingNodes[0];
     steps.unshift(node.id)
@@ -49,12 +49,12 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
   return forms;
 }
 
-export function setForm(chartData: ReactFlowJsonObject, activeNode: Node, html?: string) {
+export function setForm(chartData: ReactFlowJsonObject, selectedNode: Node, html?: string) {
   html ||= DEFAULT_HTML;
 
-  const steps = getSteps(chartData, activeNode).slice(1, -1);
+  const steps = getSteps(chartData, selectedNode).slice(1, -1);
   const forms = getForms(chartData, steps);
-  const currentStepId = activeNode.id;
+  const currentStepId = selectedNode.id;
   const formDesigner = document.querySelector('form-designer') as FormDesigner;
   formDesigner.setHtml(html);
   // this can be removed since it's coded in <form-stepper>

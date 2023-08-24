@@ -21,19 +21,22 @@ export type TAddNode = {
 export type TStoreState = {
   nodes: Node[];
   edges: Edge[];
-  setNodes: (nodes: Node[]) => void;
-  setEdges: (edges: Edge[]) => void;
   nextNodeId: number,
-  onNodesChange: OnNodesChange;
-  onEdgesChange: OnEdgesChange;
-  onEdgeUpdate: OnEdgeUpdateFunc,
-  onConnect: OnConnect;
+
+  updateNodes: (nodes: Node[]) => void;
+  updateNodesChange: OnNodesChange;
+  updateNodeData: (nodeId: string, data: any) => void;
+
+  updateEdges: (edges: Edge[]) => void;
+  updateEdgesChange: OnEdgesChange;
+  updateEdgeConnection: OnEdgeUpdateFunc,
   updateEdgeLabel: (nodeId: string, label: string) => void;
-  setNodeData: (nodeId: string, data: any) => void;
-  setEdgeData: (nodeId: string, data: any) => void;
+  updateEdgeData: (nodeId: string, data: any) => void;
+
   addNodeBeside: (nodeId: string, position: string) => void;
   addNodeBelow: (nodeId: string) => void;
   addNodeAbove: (nodeId: string) => void;
+  onConnect: OnConnect;
   undo: () => void;
   redo: () => void;
 };

@@ -48,7 +48,11 @@ export class JsonViewer extends HTMLElement {
       for (var key in data) {
         const item = document.createElement('li');
         const li = ul.appendChild(item);
-        const values = Object.values(data[key]).filter(el => typeof el == 'string').join(' / ');
+        const values = Object.values(data[key])
+          .filter(el => typeof el === 'string')
+          .map(el => (el as string).replace(/</g, '&lt;'))
+          .map(el => (el as string).length > 20 ? el.substring(0, 20) + ' ...' : el)
+          .join(' / ');
         li.innerHTML = `${key} <small>${values}</small>`;
 
         const toggleList = function(event) {
@@ -65,6 +69,8 @@ export class JsonViewer extends HTMLElement {
           this.writeDOM(li, data[key], ++level);
         } else if (typeof data[key] === 'function') {
           item.innerHTML = `${key}: function`;
+        } else if (typeof data[key] === 'string') {
+          item.innerHTML = `${key}: "${data[key].replace(/</g, '&lt;')}"`;
         } else {
           item.innerHTML = `${key}: ${data[key]}`;
         }
