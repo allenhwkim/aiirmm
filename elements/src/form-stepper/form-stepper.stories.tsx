@@ -16,7 +16,11 @@ export const Primary = (args?: any) => {
   AppStorage.setItem('currentFormflow.submitData', DEFAULT_SUBMIT_DATA);
   
   const [userData, setUserData] = useState(storageUserData);
-  const clearStorage = () => (sessionStorage.clear(), setUserData(''));
+  const clearStorage = () => {
+    sessionStorage.clear(); 
+    localStorage.clear(); 
+    setUserData('');
+  };
   window.addEventListener('app-storage', (event: any) => setUserData(JSON.stringify(event.detail.data)));
 
   const formStepper = useRef<any>();

@@ -13,10 +13,9 @@ export class MonacoEditor extends HTMLElement {
     addCss(this.tagName, `monaco-editor { display: block;  min-height: 200px;}`)
 
     this.innerHTML = '';
-    this.language = this.getAttribute('language') || 'javascript';
+    this.language = this.getAttribute('language') || this.dataset.language || 'javascript';
     this.schemas ||= getReactProp(this as any, 'schemas');
     this.value ||= getReactProp(this as any, 'value');
-    console.log('................', this.value)
 
     await this.loadLibrary(); // enable window.monaco
 

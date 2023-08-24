@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { AppStorage, type FormDesigner, type FormDiagram, type IReactflowEvent } from '@formflow/elements/src';
+  import { AppStorage, MonacoEditor, type FormDesigner, type FormDiagram, type IReactflowEvent } from '@formflow/elements/src';
   import { onMount } from 'svelte';
 
   import AppSideBar from './app-sidebar.svelte';
@@ -13,10 +13,10 @@
   let chartEl: FormDiagram;
   let menuEl: AppSideBar;
   let formDesigner: FormDesigner;
+  let monacoEditor: MonacoEditor;
   let appDataDialog: AppDataDialog;
   let appFileDialog: AppFileDialog;
 
-  let formProps = {default: {xxxxxxxxxxxxxxx: 1}};
   function formPropsChanged(e: any) {
     console.log(e.detail);
   }
@@ -40,12 +40,20 @@
   }
 
   function showTab(id) {
-    (document.querySelector('#form-designer-group') as any)
-      .style.display = id === 'node-edge-data' ? 'none' : '';
-   
-    document.querySelectorAll('.collapse.show') // collapse all accordion
-      .forEach(el => new (window as any).bootstrap.Collapse(el));
-    new (window as any).bootstrap.Collapse(document.getElementById(id));
+    const nodeEdgeDataSection: any = document.querySelector('.accordion-item:has(#node-edge-data)');
+    const formDesignerSection: any = document.querySelector('.accordion-item:has(#form-designer)');
+    const bootstrap = (window as any).bootstrap;
+    if (id === 'node-edge-data') {
+      formDesignerSection.style.display = 'none';
+      nodeEdgeDataSection.style.height = '100%';
+    } else {
+      formDesignerSection.style.display = '';
+      nodeEdgeDataSection.style.height = 'auto';
+    }
+    
+    // collapse all bootstrap accordions, then show only selected one
+    document.querySelectorAll('.collapse.show').forEach(el => new bootstrap.Collapse(el));
+    new bootstrap.Collapse(document.getElementById(id));
   }
 
   function handleReactflowEvent(e: {detail: IReactflowEvent}) {
@@ -58,12 +66,16 @@
     } else if (action === 'selected') { 
       $currentFile.selected = node || edge;
 
+      const editorValue = 
+        node?.data?.props || edge?.data?.props || {id: node?.id || edge?.id};
+      monacoEditor.setValue(JSON.stringify(editorValue, null, '  '));
       if (node?.type === 'start') {
         showTab('node-edge-data');
       } else if (node?.type === 'end') {
         showTab('node-edge-data');
       } else if (edge?.type === 'custom') {
         showTab('node-edge-data');
+      } else if (edge?.type === 'custom') {
       } else if (node?.type === 'custom') {
         showTab('form-designer');
         if (!equal($currentFile.chart, chartEl?.getData())) {
@@ -82,7 +94,11 @@
   }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+  #node-edge-data { height: 100%; }
+  .accordion-body { height: 100%; }
+  #node-edge-data monaco-editor { height: 100%; }
+</style>
 
 <svelte:window on:resize={() => chartEl.getInstance().fitView()} />
 
@@ -108,14 +124,15 @@
       </h2>
       <div id="node-edge-data" class="accordion-collapse collapse" data-bs-parent="#right-section">
         <div class="accordion-body">
-          <monaco-editor language="json"
-            value={JSON.stringify(formProps, null, '  ')}
+          <monaco-editor 
+            bind:this={monacoEditor}
             on:monaco-change={formPropsChanged}
+            data-language="json"
           ></monaco-editor>
         </div>
       </div>
     </div>
-    <div class="accordion-item" id="form-designer-group">
+    <div class="accordion-item">
       <h2 class="accordion-header" id="headingTwo">
         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#form-designer">
           Form Designer 

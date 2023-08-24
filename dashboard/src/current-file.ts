@@ -2,9 +2,18 @@ import type { FormDiagram } from '@formflow/elements/src';
 import { AppStorage } from '@formflow/elements/src';
 import type { Node, Edge } from 'reactflow';
 
+const startNodeProps = {
+  headTags: [
+    '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>',
+    '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />',
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />',
+    '<link rel="stylesheet" href="https://unpkg.com/formflow/dist/elements/lib/custom-elements.css" />',
+  ],
+}
+
 const DEFAULT_CHART =  {
   nodes:[
-    {id: 'start',  type: 'start',  data: {label: 'start'}, deletable: false, position: { x: 100, y: 0 }},
+    {id: 'start',  type: 'start',  data: {label: 'start', props: startNodeProps}, deletable: false, position: { x: 100, y: 0 }},
     {id: 'page1',  type: 'custom', data: {label: 'page1'}, position: { x: -150, y: 150 }},
     {id: 'page2',  type: 'custom', data: {label: 'page2'}, position: { x: 100, y: 150 }},
     {id: 'page3',  type: 'custom', data: {label: 'page3'}, position: { x: 350, y: 150 }},
