@@ -3,27 +3,12 @@ import { hash } from "../../lib";
 import { XChecks } from './x-checks';
 
 export class XIf extends HTMLElement {
-  props = {checkedValue : false};
-  template = '';
-
-  constructor() {
-    super();
-    for (let key in this.props) {  //  getter and setters of all reactive props
-      Object.defineProperty(this, key, {
-        get() { return this.props[key]; },
-        set(value) {
-          if (this.props[key] === value) return;
-          this.props[key] = value;
-          this.#updateDOM(); // react to props change
-        }
-      });
-    }
-  }
+  template;
 
   render(this:any) {
     const ifExpr = this.getAttribute('if');
-    this.checkValue = !!(new Function(`return ${ifExpr}`)());
-    this.innerHTML = this.checkValue ? this.template : '';
+    const checkValue = !!(new Function(`return ${ifExpr}`)());
+    this.innerHTML = checkValue ? this.template : '';
   }
 
   connectedCallback() {

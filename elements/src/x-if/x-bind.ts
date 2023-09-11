@@ -22,17 +22,19 @@ export class XBind extends HTMLElement {
     }
   }
 
-  connectedCallback() {
-    (this as any).bindExpr = this.innerText;
+  // Add bindHash to XChecks and make not visible
+  connectedCallback(this: any) {
+    this.bindExpr = this.innerText;
     if ((this as any).bindExpr === null) {
       this.innerHTML = 'ERROR: bind expression is required, e.g., bind="foo"';
     } 
-    const bindHash = XChecks.add((this as any).bindExpr);
+    const bindHash = XChecks.add(this.bindExpr);
     this.setAttribute(bindHash, '');
-    (this as any).checkValue = new Function(`return ${(this as any).bindExpr}`)();
-    this.#updateDOM();
+    this.checkValue = new Function(`return ${(this as any).bindExpr}`)();
+    this.style.display = 'none'; // do not display non-bound one
   }
 
+  // Remove bindHash from XChecks if this is the last one
   disconnectedCallback() {
     const hashStr = hash((this as any).bindExpr);
     if (hashStr) {
@@ -41,17 +43,20 @@ export class XBind extends HTMLElement {
     }
   }
 
-  render() {
+  // Called by XChecks, which is added from connectedCallback()
+  // bindHash is hash of bindExpr, and XChecks find this element by bindHash attributte
+  render() { 
     this.#updateDOM();
   }
 
   #timer: any;
-  #updateDOM() { 
+  #updateDOM(this: any) { 
     clearTimeout(this.#timer);
     this.#timer = setTimeout(async () => { 
       const updated = document.createElement('div');
-      updated.innerHTML = (this as any).checkValue;
+      updated.innerHTML = this.checkValue;
       morphdom(this, updated, { childrenOnly: true }); 
+      this.style.display=''; // display once bound
     }, 50);
   }
 }

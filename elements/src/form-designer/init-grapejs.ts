@@ -55,7 +55,7 @@ export function initGrapesJs(elId: string) {
       styles: [
         'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css',
         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css',
-        'https://unpkg.com/formflow/dist/elements/lib/custom-elements.css',
+        '/custom-elements.css',
       ],
     },
     panels: {
