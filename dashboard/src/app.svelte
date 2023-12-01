@@ -59,6 +59,9 @@
   function handleReactflowEvent(e: {detail: IReactflowEvent}) {
     const {action, type, node, edge} = e.detail;
     if (action === 'init') { // when init, select the start node
+      (window as any).reactflow = chartEl.getInstance();
+      (window as any).reactflow.zoomOut();
+
       showTab('node-edge-data');
       const {nodes, edges} = chartEl.getData();
       const node = nodes.find(el => el.id === 'start');
