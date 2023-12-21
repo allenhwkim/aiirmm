@@ -15,7 +15,7 @@
   import AppDataDialog from './app-data.dialog.svelte';
   import AppFileDialog from './app-file.dialog.svelte';
   import currentFile from './store';
-  import { setForm } from './app';
+  // import { setForm } from './app';
 
   // custom elements
   let chartEl: Formflow;
@@ -95,9 +95,9 @@
         }
 
         const nodes = chartEl.getData().nodes;
-        const nodeIndex = nodes.findIndex(el => el.id == node.id) as number;
-        const html = nodes[nodeIndex].data.html;
-        setForm(chartEl?.getData(), node, html); // set stepper, html, css
+        // const nodeIndex = nodes.findIndex(el => el.id == node.id) as number;
+        // const html = nodes[nodeIndex].data.html;
+        // setForm(chartEl?.getData(), node, html); // set stepper, html, css
       }
     } else if (action === 'change' && type === 'chart') {
       StepperStorage.setItem('currentFormflow.chart', chartEl.getData());

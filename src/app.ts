@@ -1,6 +1,6 @@
 import type { IForm } from "./global";
 import type { ReactFlowJsonObject, Node } from 'reactflow';
-import { DEFAULT_HTML, FormDesigner } from "elements-x";
+import { DEFAULT_HTML, FormDesigner } from 'elements-x';
 
 function getSteps(chartData: ReactFlowJsonObject, selectedNode: Node): string[] {
   const steps = [selectedNode.id];
@@ -49,16 +49,19 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
   return forms;
 }
 
-export function setForm(chartData: ReactFlowJsonObject, selectedNode: Node, html?: string) {
-  html ||= DEFAULT_HTML;
+// export function setForm(chartData: ReactFlowJsonObject, selectedNode: Node, html?: string) {
+//   html ||= DEFAULT_HTML;
 
-  const steps = getSteps(chartData, selectedNode).slice(1, -1);
-  const forms = getForms(chartData, steps);
-  const currentStepId = selectedNode.id;
-  const formDesigner = document.querySelector('x-formdesigner') as FormDesigner;
-  formDesigner.setHtml(html);
-  // this can be removed since it's coded in <form-stepper>
-  // formDesigner.setStyle('form.form-flow {min-height: 320px;} form-controller {display: block;}')
-  // formDesigner.runCommand('set-forms-steps', {forms, steps, currentStepId})
-}
+//   const steps = getSteps(chartData, selectedNode).slice(1, -1);
+//   const forms = getForms(chartData, steps);
+//   const currentStepId = selectedNode.id;
+//   const formDesigner = document.querySelector('x-formdesigner') as FormDesigner;
+
+//   formDesigner.html = html;
+//   formDesigner.forms = forms;
+
+//   // formDesigner.setHtml(html);
+//   // this can be removed since it's coded in <form-stepper>
+//   // formDesigner.runCommand('set-forms-steps', {forms, steps, currentStepId})
+// }
 
