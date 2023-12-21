@@ -1,4 +1,3 @@
-import type { IForm } from "./global";
 import type { ReactFlowJsonObject, Node } from 'reactflow';
 import { DEFAULT_HTML, FormDesigner } from 'elements-x';
 
@@ -44,7 +43,7 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
       defaultValues: {},
       skippable: true,
       getErrors: null
-    } as IForm; // TODO
+    };
   });
   return forms;
 }

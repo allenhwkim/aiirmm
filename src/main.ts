@@ -1,5 +1,5 @@
 import 'elements-x';
-import App from './app.svelte';
+import App from './app/App.svelte';
 
 const app = new App({target: document.body});
 export default app

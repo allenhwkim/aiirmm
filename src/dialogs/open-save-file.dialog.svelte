@@ -1,9 +1,8 @@
 <script lang="typescript">
   import { createEventDispatcher, onMount } from 'svelte';
-  import type { Formflow } from 'elements-x';
+  import type { Formflow as XFormflow } from 'elements-x';
   import { StepperStorage } from 'elements-x';
-  import currentFile from './store';
-  import { CurrentFile } from './current-file';
+  import formflow, {FormFlow} from '../store/';
 
   let message: string;
   let fileName: string;
@@ -25,9 +24,9 @@
   }
   
   function openFile(formFile: any) { // file dialog event handler
-    const chartEl: Formflow = $currentFile.chartEl;
-    $currentFile = new CurrentFile(formFile, chartEl);
-    message = `File ${$currentFile.name} opened`;
+    const chartEl: XFormflow = $formflow.chartEl;
+    $formflow = new FormFlow(formFile, chartEl);
+    message = `File ${$formflow.name} opened`;
   }
 
   function saveFileAs() {
@@ -36,9 +35,9 @@
     const confirmed = index === -1 ? 
       true : window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`);
     if (confirmed) {
-      $currentFile.name = fileName;
-      $currentFile.save();
-      $currentFile.modified = false;
+      $formflow.name = fileName;
+      $formflow.save();
+      $formflow.modified = false;
       message = `Saved file as "${fileName}"`;
     }
   }

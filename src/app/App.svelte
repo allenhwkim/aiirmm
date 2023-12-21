@@ -6,45 +6,45 @@
 </style>
 
 <script lang='ts'>
-  import type { FormDesigner, Monaco, Formflow } from 'elements-x';
+  import type { FormDesigner, Monaco, Formflow as XFormflow } from 'elements-x';
   import { StepperStorage } from 'elements-x';
   import { onMount } from 'svelte';
   import equal from 'fast-deep-equal';
 
-  import AppSideBar from './app-sidebar.svelte';
-  import AppDataDialog from './app-data.dialog.svelte';
-  import AppFileDialog from './app-file.dialog.svelte';
-  import currentFile from './store';
+  import SideBar from '../Sidebar.svelte';
+  import DataViewerDialog from '../dialogs/data-viewer.dialog.svelte';
+  import OpenSaveFileDialog from '../dialogs/open-save-file.dialog.svelte';
+  import formflow from '../store';
   // import { setForm } from './app';
 
-  // custom elements
-  let chartEl: Formflow;
-  let menuEl: AppSideBar;
-  let formDesigner: FormDesigner;
-  let monacoEditor: Monaco;
-  let appDataDialog: AppDataDialog;
-  let appFileDialog: AppFileDialog;
+  let chartEl: XFormflow;          // <x-formflow>
+  let formDesigner: FormDesigner; // <x-formdesigner>
+  let monacoEditor: Monaco;       // <x-monaco>
 
-  function formPropsChanged(e: any) {
-    console.log(e.detail);
-  }
+  let sidebarEl: SideBar;
+  let dataViewerDialog: DataViewerDialog;
+  let openSaveFileDialog: OpenSaveFileDialog;
 
-  $: selectedId = $currentFile.selected?.id;
-  $: selectedType = $currentFile.selected?.source ? 'EDGE' : 'NODE';
-  $: selectedLabel = $currentFile.selected?.data?.label || $currentFile.selected?.label || '';
+  $: selectedId = $formflow.selected?.id;
+  $: selectedType = $formflow.selected?.source ? 'EDGE' : 'NODE';
+  $: selectedLabel = $formflow.selected?.data?.label || $formflow.selected?.label || '';
 
   onMount(() => {
-    $currentFile.setChartEl(chartEl);
-    formDesigner.on('update', function() {  // html is updated
+    $formflow.setChartEl(chartEl);
+    formDesigner.editor.on('update', function() {  // html is updated
       const html = formDesigner.getHtml().replace(/^<body>/,'').replace(/<\/body>$/,''); 
       selectedType === 'NODE' && chartEl.updateNodeData(selectedId, {html})
     });
   });
 
+  function handleMonacoChange(e: any) { 
+    console.log(e.detail);
+  }
+
   function handleSideBarMessage(event: any) {
     const {dataMessage, fileMessage} = event.detail;
-    fileMessage && appFileDialog.show(fileMessage);
-    dataMessage && appDataDialog.show(dataMessage);
+    fileMessage && openSaveFileDialog.show(fileMessage);
+    dataMessage && dataViewerDialog.show(dataMessage);
   }
 
   function showTab(id) {
@@ -69,13 +69,13 @@
     if (action === 'init') { // when init, select the start node
       (window as any).reactflow = chartEl.getInstance();
       (window as any).reactflow.zoomOut();
-
       showTab('node-edge-data');
+
       const {nodes, edges} = chartEl.getData();
       const node = nodes.find(el => el.id === 'start');
       chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
     } else if (action === 'selected') { 
-      $currentFile.selected = node || edge;
+      $formflow.selected = node || edge;
 
       const editorValue = 
         node?.data?.props || edge?.data?.props || {id: node?.id || edge?.id};
@@ -89,9 +89,9 @@
       } else if (edge?.type === 'custom') {
       } else if (node?.type === 'custom') {
         showTab('form-designer');
-        if (!equal($currentFile.chart, chartEl?.getData())) {
-          $currentFile.modified = true;
-          $currentFile.chart = chartEl?.getData();
+        if (!equal($formflow.chart, chartEl?.getData())) {
+          $formflow.modified = true;
+          $formflow.chart = chartEl?.getData();
         }
 
         const nodes = chartEl.getData().nodes;
@@ -100,7 +100,7 @@
         // setForm(chartEl?.getData(), node, html); // set stepper, html, css
       }
     } else if (action === 'change' && type === 'chart') {
-      StepperStorage.setItem('currentFormflow.chart', chartEl.getData());
+      StepperStorage.setItem('formflow.chart', chartEl.getData());
     }
   }
 </script>
@@ -110,9 +110,8 @@
 <button class="sidebar toggle position-absolute top-0 start-0 border-0 fs-4" style="z-index: 1">☰</button>
 <h1 hidden>Form Flow Dashboard</h1> <!--for a11y-->
 
-<AppSideBar bind:this={menuEl} 
-  on:message={handleSideBarMessage}
-></AppSideBar>
+<SideBar bind:this={sidebarEl} on:message={handleSideBarMessage}>
+</SideBar>
 
 <x-resize width class="h-100" on:resize-move={() => chartEl.getInstance().fitView()}>
   <div class="position-relative" style="width: 33%">
@@ -123,12 +122,12 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#node-edge-data">
-           Properties of {selectedType.toLowerCase()} "{$currentFile?.name || 'Untitled'}" - "{selectedLabel}"
+           Properties of {selectedType.toLowerCase()} "{$formflow?.name || 'Untitled'}" - "{selectedLabel}"
         </button>
       </h2>
       <div id="node-edge-data" class="accordion-collapse collapse" data-bs-parent="#right-section">
         <div class="accordion-body">
-          <x-monaco bind:this={monacoEditor} on:monaco-change={formPropsChanged} data-language="json">
+          <x-monaco bind:this={monacoEditor} on:monaco-change={handleMonacoChange} data-language="json">
           </x-monaco>
         </div>
       </div>
@@ -148,5 +147,7 @@
   </div>
 </x-resize>
 
-<AppDataDialog bind:this={appDataDialog}></AppDataDialog> 
-<AppFileDialog bind:this={appFileDialog}></AppFileDialog>
+<DataViewerDialog bind:this={dataViewerDialog}>
+</DataViewerDialog> 
+<OpenSaveFileDialog bind:this={openSaveFileDialog}>
+</OpenSaveFileDialog>

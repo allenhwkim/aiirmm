@@ -6,13 +6,12 @@
 <script lang="typescript">
   import { createEventDispatcher } from 'svelte';
   import { StepperStorage } from 'elements-x';
-  import currentFile from './store';
-  import { CurrentFile } from './current-file';
+  import formflow, {FormFlow} from './store/';
 
   const dispatch = createEventDispatcher();
   
   function showData() {
-    const chartEl = $currentFile.chartEl;
+    const chartEl = $formflow.chartEl;
     dispatch('message', {
       dataMessage: {
         reactflowData: chartEl.getData(),
@@ -22,18 +21,18 @@
   }
 
   function newFile() {
-    if ($currentFile.modified === true) {
+    if ($formflow.modified === true) {
       dispatch('message', {fileMessage: 'The current formflow is modified, but not saved. Please save.'});
     } else {
       StepperStorage.removeItem('currentFormflow');
-      const chartEl = $currentFile.chartEl;
-      $currentFile = new CurrentFile(undefined, chartEl);
+      const chartEl = $formflow.chartEl;
+      $formflow = new FormFlow(undefined, chartEl);
       dispatch('message', {fileMessage: 'A new file is opened'});
     }
   }
 
   function openFile() {
-    if ($currentFile.modified === true && $currentFile.name !== CurrentFile.DEFAULT_NAME) {
+    if ($formflow.modified === true && $formflow.name !== 'Untitled') {
       const fileMessage = 'The current formflow is modified, but not saved. Please save.';
       dispatch('message', {fileMessage});
     } else {
@@ -42,10 +41,10 @@
   }
 
   function saveFile() {
-    if ($currentFile.name === CurrentFile.DEFAULT_NAME) {
+    if ($formflow.name === 'Untitled') {
       dispatch('message', {fileMessage: 'GET_FILE_NAME'})
     } else {
-      $currentFile.save();
+      $formflow.save();
       dispatch('message', {fileMessage: 'File is saved'});
     }
   }
