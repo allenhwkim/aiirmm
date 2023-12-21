@@ -24,7 +24,7 @@
     if ($formflow.modified === true) {
       dispatch('message', {fileMessage: 'The current formflow is modified, but not saved. Please save.'});
     } else {
-      StepperStorage.removeItem('currentFormflow');
+      StepperStorage.removeItem('formflow');
       const chartEl = $formflow.chartEl;
       $formflow = new FormFlow(undefined, chartEl);
       dispatch('message', {fileMessage: 'A new file is opened'});
