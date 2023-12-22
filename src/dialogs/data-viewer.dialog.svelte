@@ -3,9 +3,12 @@
 
   let data;
   let bootstrapDialog;
+  let dialogEl;
 
   onMount(() => {
-    bootstrapDialog= new window['bootstrap'].Modal(document.querySelector('#data-dialog'));
+    $$props.id && dialogEl.setAttribute('id', $$props.id);
+    $$props.class && dialogEl.classList.add(...$$props.class.split(/\s+/));
+    bootstrapDialog= new window['bootstrap'].Modal(dialogEl);
   });
   
   export function show(message: any) {
@@ -15,7 +18,7 @@
 </script>
 
 <!-- Data Dialog -->
-<div class="modal fade" id="data-dialog" tabindex="-1" aria-hidden="true">
+<div class="modal fade" bind:this={dialogEl} tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -23,10 +26,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="dialog-contents">
-        <b>reactflow data </b>
-        <json-viewer level="2" data={data?.reactflowData}></json-viewer>
-        <b>reactflow instance</b>
-        <json-viewer data={data?.reactflowInstance}></json-viewer>
+        <b>chart data </b>
+        <json-viewer level="2" data={data?.chartData}></json-viewer>
+        <b>chart instance</b>
+        <json-viewer data={data?.chartInstance}></json-viewer>
       </div>
     </div>
   </div>

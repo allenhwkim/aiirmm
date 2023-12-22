@@ -7,11 +7,14 @@
   let message: string;
   let fileName: string;
   let bootstrapDialog: any;
+  let dialogEl;
 
   const dispatch = createEventDispatcher();
 
   onMount(() => {
-    bootstrapDialog= new (window as any).bootstrap.Modal(document.querySelector('#file-dialog'));
+    $$props.id && dialogEl.setAttribute('id', $$props.id);
+    $$props.class && dialogEl.classList.add(...$$props.class.split(/\s+/));
+    bootstrapDialog= new (window as any).bootstrap.Modal(dialogEl);
   });
 
   export function show(param: any) {
@@ -48,7 +51,7 @@
 </style>
 
 <!-- Data Dialog -->
-<div class="modal fade" id="file-dialog" tabindex="-1" aria-hidden="true">
+<div class="modal fade" bind:this={dialogEl} tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">

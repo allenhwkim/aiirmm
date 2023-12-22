@@ -14,8 +14,8 @@
     const chartEl = $formflow.chartEl;
     dispatch('message', {
       dataMessage: {
-        reactflowData: chartEl.getData(),
-        reactflowInstance: chartEl.getInstance()
+        chartData: chartEl.getData(),
+        chartInstance: chartEl.getInstance()
       }
     });
   }
