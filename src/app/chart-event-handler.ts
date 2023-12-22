@@ -1,4 +1,3 @@
-import { StepperStorage } from 'elements-x';
 import equal from 'fast-deep-equal';
 import type { FormFlow } from 'src/store';
 
@@ -52,6 +51,6 @@ export function chartEventHandler(e: any, $formflow: FormFlow ) { // x-formflow 
       // setForm(chartEl?.getData(), node, html); // set stepper, html, css
     }
   } else if (action === 'change' && type === 'chart') {
-    StepperStorage.setItem('formflow.chart', chartEl.getData());
+    $formflow.setStorage('formflow.chart', chartEl.getData());
   }
 }

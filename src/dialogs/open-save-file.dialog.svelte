@@ -1,7 +1,6 @@
 <script lang="typescript">
   import { createEventDispatcher, onMount } from 'svelte';
   import type { Formflow as XFormflow } from 'elements-x';
-  import { StepperStorage } from 'elements-x';
   import formflow, {FormFlow} from '../store/';
 
   let message: string;
@@ -23,7 +22,7 @@
   }
 
   function getAllFiles() {
-    return StepperStorage.getItem('formflows') || [];
+    return $formflow.getStorage('formflows') || [];
   }
   
   function openFile(formFile: any) { // file dialog event handler
@@ -33,7 +32,7 @@
   }
 
   function saveFileAs() {
-    const allFormflows = StepperStorage.getItem('formflows') || []; // returns array
+    const allFormflows = $formflow.getStorage('formflows') || []; // returns array
     const index = allFormflows.findIndex( el => el.name === fileName);
     const confirmed = index === -1 ? 
       true : window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`);
