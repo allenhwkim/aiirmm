@@ -27,7 +27,7 @@
       selectedType === 'NODE' && chartEl.updateNodeData(selectedId, {html})
     });
 
-    $formflow.setChartEl(chartEl);
+    $formflow.chartEl = chartEl;
   });
 
   document.body.addEventListener('reactflow', e => chartEventHandler(e, $formflow));
@@ -44,12 +44,11 @@
     console.log(e.detail);
   });
 
-  document.body.addEventListener('message', event => { // sidebar message handler
+  let dataViewerDialog, openSaveFileDialog;
+  document.body.addEventListener('sidebar-message', event => { // sidebar message handler
     const {dataMessage, fileMessage} = event.detail;
-    fileMessage && 
-      document.querySelector('#open-save-file-dialog').show(fileMessage);
-    dataMessage && 
-      document.querySelector('#data-viewer-dialog').show(dataMessage);
+    dataMessage && dataViewerDialog.show(dataMessage);
+    fileMessage && openSaveFileDialog.show(fileMessage);
   });
 
 </script>
@@ -91,5 +90,5 @@
   </div>
 </x-resize>
 
-<DataViewerDialog id="data-viewer-dialog"></DataViewerDialog> 
-<OpenSaveFileDialog id="open-save-file-dialog"></OpenSaveFileDialog>
+<DataViewerDialog bind:this={dataViewerDialog}></DataViewerDialog> 
+<OpenSaveFileDialog bind:this={openSaveFileDialog}></OpenSaveFileDialog>

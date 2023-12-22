@@ -27,9 +27,9 @@
       </div>
       <div class="modal-body" id="dialog-contents">
         <b>chart data </b>
-        <json-viewer level="2" data={data?.chartData}></json-viewer>
+        <x-json level="2" data={data?.chartData}></x-json>
         <b>chart instance</b>
-        <json-viewer data={data?.chartInstance}></json-viewer>
+        <x-json level="1" data={data?.chartInstance}></x-json>
       </div>
     </div>
   </div>

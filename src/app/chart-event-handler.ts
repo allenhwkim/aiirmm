@@ -51,6 +51,6 @@ export function chartEventHandler(e: any, $formflow: FormFlow ) { // x-formflow 
       // setForm(chartEl?.getData(), node, html); // set stepper, html, css
     }
   } else if (action === 'change' && type === 'chart') {
-    $formflow.setStorage('formflow.chart', chartEl.getData());
+    $formflow.chart = chartEl.getData();
   }
 }
