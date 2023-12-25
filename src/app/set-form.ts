@@ -1,5 +1,4 @@
 import type { ReactFlowJsonObject, Node } from 'reactflow';
-import { DEFAULT_HTML, FormDesigner } from 'elements-x';
 
 function getSteps(chartData: ReactFlowJsonObject, selectedNode: Node): string[] {
   const steps = [selectedNode.id];
@@ -49,7 +48,6 @@ function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
 }
 
 // export function setForm(chartData: ReactFlowJsonObject, selectedNode: Node, html?: string) {
-//   html ||= DEFAULT_HTML;
 
 //   const steps = getSteps(chartData, selectedNode).slice(1, -1);
 //   const forms = getForms(chartData, steps);

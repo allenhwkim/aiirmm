@@ -1,4 +1,4 @@
-<style lang="scss">
+<style>
   li:not(:has(ul)) { cursor: pointer; }
   li:not(:has(ul)):hover { background: #EEE;}
 </style>

@@ -23,14 +23,14 @@
     const chartEl = document.querySelector('.x.formflow');
     const formDesigner = document.querySelector('.x.form-designer');
     formDesigner.editor.on('update', function() {  // html is updated
-      const html = formDesigner.getHtml().replace(/^<body>/,'').replace(/<\/body>$/,''); 
+      const html = formDesigner.html.replace(/^<body>/,'').replace(/<\/body>$/,''); 
       selectedType === 'NODE' && chartEl.updateNodeData(selectedId, {html})
     });
 
     $formflow.chartEl = chartEl;
   });
 
-  document.body.addEventListener('reactflow', e => chartEventHandler(e, $formflow));
+  document.body.addEventListener('formflow', e => chartEventHandler(e, $formflow));
   
   window.addEventListener('resize', e => {
     document.querySelector('.x.formflow').getInstance().fitView();
