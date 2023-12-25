@@ -3,7 +3,7 @@
   // import type { Formflow as XFormflow } from 'elements-x';
   // import formflow, {FormFlow} from '../store/';
 
-  let message: string;
+  let message;
   // let fileName: string;
   let bootstrapDialog: any;
   let dialogEl;

@@ -2,7 +2,6 @@ import { writable } from 'svelte/store';
 
 import type { Formflow as XFormflow } from 'elements-x';
 import { StepperStorage } from 'elements-x';
-import DEFAULT_CHART from './DEFAULT_CHART';
 import type { Node, Edge } from 'reactflow';
 
 StepperStorage.storage = (window as any).sessionStorage;
@@ -33,6 +32,7 @@ export class FormFlow {
   get chartEl() { return this._chartEl; }
   set chartEl(el: XFormflow) {
     this._chartEl = el;
+    console.log('...........>>>>>>>>>', this.chart)
     this._chartEl.setData(this.chart);
   }
 
@@ -52,7 +52,6 @@ export class FormFlow {
       this.chart = this.#getStorage('formflow.chart');
     } else {
       this.name = 'Untitled'; 
-      this.chart = DEFAULT_CHART;
     }
     chartEl && (this.chartEl = chartEl);
   }

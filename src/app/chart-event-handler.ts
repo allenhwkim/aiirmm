@@ -36,9 +36,9 @@ export function chartEventHandler(e: any, $formflow: FormFlow ) { // x-formflow 
 
     const editorValue = node?.data?.props || edge?.data?.props || {id: node?.id || edge?.id};
     monacoEditor.setValue(JSON.stringify(editorValue, null, '  '));
-    if (node?.type === 'start' || node?.type === 'end' || edge?.type === 'custom') {
+    if (['start', 'submit', 'end'].includes(node?.type) || edge?.type === 'custom') {
       showSection('#monaco-editor');
-    } else if (node?.type === 'custom') {
+    } else if (['custom', 'thankyou'].includes(node?.type)) {
       showSection('#form-designer');
       if (!equal($formflow.chart, chartEl?.getData())) {
         $formflow.modified = true;
