@@ -19,28 +19,6 @@
     bootstrapDialog.show();
   }
 
-  // function getAllFiles() {
-  //   return $formflow.getStorage('formflows') || [];
-  // }
-  
-  // function openFile(formFile: any) { // file dialog event handler
-  //   const chartEl: XFormflow = $formflow.chartEl;
-  //   $formflow = new FormFlow(formFile, chartEl);
-  //   message = `File ${$formflow.name} opened`;
-  // }
-
-  // function saveFileAs() {
-  //   const allFormflows = $formflow.getStorage('formflows') || []; // returns array
-  //   const index = allFormflows.findIndex( el => el.name === fileName);
-  //   const confirmed = index === -1 ? 
-  //     true : window.confirm(`The same file name "${fileName}" already exists. Do you want to overwrite?`);
-  //   if (confirmed) {
-  //     $formflow.name = fileName;
-  //     $formflow.save();
-  //     $formflow.modified = false;
-  //     message = `Saved file as "${fileName}"`;
-  //   }
-  // }
 </script>
 
 <style>

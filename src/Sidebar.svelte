@@ -4,53 +4,11 @@
 </style>
 
 <script lang="typescript">
-  import formflow, {FormFlow} from './store/';
-
   let thisEl;
   
   function showData() {
-    const chartEl = $formflow.chartEl;
-    thisEl.dispatchEvent(new CustomEvent('sidebar-message', {bubbles: true, detail: {
-      dataMessage: {
-        chartData: chartEl.getData(),
-        chartInstance: chartEl.getInstance()
-      }
-    }}));
+    thisEl.dispatchEvent(new CustomEvent('sidebar-message', {bubbles: true, detail: 'show-data'}));
   }
-
-  // function newFile() {
-  //   if ($formflow.modified === true) {
-  //     dispatch('message', {fileMessage: 'The current formflow is modified, but not saved. Please save.'});
-  //   } else {
-  //     $formflow.removeStorage('formflow');
-  //     const chartEl = $formflow.chartEl;
-  //     $formflow = new FormFlow(undefined, chartEl);
-  //     dispatch('message', {fileMessage: 'A new file is opened'});
-  //   }
-  // }
-
-  // function openFile() {
-  //   if ($formflow.modified === true && $formflow.name !== 'Untitled') {
-  //     const fileMessage = 'The current formflow is modified, but not saved. Please save.';
-  //     dispatch('message', {fileMessage});
-  //   } else {
-  //     dispatch('message', {fileMessage: 'LIST_ALL_FILES'});
-  //   }
-  // }
-
-  // function saveFile() {
-  //   if ($formflow.name === 'Untitled') {
-  //     dispatch('message', {fileMessage: 'GET_FILE_NAME'})
-  //   } else {
-  //     $formflow.save();
-  //     dispatch('message', {fileMessage: 'File is saved'});
-  //   }
-  // }
-
-  // function saveFileAs() {
-  //   dispatch('message', {fileMessage: 'GET_FILE_NAME'})
-  // }
-
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -59,10 +17,6 @@
     <li>
       File
       <ul>
-        <!-- <li on:click={newFile}>New</li>
-        <li on:click={openFile}>Open</li>
-        <li on:click={saveFile}>Save</li>
-        <li on:click={saveFileAs}>Save As</li> -->
       </ul>
     </li>
     <li on:click={showData}>Show data</li>

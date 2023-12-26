@@ -1,5 +1,5 @@
 import equal from 'fast-deep-equal';
-import type { FormFlow } from 'src/store';
+import { name, chart, modified, selected } from '../store/store'
 
 function showSection(selector) {
   const monacoEditorSection: any = document.querySelector('.accordion-item:has(#monaco-editor)');
@@ -18,7 +18,7 @@ function showSection(selector) {
   new bootstrap.Collapse(document.querySelector(selector));
 }
 
-export function chartEventHandler(e: any, $formflow: FormFlow ) { // x-formflow event handler
+export function chartEventHandler(e: any ) { // x-formflow event handler
   const {action, type, node, edge} = e.detail;
   const chartEl: any = document.querySelector('.x.formflow');
 
@@ -31,7 +31,7 @@ export function chartEventHandler(e: any, $formflow: FormFlow ) { // x-formflow 
     const node = nodes.find(el => el.id === 'start');
     chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
   } else if (action === 'selected') { 
-    $formflow.selected = node || edge;
+    selected.set(node || edge);
     const monacoEditor: any = document.querySelector('.x.monaco');
 
     const editorValue = node?.data?.props || edge?.data?.props || {id: node?.id || edge?.id};
@@ -40,9 +40,9 @@ export function chartEventHandler(e: any, $formflow: FormFlow ) { // x-formflow 
       showSection('#monaco-editor');
     } else if (['custom', 'thankyou'].includes(node?.type)) {
       showSection('#form-designer');
-      if (!equal($formflow.chart, chartEl?.getData())) {
-        $formflow.modified = true;
-        $formflow.chart = chartEl?.getData();
+      if (!equal(chart, chartEl?.getData())) {
+        modified.set(true);
+        chart.set(chartEl?.getData());
       }
 
       const nodes = chartEl.getData().nodes;
@@ -51,6 +51,6 @@ export function chartEventHandler(e: any, $formflow: FormFlow ) { // x-formflow 
       // setForm(chartEl?.getData(), node, html); // set stepper, html, css
     }
   } else if (action === 'change' && type === 'chart') {
-    $formflow.chart = chartEl.getData();
+    chart.set(chartEl.getData());
   }
 }
