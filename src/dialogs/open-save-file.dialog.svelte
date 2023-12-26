@@ -1,12 +1,12 @@
-<script lang="typescript">
+<script lang="ts">
   import { onMount } from 'svelte';
   // import type { Formflow as XFormflow } from 'elements-x';
   // import formflow, {FormFlow} from '../store/';
 
-  let message;
+  let message: string;
   // let fileName: string;
   let bootstrapDialog: any;
-  let dialogEl;
+  let dialogEl: any;
 
   onMount(() => {
     $$props.id && dialogEl.setAttribute('id', $$props.id);
