@@ -13,12 +13,5 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <x-sidebar bind:this={thisEl}>
-  <ul>
-    <li>
-      File
-      <ul>
-      </ul>
-    </li>
-    <li on:click={showData}>Show data</li>
-  </ul>
+  <button class="btn btn-light" on:click={showData}>Show data</button>
 </x-sidebar>

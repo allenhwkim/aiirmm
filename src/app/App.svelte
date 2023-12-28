@@ -10,7 +10,6 @@
 
   import SideBar from '../Sidebar.svelte';
   import DataViewerDialog from '../dialogs/data-viewer.dialog.svelte';
-  import OpenSaveFileDialog from '../dialogs/open-save-file.dialog.svelte';
   import { name, selected, chart } from '../store/store';
   import { chartEventHandler } from './chart-event-handler';
 
@@ -86,4 +85,3 @@
 </x-resize>
 
 <DataViewerDialog bind:this={dataViewerDialog}></DataViewerDialog> 
-<OpenSaveFileDialog bind:this={openSaveFileDialog}></OpenSaveFileDialog>

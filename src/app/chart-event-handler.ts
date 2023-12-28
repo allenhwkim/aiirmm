@@ -2,6 +2,7 @@ import equal from 'fast-deep-equal';
 import { chart, isModified, selected } from '../store/store'
 import { get } from 'svelte/store';
 import type { FormFlow as XFormflow } from 'elements-x';
+import { setForm } from './set-form';
 
 export function chartEventHandler(e: any ) { // x-formflow event handler
   const {action, type, node, edge} = e.detail;
@@ -28,10 +29,7 @@ export function chartEventHandler(e: any ) { // x-formflow event handler
         chart.set(chartEl?.getData());
       }
 
-      const nodes = chartEl.getData().nodes;
-      // const nodeIndex = nodes.findIndex(el => el.id == node.id) as number;
-      // const html = nodes[nodeIndex].data.html;
-      // setForm(chartEl?.getData(), node, html); // set stepper, html, css
+      setForm(chartEl?.getData(), node.id); // set stepper
     }
   } else if (action === 'change' && type === 'chart') {
     chart.set(chartEl.getData());

@@ -1,7 +1,8 @@
 import type { ReactFlowJsonObject, Node } from 'reactflow';
+import type { FormDesigner } from 'elements-x';
 
-function getSteps(chartData: ReactFlowJsonObject, selectedNode: Node): string[] {
-  const steps = [selectedNode.id];
+function getSteps(chartData: ReactFlowJsonObject, formId: string): string[] {
+  const steps = [formId];
   const getNodeById = (id: string) => chartData.nodes.find(node => node.id === id);
   const getOutgoingNodes = (node: Node) => {
     const outgoingEdges = chartData.edges.filter(edge => edge.source === node.id);
@@ -12,14 +13,15 @@ function getSteps(chartData: ReactFlowJsonObject, selectedNode: Node): string[] 
     return incomingEdges.map(edge => getNodeById(edge.source))
   }
 
-  let outgoingNodes = getOutgoingNodes(selectedNode);
+  const currentNode = getNodeById(formId);
+  let outgoingNodes = getOutgoingNodes(currentNode);
   while (outgoingNodes.length) {
     const node = outgoingNodes[0];
     steps.push(node.id)
     outgoingNodes = getOutgoingNodes(node);
   }
 
-  let incomingNodes = getIncomingNodes(selectedNode);
+  let incomingNodes = getIncomingNodes(currentNode);
   while (incomingNodes.length) {
     const node = incomingNodes[0];
     steps.unshift(node.id)
@@ -29,36 +31,19 @@ function getSteps(chartData: ReactFlowJsonObject, selectedNode: Node): string[] 
   return steps;
 }
 
-function getForms(chartData: ReactFlowJsonObject, steps: string[]): any {
-  const forms = {};
-  steps.forEach( (nodeId: string) => {
+export function setForm(chartData: ReactFlowJsonObject, formId: string) {
+  const steps = getSteps(chartData, formId).slice(1, -1);
+  const forms = steps.reduce((acc, nodeId) => {
     const node = chartData.nodes.find(el => el.id === nodeId)
-    forms[nodeId] = {
-      type: 
-        node.data?.label.indexOf('Review') !== -1 ? 'review' : 
-        node.data?.label.indexOf('Thankyou') !== -1 ? 'submit' : 'form',
-      title: node.data?.label,
-      html: '',
-      defaultValues: {},
-      skippable: true,
-      getErrors: null
+    acc[nodeId] = { 
+      ...{ title: node.data.label, defaultValues: {} },
+      ...node.data
     };
-  });
-  return forms;
+    return acc;
+  }, {});
+
+  const formDesigner = document.querySelector('x-formdesigner') as FormDesigner;
+  formDesigner.forms = forms; // this sets steps
+  formDesigner.setAttribute('step', formId);
 }
-
-// export function setForm(chartData: ReactFlowJsonObject, selectedNode: Node, html?: string) {
-
-//   const steps = getSteps(chartData, selectedNode).slice(1, -1);
-//   const forms = getForms(chartData, steps);
-//   const currentStepId = selectedNode.id;
-//   const formDesigner = document.querySelector('x-formdesigner') as FormDesigner;
-
-//   formDesigner.html = html;
-//   formDesigner.forms = forms;
-
-//   // formDesigner.setHtml(html);
-//   // this can be removed since it's coded in <form-stepper>
-//   // formDesigner.runCommand('set-forms-steps', {forms, steps, currentStepId})
-// }
 
