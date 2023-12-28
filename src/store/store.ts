@@ -1,8 +1,7 @@
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 
-import type { Formflow as XFormflow } from 'elements-x';
-import { StepperStorage } from 'elements-x';
-import type { Node, Edge } from 'reactflow';
+import {StepperStorage, type Formflow as XFormflow } from 'elements-x';
+import type {Node, Edge} from 'reactflow';
 
 StepperStorage.storage = (window as any).sessionStorage;
 
@@ -13,18 +12,17 @@ name.subscribe(value => {
 });
 
 const storageChart = StepperStorage.getItem('formflow.chart');
-export const chart = writable(storageChart);
+export const chart: Writable<XFormflow> = writable(storageChart);
 chart.subscribe(value => {
   StepperStorage.setItem('formflow.chart', value);
 });
 
-export const selected = writable(null);
+export const selected : Writable<Node | Edge>= writable(null);
 selected.subscribe((val) => {
-  console.log({selected: val});
   StepperStorage.setItem('formflow.selected', val);
 });
 
-export const modified = writable(false);
-modified.subscribe(value => {
-  StepperStorage.setItem('formflow.modified', value);
+export const isModified: Writable<Boolean> = writable(false);
+isModified.subscribe(value => {
+  StepperStorage.setItem('formflow.isModified', value);
 });

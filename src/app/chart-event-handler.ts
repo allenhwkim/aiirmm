@@ -1,5 +1,42 @@
 import equal from 'fast-deep-equal';
-import { name, chart, modified, selected } from '../store/store'
+import { chart, isModified, selected } from '../store/store'
+import { get } from 'svelte/store';
+import type { FormFlow as XFormflow } from 'elements-x';
+
+export function chartEventHandler(e: any ) { // x-formflow event handler
+  const {action, type, node, edge} = e.detail;
+  const chartEl: XFormflow = document.querySelector('.x.formflow');
+
+  if (action === 'init') { // when init, select the start node
+    (window as any).chart = chartEl.getInstance();
+    (window as any).chart.zoomOut();
+    showSection('#monaco-editor');
+
+    const {nodes, edges} = chartEl.getData();
+    const node = nodes.find(el => el.id === 'start');
+    chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
+  } else if (action === 'selected') { 
+    selected.set(node || edge);
+    const monacoEditor: any = document.querySelector('.x.monaco');
+    monacoEditor.setValue(JSON.stringify(get(selected).data, null, '  '))
+    if (['start', 'submit', 'end'].includes(node?.type) || edge?.type === 'custom') {
+      showSection('#monaco-editor');
+    } else if (['custom', 'thankyou'].includes(node?.type)) {
+      showSection('#form-designer');
+      if (!equal(chart, chartEl?.getData())) {
+        isModified.set(true);
+        chart.set(chartEl?.getData());
+      }
+
+      const nodes = chartEl.getData().nodes;
+      // const nodeIndex = nodes.findIndex(el => el.id == node.id) as number;
+      // const html = nodes[nodeIndex].data.html;
+      // setForm(chartEl?.getData(), node, html); // set stepper, html, css
+    }
+  } else if (action === 'change' && type === 'chart') {
+    chart.set(chartEl.getData());
+  }
+}
 
 function showSection(selector) {
   const monacoEditorSection: any = document.querySelector('.accordion-item:has(#monaco-editor)');
@@ -16,41 +53,4 @@ function showSection(selector) {
   // collapse all bootstrap accordions, then show only selected one
   document.querySelectorAll('.collapse.show').forEach(el => new bootstrap.Collapse(el));
   new bootstrap.Collapse(document.querySelector(selector));
-}
-
-export function chartEventHandler(e: any ) { // x-formflow event handler
-  const {action, type, node, edge} = e.detail;
-  const chartEl: any = document.querySelector('.x.formflow');
-
-  if (action === 'init') { // when init, select the start node
-    (window as any).chart = chartEl.getInstance();
-    (window as any).chart.zoomOut();
-    showSection('#monaco-editor');
-
-    const {nodes, edges} = chartEl.getData();
-    const node = nodes.find(el => el.id === 'start');
-    chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
-  } else if (action === 'selected') { 
-    selected.set(node || edge);
-    const monacoEditor: any = document.querySelector('.x.monaco');
-
-    const editorValue = node?.data?.props || edge?.data?.props || {id: node?.id || edge?.id};
-    monacoEditor.setValue(JSON.stringify(editorValue, null, '  '));
-    if (['start', 'submit', 'end'].includes(node?.type) || edge?.type === 'custom') {
-      showSection('#monaco-editor');
-    } else if (['custom', 'thankyou'].includes(node?.type)) {
-      showSection('#form-designer');
-      if (!equal(chart, chartEl?.getData())) {
-        modified.set(true);
-        chart.set(chartEl?.getData());
-      }
-
-      const nodes = chartEl.getData().nodes;
-      // const nodeIndex = nodes.findIndex(el => el.id == node.id) as number;
-      // const html = nodes[nodeIndex].data.html;
-      // setForm(chartEl?.getData(), node, html); // set stepper, html, css
-    }
-  } else if (action === 'change' && type === 'chart') {
-    chart.set(chartEl.getData());
-  }
 }

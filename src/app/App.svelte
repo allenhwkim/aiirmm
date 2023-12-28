@@ -14,16 +14,12 @@
   import { name, selected, chart } from '../store/store';
   import { chartEventHandler } from './chart-event-handler';
 
-  $: selectedId = $selected?.id;
-  $: selectedType = $selected?.source ? 'case' : 'form';
-  $: selectedLabel = $selected?.data?.label || $selected?.label || $selected?.id || '';
-
   onMount(() => {
     const chartEl = document.querySelector('.x.formflow') as any;
     const formDesigner = document.querySelector('.x.form-designer') as any;
     formDesigner.editor.on('update', function() {  // html is updated
       const html = formDesigner.html.replace(/^<body>/,'').replace(/<\/body>$/,''); 
-      ($selected.type === 'custom') && chartEl.updateNodeData(selectedId, {html})
+      ($selected.type === 'custom') && chartEl.updateNodeData($selected.id, {html})
     });
 
     chartEl.setData($chart);
@@ -65,7 +61,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingTwo">
         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#form-designer">
-          {selectedLabel} {selectedType}
+          {$selected?.data?.label} form
         </button>
       </h2>
       <div id="form-designer" class="accordion-collapse collapse" data-bs-parent="#right-section">
@@ -77,7 +73,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#monaco-editor">
-          {selectedLabel} properties
+          {$selected?.data?.label} properties
         </button>
       </h2>
       <div id="monaco-editor" class="accordion-collapse collapse" data-bs-parent="#right-section">
