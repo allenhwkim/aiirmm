@@ -1,0 +1,4 @@
+html, body { height: 100% }
+#monaco-editor { height: 100%; }
+#monaco-editor x-monaco { height: 100%; }
+.accordion-body { height: 100%; }

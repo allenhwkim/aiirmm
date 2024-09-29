@@ -1,0 +1,35 @@
+name: When merge to develop, build and deploy 
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build
+        run: npm run build && ls build
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Deploy to S3 bucket
+        run: |
+          aws s3 sync ./build/ s3://onehealthdevhubft/onehealthapp/ --delete --acl public-read
+          aws cloudfront create-invalidation --distribution-id E1P0MS31K9LOXS --paths "/*"

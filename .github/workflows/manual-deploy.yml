@@ -1,0 +1,68 @@
+name: Manual deployment (admin. only)
+run-name: Manual deployment to ${{github.ref}} ${{inputs.version}} to ${{inputs.env}}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        type: string
+      env:
+        description: 'Deploy to env'
+        type: choice
+        options: [dev,test, pst, ppe]
+        required: true
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}
+    steps:
+      - uses: actions-cool/check-user-permission@v2
+        with:
+          require: 'admin'
+
+      - uses: actions/checkout@v4 # checkout first setup-node second
+        with:
+          ref: ${{ inputs.version }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build
+        run: |
+          npm run build
+          ls build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Deploy to S3 bucket
+        run: |
+          echo "Deploying to ${{inputs.env}}"
+          case "${{ inputs.env }}" in
+            dev)
+              aws s3 sync ./build/ s3://onehealthdevhubft/onehealthapp/ --delete --acl public-read && \
+              aws cloudfront create-invalidation --distribution-id E1P0MS31K9LOXS --paths "/*"
+              ;;
+            test)
+              aws s3 sync ./build/ s3://hubfttest-pcie1-0/patientsummary/ --delete --acl public-read && \
+              aws cloudfront create-invalidation --distribution-id E28RRS9C99KMJH --paths "/*"
+              ;;
+            pst)
+              aws s3 sync ./build/ s3://hubft-pcie1-0-sandbox/patientsummary/ --delete --acl public-read && \
+              aws cloudfront create-invalidation --distribution-id E39LO72P9R6M43 --paths "/*"
+              ;;
+            ppe)
+              aws s3 sync ./build/ s3://hubftstag-pcie1-0/patientsummary/ --delete --acl public-read && \
+              aws cloudfront create-invalidation --distribution-id E12LM736OJKYQ9 --paths "/*"
+          esac
