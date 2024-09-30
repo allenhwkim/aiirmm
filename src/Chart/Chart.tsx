@@ -44,12 +44,12 @@ function chartEventHandler(e: any ) { // x-formflow event handler
   }
 }
 
-export default function({className}) {
+export default function() {
   document.body.addEventListener('formflow',  chartEventHandler);
 
   return (
     <>
-      <x-formflow class={className}></x-formflow>
+      <x-formflow></x-formflow>
     </>
   )
 }

@@ -7,6 +7,7 @@ import MonacoEditor from '../MonacoEditor/MonacoEditor';
 import { Accordion } from 'react-bootstrap';
 
 export default function() {
+  const [chartSize, setChartSize] = useState(3);
   const [activeAccordion, setActiveAccordion] = useState('FormDesigner');
 
   const formflow = Storage.getItem('formflow') || 'Untitled';
@@ -38,14 +39,26 @@ export default function() {
 
   }, []);
 
+  function bigger(w) { 
+    setChartSize(w === 'chart' ? 9 : 3);
+    const chartEl = document.querySelector('x-formflow') as any;
+    setTimeout(() => chartEl.getInstance().fitView(), 100)
+  }
+
   return (<>
 
     <div className="container">
       <SideBar></SideBar>
 
       <div className="row">
-        <Chart className="col vh-100" />
-        <Accordion className="col-9" activeKey={activeAccordion}>
+        <div className={'vh-100 position-relative col-' + chartSize}>
+          <Chart />
+          <div className="position-absolute top-0 end-0 transition-middle">
+            { chartSize === 3 && <button className="btn btn-light" onClick={() => bigger('chart')}>+</button> }
+            { chartSize === 9 && <button className="btn btn-light" onClick={() => bigger('else')}>-</button> }
+          </div>
+        </div>
+        <Accordion className={'col-' + (11 - chartSize)} activeKey={activeAccordion}>
           <Accordion.Item eventKey="Properties">
             <Accordion.Header onClick={() => setActiveAccordion('Properties')}>
               {selected?.data?.label} properties

@@ -1,7 +1,7 @@
 This application adopts event-driven architecture.
 The following events are handled internally
 
-Custom event from custom elements
+Custom event from elements-x, collection of custom elements
   * formflow : 
     - fired from `<x-formflow>` custom element
     - Indicates a chart is initialized, a node is selected, or change occurred
