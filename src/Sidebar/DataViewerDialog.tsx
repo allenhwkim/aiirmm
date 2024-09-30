@@ -15,11 +15,11 @@ export default function(props: Props) {
 
   useEffect(() => {
     if (props.show) {
+      setShow(props.show);
       setTimeout(() => {
         (chartDataRef.current as any).data = props.data.chartData;
         (chartInstanceRef.current as any).data = props.data.chartInstance;
       })
-      setShow(props.show);
     }
   }, [props]);
 
