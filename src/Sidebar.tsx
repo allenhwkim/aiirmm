@@ -1,11 +1,3 @@
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'x-sidebar': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
-}
-
 export default function() {
 
   function showData() {

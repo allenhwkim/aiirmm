@@ -5,36 +5,42 @@ import { setForm } from './set-form';
 
 export function chartEventHandler(e: any ) { // x-formflow event handler
   const formflow = Storage.getItem('formflow') || 'Untitled';
-  const {isModified, selected, chart} = formflow;
+  const {chart} = formflow;
 
-  const {action, type, node, edge} = e.detail;
-  const chartEl: XFormflow = document.querySelector('.x.formflow');
-
-  if (action === 'init') { // when init, select the start node
-    (window as any).chart = chartEl.getInstance();
+  console.log(e.detail);
+  if (e.detail.action === 'init') { // when init, select the start node
+    const {event} = e.detail;
+    (window as any).chart = event;
     (window as any).chart.zoomOut();
     showSection('#monaco-editor');
 
+    const chartEl: XFormflow = document.querySelector('x-formflow');
     const {nodes, edges} = chartEl.getData();
     const node = nodes.find(el => el.id === 'start');
-    chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
-  } else if (action === 'selected') { 
-    selected.set(node || edge);
-    const monacoEditor: any = document.querySelector('.x.monaco');
+    node && chartEl.fireEvent({action: 'selected', type: 'node', node, nodes, edges})
+  } else if (e.detail.action === 'selected') { 
+    const {type, node, edge} = e.detail;
+    console.log('selected....', {type, node, edge});
+    const selected = node || edge;
+    Storage.setItem('formflow', 'selected', selected);
+
+    const monacoEditor: any = document.querySelector('x-monaco');
     monacoEditor.setValue(JSON.stringify(selected.data, null, '  '))
     if (['start', 'submit', 'end'].includes(node?.type) || edge?.type === 'custom') {
       showSection('#monaco-editor');
     } else if (['custom', 'thankyou'].includes(node?.type)) {
       showSection('#form-designer');
+      const chartEl: XFormflow = document.querySelector('x-formflow');
       if (!equal(chart, chartEl?.getData())) {
-        isModified.set(true);
-        chart.set(chartEl?.getData());
+        Storage.setItem('formflow', 'setModified', true);
+        Storage.setItem('formflow', 'chart', chartEl?.getData());
       }
 
       setForm(chartEl?.getData(), node.id); // set stepper
     }
-  } else if (action === 'change' && type === 'chart') {
-    chart.set(chartEl.getData());
+  } else if (e.detail.action === 'change' && e.detail.type === 'chart') {
+    const chartEl: XFormflow = document.querySelector('x-formflow');
+    Storage.setItem('formflow', 'chart', chartEl.getData());
   }
 }
 
