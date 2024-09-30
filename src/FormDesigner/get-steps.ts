@@ -1,7 +1,9 @@
 import type { ReactFlowJsonObject, Node } from 'reactflow';
-import type { FormDesigner } from 'elements-x';
 
-function getSteps(chartData: ReactFlowJsonObject, formId: string): string[] {
+/**
+ * Returns form steps related to this step
+ */
+export function getSteps(chartData: ReactFlowJsonObject, formId: string): string[] {
   const steps = [formId];
   const getNodeById = (id: string) => chartData.nodes.find(node => node.id === id);
   const getOutgoingNodes = (node: Node) => {
@@ -30,20 +32,3 @@ function getSteps(chartData: ReactFlowJsonObject, formId: string): string[] {
 
   return steps;
 }
-
-export function setForm(chartData: ReactFlowJsonObject, formId: string) {
-  const steps = getSteps(chartData, formId).slice(1, -1);
-  const forms = steps.reduce((acc, nodeId) => {
-    const node = chartData.nodes.find(el => el.id === nodeId) as Node
-    acc[nodeId] = { 
-      ...{ title: node.data.label, defaultValues: {} },
-      ...node.data
-    };
-    return acc;
-  }, {});
-
-  const formDesigner = document.querySelector('x-formdesigner') as FormDesigner;
-  formDesigner.forms = forms; // this sets steps
-  formDesigner.setAttribute('step', formId);
-}
-
