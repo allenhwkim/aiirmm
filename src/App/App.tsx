@@ -7,7 +7,7 @@ import MonacoEditor from '../MonacoEditor/MonacoEditor';
 import { Accordion } from 'react-bootstrap';
 
 export default function() {
-  const [chartSize, setChartSize] = useState(3);
+  const [chartSize, setChartSize] = useState(25);
   const [activeAccordion, setActiveAccordion] = useState('FormDesigner');
 
   const formflow = Storage.getItem('formflow') || 'Untitled';
@@ -25,10 +25,13 @@ export default function() {
     document.body.addEventListener('formflow', (e: any) => {
       const {action, node} = e.detail;
       const nodeType = node?.type;
-      const designRequired = action === 'selected' && ['custom', 'thankyou'].includes(nodeType);
-      const activeSection = designRequired ? 'FormDesigner' : 'Properties';
-      setActiveAccordion(activeSection);
+      if (nodeType) {
+        const designRequired = action === 'selected' && ['custom', 'thankyou'].includes(nodeType);
+        const activeSection = designRequired ? 'FormDesigner' : 'Properties';
+        setActiveAccordion(activeSection);
+      }
     });
+
     window.addEventListener('resize', _e => {
       (document.querySelector('x-formflow') as any).getInstance().fitView();
     })
@@ -39,26 +42,27 @@ export default function() {
 
   }, []);
 
-  function bigger(w) { 
-    setChartSize(w === 'chart' ? 9 : 3);
+  function toggleChartSize() { 
+    const chartSizes = [25, 75];
+    const ndx = chartSizes.indexOf(chartSize);
+    setChartSize( chartSizes[ (ndx + 1) % chartSizes.length] )
     const chartEl = document.querySelector('x-formflow') as any;
     setTimeout(() => chartEl.getInstance().fitView(), 100)
   }
 
-  return (<>
-
-    <div className="container">
+  return (
+    <div className="container mw-100">
       <SideBar></SideBar>
+      <button onClick={toggleChartSize}>Toggle chart size</button>
 
-      <div className="row">
-        <div className={'vh-100 position-relative col-' + chartSize}>
-          <Chart />
-          <div className="position-absolute top-0 end-0 transition-middle">
-            { chartSize === 3 && <button className="btn btn-light" onClick={() => bigger('chart')}>+</button> }
-            { chartSize === 9 && <button className="btn btn-light" onClick={() => bigger('else')}>-</button> }
-          </div>
-        </div>
-        <Accordion className={'col-' + (11 - chartSize)} activeKey={activeAccordion}>
+      <div className="d-flex">
+        <Chart id="chart" 
+          className='vh-100 position-relative' 
+          style={{width: chartSize+'%', display: chartSize ? 'block' : 'none'}}>
+        </Chart>
+        <Accordion 
+          activeKey={activeAccordion}
+          style={{width: (100-chartSize)+'%', display: (100-chartSize) ? 'block' : 'none'}}>
           <Accordion.Item eventKey="Properties">
             <Accordion.Header onClick={() => setActiveAccordion('Properties')}>
               {selected?.data?.label} properties
@@ -79,5 +83,5 @@ export default function() {
         </Accordion>
       </div>
     </div>
-  </>)
+  )
 }

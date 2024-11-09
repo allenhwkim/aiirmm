@@ -2,6 +2,7 @@ import equal from 'fast-deep-equal';
 import type { FormFlow as XFormflow } from 'elements-x';
 import { Storage } from '../stroage';
 import { fireEvent } from '../util';
+import { HTMLAttributes } from 'react';
 
 /**
  * custom element <x-formflow> fires these event
@@ -44,12 +45,12 @@ function chartEventHandler(e: any ) { // x-formflow event handler
   }
 }
 
-export default function() {
+export default function(props: HTMLAttributes<T>) {
   document.body.addEventListener('formflow',  chartEventHandler);
 
   return (
-    <>
+    <div {...props}>
       <x-formflow></x-formflow>
-    </>
+    </div>
   )
 }

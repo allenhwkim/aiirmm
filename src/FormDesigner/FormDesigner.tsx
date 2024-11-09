@@ -1,5 +1,4 @@
 import { ReactFlowJsonObject, Node } from "reactflow";
-import type { FormDesigner } from "elements-x";
 import { getSteps } from "./get-steps";
 
 function eventHandler(e: any) {
@@ -7,18 +6,12 @@ function eventHandler(e: any) {
   const chartData : ReactFlowJsonObject = e.detail.chartData;
   const selectedNode = e.detail.selectedNode;
   const steps = getSteps(chartData, selectedNode).slice(1, -1);
-  const forms = steps.reduce((acc, nodeId) => {
-    const node = chartData.nodes.find(el => el.id === nodeId) as Node;
-    acc[nodeId] = { 
-      ...{ title: node.data.label, defaultValues: {} },
-      ...node.data
-    };
-    return acc;
-  }, {});
+  console.log({steps, selectedNode});
 
-  const formDesigner = document.querySelector('x-formdesigner') as FormDesigner;
-  formDesigner.forms = forms; // this sets steps
-  formDesigner.setAttribute('step', selectedNode);
+  const designerEl = document.querySelector('x-formdesigner') as any;
+  const stepperEl = designerEl.editor.Canvas.getBody().querySelector('x-stepper');
+  stepperEl.setAttribute('steps', steps.join(','));
+  stepperEl.setAttribute('active', selectedNode);
 }
 
 export default function() {
