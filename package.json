@@ -1,5 +1,5 @@
 {
-  "name": "one-health",
+  "name": "aiirmm",
   "version": "0.1.0",
   "private": true,
   "engineStrict": true,
@@ -9,7 +9,9 @@
   "scripts": {
     "start:local": "export OAG_URL=http://localhost:3100 SEARCH_URL=http://localhost:3200; npx vite --open",
     "start": "vite --open --mode=dev",
-    "build": "vite build --mode=dev"
+    "build": "vite build --mode=dev",
+    "prepare": "husky",
+    "lint": "eslint --fix"
   },
   "browserslist": [
     "last 2 chrome version",
