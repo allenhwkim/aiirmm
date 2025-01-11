@@ -1,5 +1,5 @@
-import { ReactFlowJsonObject, Node } from "reactflow";
-import { getSteps } from "./get-steps";
+import { ReactFlowJsonObject } from 'reactflow';
+import { getSteps } from './get-steps';
 
 function eventHandler(e: any) {
   console.log('designer event', e.detail);

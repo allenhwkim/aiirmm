@@ -45,7 +45,7 @@ function chartEventHandler(e: any ) { // x-formflow event handler
   }
 }
 
-export default function(props: HTMLAttributes<T>) {
+export default function(props: HTMLAttributes<any>) {
   document.body.addEventListener('formflow',  chartEventHandler);
 
   return (

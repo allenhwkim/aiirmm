@@ -7,6 +7,7 @@ import './style.css';
 import App from './App/App.tsx';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       [name: string]: React.DetailedHTMLProps<any, HTMLElement>;
