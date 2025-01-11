@@ -43,7 +43,7 @@ export default function() {
   }, []);
 
   function toggleChartSize() { 
-    const chartSizes = [25, 75];
+    const chartSizes = [0, 25, 50, 75, 100];
     const ndx = chartSizes.indexOf(chartSize);
     setChartSize( chartSizes[ (ndx + 1) % chartSizes.length] )
     const chartEl = document.querySelector('x-formflow') as any;
