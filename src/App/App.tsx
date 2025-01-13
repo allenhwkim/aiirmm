@@ -5,7 +5,7 @@ import Chart from '../Chart/Chart';
 import FormDesigner from '../FormDesigner/FormDesigner';
 import MonacoEditor from '../MonacoEditor/MonacoEditor';
 import { Accordion } from 'react-bootstrap';
-import { Panel, PanelGroup, PanelResizeHandle, } from "react-resizable-panels";
+import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
 import { debounce } from 'lodash';
 
 export default function() {
@@ -37,9 +37,9 @@ export default function() {
   }, []);
 
   const resetChart = debounce((_size) => {
-      const chartEl = document.querySelector('x-formflow') as any;
-      chartEl.getInstance().fitView();
-    }, 300);
+    const chartEl = document.querySelector('x-formflow') as any;
+    chartEl.getInstance().fitView();
+  }, 300);
 
   return (
     <div className="container mw-100">
@@ -47,7 +47,7 @@ export default function() {
 
       <PanelGroup direction="horizontal">
         <Panel defaultSize={30} minSize={20} onResize={resetChart}>
-          <Chart id="chart" className='vh-100 position-relative' />
+          <Chart id="chart" className='vh-100 position-relative' /> {/* chart on the left */}
         </Panel>
         <PanelResizeHandle style={{width: '4px', background: '#CCC'}} />
         <Panel defaultSize={70} minSize={30}>
@@ -57,7 +57,7 @@ export default function() {
                 {selected?.data?.label} properties
               </Accordion.Header>
               <Accordion.Body>
-                <MonacoEditor language="json" value="" />
+                <MonacoEditor language="json" value="" /> {/* property editor on the right */}
               </Accordion.Body>
             </Accordion.Item>
 
@@ -66,7 +66,7 @@ export default function() {
                 {selected?.data?.label} form
               </Accordion.Header>
               <Accordion.Body>
-                <FormDesigner />
+                <FormDesigner /> {/* form designer on the right */}
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
