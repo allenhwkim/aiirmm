@@ -5,9 +5,10 @@ import Chart from '../Chart/Chart';
 import FormDesigner from '../FormDesigner/FormDesigner';
 import MonacoEditor from '../MonacoEditor/MonacoEditor';
 import { Accordion } from 'react-bootstrap';
+import { Panel, PanelGroup, PanelResizeHandle, } from "react-resizable-panels";
+import { debounce } from 'lodash';
 
 export default function() {
-  const [chartSize, setChartSize] = useState(25);
   const [activeAccordion, setActiveAccordion] = useState('FormDesigner');
 
   const formflow = Storage.getItem('formflow') || 'Untitled';
@@ -32,56 +33,45 @@ export default function() {
       }
     });
 
-    window.addEventListener('resize', _e => {
-      (document.querySelector('x-formflow') as any).getInstance().fitView();
-    })
-
-    document.body.addEventListener('resize-move', _e => { // x-resize event handler
-      (document.querySelector('x-formflow') as any).getInstance().fitView();
-    })
-
+    window.addEventListener('resize', resetChart);
   }, []);
 
-  function toggleChartSize() { 
-    const chartSizes = [0, 25, 50, 75, 100];
-    const ndx = chartSizes.indexOf(chartSize);
-    setChartSize( chartSizes[ (ndx + 1) % chartSizes.length] )
-    const chartEl = document.querySelector('x-formflow') as any;
-    setTimeout(() => chartEl.getInstance().fitView(), 100)
-  }
+  const resetChart = debounce((_size) => {
+      const chartEl = document.querySelector('x-formflow') as any;
+      chartEl.getInstance().fitView();
+    }, 300);
 
   return (
     <div className="container mw-100">
       <SideBar></SideBar>
-      <button onClick={toggleChartSize}>Toggle chart size</button>
 
-      <div className="d-flex">
-        <Chart id="chart" 
-          className='vh-100 position-relative' 
-          style={{width: chartSize+'%', display: chartSize ? 'block' : 'none'}}>
-        </Chart>
-        <Accordion 
-          activeKey={activeAccordion}
-          style={{width: (100-chartSize)+'%', display: (100-chartSize) ? 'block' : 'none'}}>
-          <Accordion.Item eventKey="Properties">
-            <Accordion.Header onClick={() => setActiveAccordion('Properties')}>
-              {selected?.data?.label} properties
-            </Accordion.Header>
-            <Accordion.Body>
-              <MonacoEditor language="json" value="" />
-            </Accordion.Body>
-          </Accordion.Item>
+      <PanelGroup direction="horizontal">
+        <Panel defaultSize={30} minSize={20} onResize={resetChart}>
+          <Chart id="chart" className='vh-100 position-relative' />
+        </Panel>
+        <PanelResizeHandle style={{width: '4px', background: '#CCC'}} />
+        <Panel defaultSize={70} minSize={30}>
+          <Accordion className="w-100" activeKey={activeAccordion}>
+            <Accordion.Item eventKey="Properties">
+              <Accordion.Header onClick={() => setActiveAccordion('Properties')}>
+                {selected?.data?.label} properties
+              </Accordion.Header>
+              <Accordion.Body>
+                <MonacoEditor language="json" value="" />
+              </Accordion.Body>
+            </Accordion.Item>
 
-          <Accordion.Item eventKey="FormDesigner">
-            <Accordion.Header onClick={() => setActiveAccordion('FormDesigner')}>
-              {selected?.data?.label} form
-            </Accordion.Header>
-            <Accordion.Body>
-              <FormDesigner />
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-      </div>
+            <Accordion.Item eventKey="FormDesigner">
+              <Accordion.Header onClick={() => setActiveAccordion('FormDesigner')}>
+                {selected?.data?.label} form
+              </Accordion.Header>
+              <Accordion.Body>
+                <FormDesigner />
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        </Panel>
+      </PanelGroup>
     </div>
   )
 }
