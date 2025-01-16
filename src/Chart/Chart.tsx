@@ -20,7 +20,6 @@ function chartEventHandler(e: any ) { // x-formflow event handler
   const chartModified = !equal(storageChart, currentChart);
   const designRequired = ['custom', 'thankyou'].includes(node?.type);
 
-  console.log('chartEventHandler.....', e.detail);
   if (action === 'init') { // when init, select the start node
     e.detail.event.zoomOut(); // e.detail is chart instance
     const node = nodes.find(el => el.id === 'start');
@@ -31,7 +30,6 @@ function chartEventHandler(e: any ) { // x-formflow event handler
   } 
   else if (action === 'selected') { 
     const selected = node || edge;
-    console.log({chartModified, designRequired})
     if (chartModified) {
       Storage.setItem('formflow', 'setModified', true);
       Storage.setItem('formflow', 'chart', currentChart);

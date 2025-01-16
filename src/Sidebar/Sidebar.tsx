@@ -1,5 +1,4 @@
 import {useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import DataViewerDialog from './DataViewerDialog';
 
@@ -16,14 +15,14 @@ export default function() {
 
   return (
     <>
-      <Button variant="light" onClick={() => setShow(true)}>☰</Button>
+      <button className="btn btn-light position-absolute z-1" onClick={() => setShow(true)}>☰</button>
 
       <Offcanvas show={show} onHide={() => setShow(false)}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Sidebar</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Button variant="light" onClick={showData}>Show data</Button>
+          <button className="btn btn-light" onClick={showData}>Show data</button>
         </Offcanvas.Body>
       </Offcanvas>
       

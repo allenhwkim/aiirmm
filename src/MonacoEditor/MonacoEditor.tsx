@@ -6,7 +6,7 @@ export default function({value='', theme='vs-dark', language='javascript', requi
   });
 
   document.body.addEventListener('monaco-change', (e:any) => { // monaco editor change handler
-    console.log(e.detail);
+    // console.log(e.detail);
   });
 
   return (<>

@@ -7,7 +7,6 @@ export const isValidUrl = (url: string) => {
 };
 
 export function fireEvent(eventName, detail) {
-  console.log('fireEvent', {eventName, detail})
   document.body.dispatchEvent(
     new CustomEvent(eventName, {bubbles: true, detail})
   );
