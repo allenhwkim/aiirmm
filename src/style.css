@@ -1,2 +1,25 @@
-html, body { height: 100% }
 x-monaco { height: 100%; }
+.cursor-pointer {cursor: pointer;}
+.draggable-console {
+  z-index: 4;
+  position: absolute;
+  background: #FFF;
+  border: 1px solid #ccc; 
+  font-size: .75rem;
+}
+.draggable-console .title {
+  user-select: none;
+}
+.draggable-console :not(.title)  /* .console */ {
+  height: 200px;
+  width: 400px;
+  display: block;
+  outline: none;
+  resize:both;
+  overflow: auto;
+  margin: 0;
+  white-space: pre-wrap; 
+}
+.draggable-console.collapsed :not(.title) /* .console */ { 
+  display: none;
+}

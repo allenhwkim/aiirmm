@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'elements-x';
 import './style.css';
-import './style.css';
 import App from './App/App.tsx';
 
 declare global {
