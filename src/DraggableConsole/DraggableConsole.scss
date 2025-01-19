@@ -1,0 +1,28 @@
+.draggable-console {
+  z-index: 4;
+  position: absolute;
+  background: #FFF;
+  border: 1px solid #ccc; 
+  font-size: .75rem;
+
+  &.collapsed {
+   :not(.title) /* .console */ { 
+    display: none;
+   }
+  }
+
+  .title {
+    user-select: none;
+  }
+
+  :not(.title)  /* .console */ {
+    height: 200px;
+    width: 400px;
+    display: block;
+    outline: none;
+    resize:both;
+    overflow: auto;
+    margin: 0;
+    white-space: pre-wrap; 
+  }
+}

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
+import { JsonEditor } from 'json-edit-react'
 import { debounce } from 'lodash';
-import ReactModal from 'react-modal';
-import JsonView from '@uiw/react-json-view';
-import { Storage } from '../stroage';
 import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
-import eventHandler from './event-handler';
+import { Storage } from '../stroage';
 import { fireEvent } from '../util';
-import DraggableConsole from './DraggableConsole';
+import DraggableConsole from '../DraggableConsole/DraggableConsole';
+import DialogModal from '../Modal/DialogModal';
+import eventHandler from './event-handler';
 
 const resetChart = debounce((_size) => {
   const chartEl = document.querySelector('x-formflow') as any;
@@ -59,11 +59,23 @@ export default function() {
         </PanelGroup>
       </Panel>
 
-      <ReactModal ariaHideApp={false} 
+      <DialogModal 
         isOpen={showModal} 
-        onRequestClose={() => setShowModal(false)}>
-        <JsonView value={data} collapsed={2}></JsonView>
-      </ReactModal>{/* show chart data */}
+        hasCloseBtn={true} 
+        onClose={() => setShowModal(false)}>
+        <JsonEditor 
+          data={ data as any } 
+          collapse={1} 
+          maxWidth={'100%'}
+          enableClipboard={false}
+          collapseAnimationTime={100}
+          restrictAdd={true}
+          restrictEdit={true}
+          restrictDelete={true}
+          rootFontSize={'12px'}
+        />
+      </DialogModal>
+
 
       <DraggableConsole>
         <pre id="console" className="console"></pre>
