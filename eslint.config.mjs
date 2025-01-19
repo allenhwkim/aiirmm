@@ -10,6 +10,7 @@ export default tseslint.config(
       'indent': ['error', 2],
       'linebreak-style': 1,
       'max-lines': ['error', 200],
+      'no-trailing-spaces': 'error',
       'quotes': ['error', 'single'],
       '@typescript-eslint/no-explicit-any': 0,
       '@typescript-eslint/no-unused-expressions': 0,

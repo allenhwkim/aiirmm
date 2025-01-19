@@ -14,7 +14,7 @@ export default function DialogModal({isOpen, hasCloseBtn, onClose, children}: Mo
   useEffect(() => {
     const modalEl = modalRef.current;
     if (!modalEl) return;
-  
+
     isOpen ? modalEl.showModal() : modalEl.close();
   }, [isOpen]);
 
@@ -24,11 +24,15 @@ export default function DialogModal({isOpen, hasCloseBtn, onClose, children}: Mo
   };
 
   return (
-    <dialog className="dialog-modal" ref={modalRef} 
+    <dialog className="dialog-modal shadow-sm" ref={modalRef}
       onClick={ e => e.target === modalRef.current && closeModal()}
       onKeyDown={e => (e.key === 'Escape') && closeModal()}>
-      {hasCloseBtn && 
-        <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
+      {hasCloseBtn &&
+        <div
+          className="btn-close"
+          aria-label="Close"
+          onClick={closeModal}>
+        </div>
       }
       {children}
     </dialog>

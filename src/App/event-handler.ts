@@ -37,7 +37,7 @@ export default function eventHandler() {
     }
     case 'selected': {
       nodeSelected(node || edge);
-      (['custom', 'thankyou'].includes(node?.type)) && 
+      (['custom', 'thankyou'].includes(node?.type)) &&
             fireEvent('form-designer', {type: 'init', chartData, selectedNode: node.id});
       monacoEditor.setValue(JSON.stringify((node || edge).data, null, '  '))
       break;

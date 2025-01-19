@@ -5,7 +5,7 @@ import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
 import { Storage } from '../stroage';
 import { fireEvent } from '../util';
 import DraggableConsole from '../DraggableConsole/DraggableConsole';
-import DialogModal from '../Modal/DialogModal';
+import DialogModal from '../DialogModal/DialogModal';
 import eventHandler from './event-handler';
 
 const resetChart = debounce((_size) => {
@@ -25,7 +25,7 @@ export default function() {
     chartEl?.setData(chart);
 
     const formDesigner = document.querySelector('form-designer') as any;
-    formDesigner?.editor.on('update', () => { 
+    formDesigner?.editor.on('update', () => {
       fireEvent('form-designer', {type: 'update', id: selected.id, html: formDesigner.html})
     });
     eventHandler();
@@ -59,13 +59,13 @@ export default function() {
         </PanelGroup>
       </Panel>
 
-      <DialogModal 
-        isOpen={showModal} 
-        hasCloseBtn={true} 
+      <DialogModal
+        isOpen={showModal}
+        hasCloseBtn={true}
         onClose={() => setShowModal(false)}>
-        <JsonEditor 
-          data={ data as any } 
-          collapse={1} 
+        <JsonEditor
+          data={ data as any }
+          collapse={1}
           maxWidth={'100%'}
           enableClipboard={false}
           collapseAnimationTime={100}

@@ -6,16 +6,31 @@
   font-size: .75rem;
 
   &.collapsed {
-   :not(.title) /* .console */ { 
+   > :not(.title) /* .console */ { 
     display: none;
    }
   }
 
   .title {
+    display: flex;
     user-select: none;
+    background-color: var(--bs-secondary, #CCC);
+    cursor: grab;
+    color: #FFF;
+    padding: 2px 4px;
+    .icons {
+      text-align: right;
+      flex: 1;
+      padding-left: 4px;
+      > * {
+        cursor: pointer;
+        fill: #FFF;
+        width: 10px;
+      }
+    }
   }
 
-  :not(.title)  /* .console */ {
+  > :not(.title)  /* .console */ {
     height: 200px;
     width: 400px;
     display: block;

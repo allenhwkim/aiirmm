@@ -25,8 +25,8 @@ export default defineConfig(({mode}) => {
       'process.env': process.env
     },
     plugins: [
-      react(), 
-      svgr(), 
+      react(),
+      svgr(),
       basicSsl(),
       htmlTransformPlugin(mode),
       viteTsconfigPaths()

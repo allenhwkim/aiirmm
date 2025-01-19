@@ -1,0 +1,29 @@
+.dialog-modal {
+  border: 0;
+  border-radius: 0.5rem;
+  width: 50%;
+  height: 75%;
+  padding: 0;
+  overflow: auto;
+  background-color: #f6f6f6;
+
+  &::backdrop {
+    background: hsl(0 0% 0% / 50%);
+  }
+
+  .btn-close {
+    position: sticky;
+    float: right;
+    color: var(--bs-secondary);
+    top: 4px;
+    right: 8px;
+    z-index: 1;
+    font-size: .75rem;
+    cursor: pointer;
+  }
+
+  > :not(.btn-close) {
+    height: 100%;
+  }
+}
+

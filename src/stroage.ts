@@ -1,7 +1,7 @@
 /**
  * window.sessionStorage alternative by proving
  *   set and get object as values instead of string
- * 
+ *
  * Storage.getItem('foo', 'bar');
  * Storage.getItem('foo');
  * Storage.removeItem('foo', 'bar');
