@@ -1,17 +1,8 @@
 import type { ReactFlowJsonObject, Node } from 'reactflow';
 
-export const isValidUrl = (url: string) => {
-  try {
-    return new URL(url);
-  } catch(err) {
-    return false;
-  }
-};
-
-export function fireEvent(eventName, detail) {
-  document.body.dispatchEvent(
-    new CustomEvent(eventName, {bubbles: true, detail})
-  );
+export function console(eventName, data) {
+  document.querySelector('#console')?.
+    insertAdjacentHTML('beforeend', `${eventName} ${JSON.stringify(data)}\n`)
 }
 
 // Returns form steps related to this step

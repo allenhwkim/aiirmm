@@ -7,7 +7,14 @@ export default tseslint.config(
   {
     rules: {
       'react/prop-types': 0,
-      'indent': ['error', 2],
+      'indent': [
+        'error',
+        2, // 2-space indentation
+        {
+          SwitchCase: 1,
+          flatTernaryExpressions: true
+        }
+      ],
       'linebreak-style': 1,
       'max-lines': ['error', 200],
       'no-trailing-spaces': 'error',

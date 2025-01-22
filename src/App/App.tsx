@@ -2,32 +2,24 @@ import { useEffect, useState } from 'react';
 import { JsonEditor } from 'json-edit-react'
 import { debounce } from 'lodash';
 import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
-import { Storage } from '../stroage';
-import { fireEvent } from '../util';
 import DraggableConsole from '../DraggableConsole/DraggableConsole';
 import DialogModal from '../DialogModal/DialogModal';
 import eventHandler from './event-handler';
 
-const resetChart = debounce((_size) => {
+const fitView = debounce((_size) => {
   const chartEl = document.querySelector('x-formflow') as any;
   chartEl.getInstance().fitView();
 }, 300);
 
-window.addEventListener('resize', resetChart);
+window.addEventListener('resize', fitView);
 
 export default function() {
-  const {selected, chart} = Storage.getItem('formflow') || {};
   const [showModal, setShowModal] = useState(false);
   const [data, setChartData] = useState();
 
   useEffect(() => {
     const chartEl = document.querySelector('x-formflow') as any;
-    chartEl?.setData(chart);
-
-    const formDesigner = document.querySelector('form-designer') as any;
-    formDesigner?.editor.on('update', () => {
-      fireEvent('form-designer', {type: 'update', id: selected.id, html: formDesigner.html})
-    });
+    chartEl?.setData();
     eventHandler();
   }, []);
 
@@ -41,7 +33,7 @@ export default function() {
   return (
     <PanelGroup direction="horizontal" className="container mw-100">
       <Panel className="vh-100 position-relative"
-        onResize={resetChart} defaultSize={30} minSize={20}>
+        onResize={fitView} defaultSize={30} minSize={20}>
         <x-formflow></x-formflow>
       </Panel>
       <PanelResizeHandle style={{width: '4px', background: '#CCC'}} />
