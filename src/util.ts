@@ -1,5 +1,13 @@
 import type { ReactFlowJsonObject, Node } from 'reactflow';
 
+export function isNode(node) {
+  return !!node.position;
+}
+
+export function isEdge(edge) {
+  return !!edge.source || !!edge.target;
+}
+
 export function console(eventName, data) {
   document.querySelector('#console')?.
     insertAdjacentHTML('beforeend', `${eventName} ${JSON.stringify(data)}\n`)

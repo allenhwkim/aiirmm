@@ -1,8 +1,7 @@
 
 // import equal from 'fast-deep-equal';
 import type { FormFlow as XFormflow } from 'elements-x';
-import { Storage } from '../stroage';
-import { getSteps, console } from '../util';
+import { getSteps, console as konsole, isNode, isEdge } from '../util';
 import { Node, Edge } from 'reactflow';
 
 export default function eventHandler() {
@@ -13,20 +12,27 @@ export default function eventHandler() {
   const monacoEl: any = document.querySelector('x-monaco');
 
   designerEl.editor.on('update', () => {
-    console('form-designer',  'update');
+    konsole('form-designer',  'update');
     const html = designerEl.html.replace(/<\/?body>/g,'');
+
     chartEl?.updateNodeData(SELECTED.id, {html});
   });
 
   monacoEl.addEventListener('monaco-change', event => {
-    console('monaco-change', event.detail);
+    const jsonCode = event.detail;
+    konsole('monaco-change', jsonCode);
+    const data = JSON.parse(jsonCode);
+    isNode(SELECTED) && chartEl?.updateNodeData(SELECTED.id, {data});
+    isEdge(SELECTED) && chartEl?.updateEdgeData(SELECTED.id, {data});
   })
 
-  // event from <x-formflow>
+  // event from <x-formflow>. functions available: 
+  //  getData(), await getImage(), getInstance(), fireEvent(detail)
+  //  updateNodeData(id, data), updateEdgeData(id, data) 
   chartEl.addEventListener('formflow' as any, (event: CustomEvent) => {
     const chartData = chartEl.getData();
     const {action, type, node, edge} = event.detail;
-    console('formflow', {action, type})
+    konsole('formflow', {action, type})
 
     switch(action) {
 
@@ -43,14 +49,16 @@ export default function eventHandler() {
 
       case 'selected': {
         SELECTED = node || edge;
-        if (['custom', 'thankyou'].includes(node?.type)) {
+console.log({SELECTED})
+        if (isNode(SELECTED) && ['custom', 'thankyou'].includes(node?.type)) {
           const chartData = chartEl?.getData();
           const steps = getSteps(chartData, SELECTED.id).slice(1, -1);
           const stepperEl = designerEl.editor.Canvas.getBody().querySelector('x-stepper');
           stepperEl?.setAttribute('steps', steps.join(','));
           stepperEl?.setAttribute('active', SELECTED.id);
         }
-        monacoEl.setValue(JSON.stringify(SELECTED.data, null, '  '))
+        const jsonStr = JSON.stringify(SELECTED.data || {}, null, '  ')
+        monacoEl.setValue(jsonStr);
         break;
       }
 
