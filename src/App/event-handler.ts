@@ -26,9 +26,9 @@ export default function eventHandler() {
     isEdge(SELECTED) && chartEl?.updateEdgeData(SELECTED.id, {data});
   })
 
-  // event from <x-formflow>. functions available: 
+  // event from <x-formflow>. functions available:
   //  getData(), await getImage(), getInstance(), fireEvent(detail)
-  //  updateNodeData(id, data), updateEdgeData(id, data) 
+  //  updateNodeData(id, data), updateEdgeData(id, data)
   chartEl.addEventListener('formflow' as any, (event: CustomEvent) => {
     const chartData = chartEl.getData();
     const {action, type, node, edge} = event.detail;
@@ -49,7 +49,7 @@ export default function eventHandler() {
 
       case 'selected': {
         SELECTED = node || edge;
-console.log({SELECTED})
+        console.log({SELECTED})
         if (isNode(SELECTED) && ['custom', 'thankyou'].includes(node?.type)) {
           const chartData = chartEl?.getData();
           const steps = getSteps(chartData, SELECTED.id).slice(1, -1);
