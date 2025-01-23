@@ -13,17 +13,17 @@ export default function eventHandler() {
 
   designerEl.editor.on('update', () => {
     konsole('form-designer',  'update');
-    const html = designerEl.html.replace(/<\/?body>/g,'');
+    const html = designerEl.editor.getHtml().replace(/<\/?body>/g,'');
 
-    chartEl?.updateNodeData(SELECTED.id, {html});
+    isNode(SELECTED) && chartEl?.updateNodeData(SELECTED.id, {html});
   });
 
   monacoEl.addEventListener('monaco-change', event => {
     const jsonCode = event.detail;
     konsole('monaco-change', jsonCode);
     const data = JSON.parse(jsonCode);
-    isNode(SELECTED) && chartEl?.updateNodeData(SELECTED.id, {data});
-    isEdge(SELECTED) && chartEl?.updateEdgeData(SELECTED.id, {data});
+    isNode(SELECTED) && chartEl?.updateNodeData(SELECTED.id, data);
+    isEdge(SELECTED) && chartEl?.updateEdgeData(SELECTED.id, data);
   })
 
   // event from <x-formflow>. functions available:
