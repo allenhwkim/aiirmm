@@ -5,11 +5,15 @@ import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
 import DraggableConsole from '../DraggableConsole/DraggableConsole';
 import DialogModal from '../DialogModal/DialogModal';
 import eventHandler from './event-handler';
+import FormFlow from '../FormFlow/FormFlow';
+import GrapesJs from '../GrapesJs/GrapesJs';
 
 const fitView = debounce((_size) => {
-  const chartEl = document.querySelector('x-formflow') as any;
-  chartEl.getInstance().fitView();
-}, 300);
+  // const chartEl = document.querySelector('x-formflow') as any;
+  // const designerEl = document.querySelector('x-formdesigner') as any;
+  // chartEl.getInstance().fitView();
+  // designerEl.editor.refresh();
+}, 50);
 
 window.addEventListener('resize', fitView);
 
@@ -33,8 +37,8 @@ export default function() {
   return (
     <PanelGroup direction="horizontal" className="container mw-100">
       <Panel className="vh-100 position-relative"
-        onResize={fitView} defaultSize={30} minSize={20}>
-        <x-formflow></x-formflow>
+        onResize={fitView} defaultSize={30}>
+        <FormFlow />
       </Panel>
       <PanelResizeHandle style={{width: '4px', background: '#CCC'}} />
       <Panel defaultSize={70} minSize={30}>
@@ -46,7 +50,7 @@ export default function() {
           <PanelResizeHandle style={{height: '4px', background: '#CCC'}} />
           <Panel defaultSize={70}>
             {/* refer event-halder.ts for set/get of this value */}
-            <x-formdesigner></x-formdesigner>
+            <GrapesJs />
           </Panel>
         </PanelGroup>
       </Panel>

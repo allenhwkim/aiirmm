@@ -1,0 +1,160 @@
+.react-flow {
+  --xy-theme-selected: #F57DBD;
+  --xy-theme-hover: #C5C5C5;
+  --xy-theme-edge-hover: black;
+  --xy-theme-color-focus: #E8E8E8;
+  --xy-node-border-default: 1px solid #EDEDED;
+  --xy-node-boxshadow-default: 0px 3.54px 4.55px 0px #00000005, 0px 3.54px 4.55px 0px #0000000D, 0px .51px 1.01px 0px #0000001A;
+  --xy-node-border-radius-default: 8px;
+  --xy-handle-background-color-default: #ffffff;
+  --xy-handle-border-color-default: #AAAAAA;
+  --xy-edge-label-color-default: #505050;
+  /* --xy-node-background-color-default: #33aeff; */
+  /* --xy-node-color-default: #FFF; */
+}
+
+.react-flow__node {
+  box-shadow: var(--xy-node-boxshadow-default);
+  border-radius: var(--xy-node-border-radius-default);
+  background-color: var(--xy-node-background-color-default);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  flex-direction: column;
+  border: var(--xy-node-border-default);
+  color: var(--xy-node-color, var(--xy-node-color-default));
+
+  &.selectable {
+
+    &:hover {
+      border-color: var(--xy-theme-hover);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 4px var(--xy-theme-color-focus);
+      border-color: #d9d9d9;
+      &:active {
+        box-shadow: var(--xy-node-boxshadow-default)
+      }
+    }
+
+    &.selected {
+      border-color: var(--xy-theme-selected);
+      box-shadow: var(--xy-node-boxshadow-default)
+    }
+  }
+
+  &.draggable:hover {
+    border-color: var(--xy-theme-hover);
+  }
+
+}
+
+.react-flow__edge {
+  &.selectable {
+    &:hover, &.selected {
+      .react-flow__edge-path {
+        stroke: var(--xy-theme-edge-hover)
+      }
+    }
+  }
+}
+
+.react-flow__handle {
+  background-color: var(--xy-handle-background-color-default);
+
+  &.connectionindicator {
+    &:hover {
+      pointer-events: all;
+      border-color: var(--xy-theme-edge-hover);
+      background-color: #fff;
+    }
+  }
+
+  &.connectionindicator:focus,
+  &.connectingfrom,
+  &.connectingto {
+    border-color: var(--xy-theme-edge-hover)
+  }
+}
+
+html,body {
+  margin: 0;
+  font-family: sans-serif;
+  box-sizing: border-box
+}
+ 
+.react-flow__panel {
+  font-size: 12px;
+  user-select: none;
+  .add-node-dnd {
+    padding: 4px;
+    background: #EEE;
+
+    .dndnode {
+      position: relative;
+    }
+  }
+
+  .status-bar {
+    font-size: 12px;
+    opacity: .5;
+  }
+}
+
+.label-popup-backdrop {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.label-popup-input {
+  position: absolute;
+  display: inline-block;
+  background: white;
+  border: 1px solid var(--xy-node-border-default);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+}
+
+.dialog-modal {
+  border: 0;
+  border-radius: 0.5rem;
+  min-width: 50%;
+  min-height: 75%;
+  padding: 0;
+  overflow: auto;
+  background-color: #f6f6f6;
+
+  &::backdrop {
+    background: hsl(0 0% 0% / 50%);
+  }
+
+  .btn-close {
+    position: sticky;
+    float: right;
+    color: var(--bs-secondary);
+    top: 4px;
+    right: 8px;
+    z-index: 1;
+    font-size: .75rem;
+    cursor: pointer;
+  }
+
+  > :not(.btn-close) {
+    height: 100%;
+  }
+
+  img {
+    width: 100%;
+  }
+}

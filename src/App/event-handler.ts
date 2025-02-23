@@ -11,12 +11,12 @@ export default function eventHandler() {
   const designerEl = document.querySelector('x-formdesigner') as any;
   const monacoEl: any = document.querySelector('x-monaco');
 
-  designerEl.editor.on('update', () => {
-    konsole('form-designer',  'update');
-    const html = designerEl.editor.getHtml().replace(/<\/?body>/g,'');
+  // designerEl.editor.on('update', () => {
+  //   konsole('form-designer',  'update');
+  //   const html = designerEl.editor.getHtml().replace(/<\/?body>/g,'');
 
-    isNode(SELECTED) && chartEl?.updateNodeData(SELECTED.id, {html});
-  });
+  //   isNode(SELECTED) && chartEl?.updateNodeData(SELECTED.id, {html});
+  // });
 
   monacoEl.addEventListener('monaco-change', event => {
     const jsonCode = event.detail;
@@ -29,40 +29,40 @@ export default function eventHandler() {
   // event from <x-formflow>. functions available:
   //  getData(), await getImage(), getInstance(), fireEvent(detail)
   //  updateNodeData(id, data), updateEdgeData(id, data)
-  chartEl.addEventListener('formflow' as any, (event: CustomEvent) => {
-    const chartData = chartEl.getData();
-    const {action, type, node, edge} = event.detail;
-    konsole('formflow', {action, type})
+  // chartEl.addEventListener('formflow' as any, (event: CustomEvent) => {
+  //   const chartData = chartEl.getData();
+  //   const {action, type, node, edge} = event.detail;
+  //   konsole('formflow', {action, type})
 
-    switch(action) {
+  //   switch(action) {
 
-      case 'init': {
-        const initNode = chartData.nodes.find(el => el.id === 'start');
-        SELECTED = initNode;
-        initNode && monacoEl.setValue(JSON.stringify(initNode.data, null, '  '))
-        break;
-      }
+  //     case 'init': {
+  //       const initNode = chartData.nodes.find(el => el.id === 'start');
+  //       SELECTED = initNode;
+  //       initNode && monacoEl.setValue(JSON.stringify(initNode.data, null, '  '))
+  //       break;
+  //     }
 
-      case 'change': {
-        break;
-      }
+  //     case 'change': {
+  //       break;
+  //     }
 
-      case 'selected': {
-        SELECTED = node || edge;
-        console.log({SELECTED})
-        if (isNode(SELECTED) && ['custom', 'thankyou'].includes(node?.type)) {
-          const chartData = chartEl?.getData();
-          const steps = getSteps(chartData, SELECTED.id).slice(1, -1);
-          const stepperEl = designerEl.editor.Canvas.getBody().querySelector('x-stepper');
-          stepperEl?.setAttribute('steps', steps.join(','));
-          stepperEl?.setAttribute('active', SELECTED.id);
-        }
-        const jsonStr = JSON.stringify(SELECTED.data || {}, null, '  ')
-        monacoEl.setValue(jsonStr);
-        break;
-      }
+  //     case 'selected': {
+  //       SELECTED = node || edge;
+  //       console.log({SELECTED})
+  //       if (isNode(SELECTED) && ['custom', 'thankyou'].includes(node?.type)) {
+  //         const chartData = chartEl?.getData();
+  //         const steps = getSteps(chartData, SELECTED.id).slice(1, -1);
+  //         const stepperEl = designerEl.editor.Canvas.getBody().querySelector('x-stepper');
+  //         stepperEl?.setAttribute('steps', steps.join(','));
+  //         stepperEl?.setAttribute('active', SELECTED.id);
+  //       }
+  //       const jsonStr = JSON.stringify(SELECTED.data || {}, null, '  ')
+  //       monacoEl.setValue(jsonStr);
+  //       break;
+  //     }
 
-    }
-  });
+  //   }
+  // });
 
 }
