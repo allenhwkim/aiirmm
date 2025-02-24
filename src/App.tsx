@@ -61,10 +61,10 @@ export default function() {
     <PanelGroup direction="horizontal" className="container mw-100">
       <Panel className="vh-100 position-relative"
         onResize={fitView} defaultSize={30}>
-        <FormFlow 
-          onInit={(instance) => setReactFlow(instance)} 
-          onNodeClick={(_, node) => setSelected(node)} 
-          onEdgeClick={(_, edge) => setSelected(edge)} 
+        <FormFlow
+          onInit={(instance) => setReactFlow(instance)}
+          onNodeClick={(_, node) => setSelected(node)}
+          onEdgeClick={(_, edge) => setSelected(edge)}
         />
       </Panel>
       <PanelResizeHandle style={{width: '4px', background: '#CCC'}} />

@@ -50,7 +50,7 @@ export default function(props: any) {
       },
       ...props
     }) as Editor;
-    
+
     editor.on('load', () => props.onLoad?.(editor));
   }, [])
 
