@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
-import DraggableConsole from './DraggableConsole/DraggableConsole';
 import FormFlow from './FormFlow/FormFlow';
 import GrapesJs from './GrapesJs/GrapesJs';
 import { ReactFlowInstance, Node, Edge } from '@xyflow/react';
@@ -80,10 +79,6 @@ export default function() {
           </Panel>
         </PanelGroup>
       </Panel>
-
-      <DraggableConsole>
-        <pre id="console" className="console"></pre>
-      </DraggableConsole>
     </PanelGroup>
   )
 }
