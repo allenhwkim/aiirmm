@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'elements-x';
 import './style.css';
-import App from './App/App.tsx';
+import App from './App.tsx';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

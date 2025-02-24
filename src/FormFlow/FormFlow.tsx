@@ -38,15 +38,19 @@ function FormFlow(props: PropsWithoutRef<FormFlowProps> ) {
   }, []);
 
   const onNodesChange = useCallback((changes:NodeChange<Node>[]) => {
-    addUndoRedo(rfInstance, changes, ['position', 'dimensions']);
-    setNodes((nds: Node[]) => applyNodeChanges(changes, nds));
-    props.onNodesChange?.(changes);
+    if (changes.length) {
+      addUndoRedo(rfInstance, changes, ['position', 'dimensions']);
+      setNodes((nds: Node[]) => applyNodeChanges(changes, nds));
+      props.onNodesChange?.(changes);
+    }
   }, [setNodes, rfInstance]);
 
   const onEdgesChange = useCallback((changes: EdgeChange<Edge>[]) => {
-    addUndoRedo(rfInstance, changes, ['remove']);
-    setEdges((eds: Edge[]) => applyEdgeChanges(changes, eds));
-    props.onEdgesChange?.(changes);
+    if (changes.length) {
+      addUndoRedo(rfInstance, changes, ['remove']);
+      setEdges((eds: Edge[]) => applyEdgeChanges(changes, eds));
+      props.onEdgesChange?.(changes);
+    }
   }, [setEdges, rfInstance]);
 
   const onConnect = useCallback((connection: Connection) => {

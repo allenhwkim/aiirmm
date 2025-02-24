@@ -38,7 +38,7 @@ export default function(editor: Editor) {
               {label: 'light', value: 'btn btn-light'},
               {label: 'dark', value: 'btn btn-dark'},
               {label: 'link', value: 'btn btn-link text-decoration-none p-0 m-0 shadow-none'},
-            ]
+            ] as any
           },
           {
             type: 'select',
@@ -49,7 +49,7 @@ export default function(editor: Editor) {
               {label: 'large', value: 'btn-lg'},
               {label: 'normal', value: ''},
               {label: 'small', value: 'btn-sm'},
-            ]
+            ] as any
           },
           {
             type: 'button',

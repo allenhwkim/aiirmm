@@ -36,7 +36,7 @@ export default function(editor: Editor) {
   editor.on('component:create', model => {
     if (model.get('type') === 'x-combobox') {
       model.set('script', function(this) {
-        const el = this;
+        // const el = this;
         // el.dataList = {foo:1, bar:2};
         // el.dataFunction = function(q) {
         //   return fetch('https://dummyjson.com/products/search?q='+q)

@@ -1,4 +1,4 @@
-import grapesjs, {Editor, usePlugin, EditorConfig} from 'grapesjs';
+import grapesjs, {Editor, usePlugin} from 'grapesjs';
 import grapesjsParserPostCss from 'grapesjs-parser-postcss';
 import grapesjsStyleBg from 'grapesjs-style-bg';
 import formsPlugin from './plugins/forms-plugin'; // <form>, <input> ...
@@ -11,11 +11,11 @@ import 'grapesjs/dist/css/grapes.min.css';
 import { useEffect, useRef } from 'react';
 import './style.css';
 
-export default function(props: EditorConfig) {
+export default function(props: any) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    grapesjs.init({
+    const editor = grapesjs.init({
       container: ref.current as HTMLElement,
       plugins: [
         // cleaner css, https://grapesjs.com/docs/guides/Custom-CSS-parser.html#plugins
@@ -50,6 +50,8 @@ export default function(props: EditorConfig) {
       },
       ...props
     }) as Editor;
+    
+    editor.on('load', () => props.onLoad?.(editor));
   }, [])
 
   return (
