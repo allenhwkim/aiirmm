@@ -1,5 +1,5 @@
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { useEffect, useRef, useImperativeHandle, useState } from "react";
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { useEffect, useRef, useImperativeHandle, useState } from 'react';
 
 export default function(props, ref: React.ForwardedRef<any>) {
   const divRef = useRef<HTMLDivElement>(null);
@@ -9,8 +9,8 @@ export default function(props, ref: React.ForwardedRef<any>) {
 
   useEffect(() => {
     const editor = monaco.editor.create(
-      divRef.current as HTMLElement, 
-      props.options, 
+      divRef.current as HTMLElement,
+      props.options,
       props.override
     );
     props.onLoad?.(editor);
@@ -23,9 +23,9 @@ export default function(props, ref: React.ForwardedRef<any>) {
   }, [props.options.value]);
 
   return (
-    <div ref={divRef} 
-      style={{height: '100%'}} 
-      className="monaco-editor" 
+    <div ref={divRef}
+      style={{height: '100%'}}
+      className="monaco-editor"
     />
   );
 }

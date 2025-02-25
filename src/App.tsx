@@ -49,7 +49,7 @@ export default function() {
     <PanelGroup direction="horizontal" className="container mw-100">
       <Panel className="vh-100 position-relative"
         onResize={fitView} defaultSize={30}>
-          {JSON.stringify(selected)}
+        {JSON.stringify(selected)}
         <FormFlow
           onInit={(instance) => setReactFlow(instance)}
           onNodeClick={(_, node) => setSelected(node)}
@@ -63,7 +63,7 @@ export default function() {
             <MonacoEditor
               options={{
                 value: selected?.data,
-                language: "json",
+                language: 'json',
                 automaticLayout: true,
               }}
               onLoad={onMonacoLoad}
