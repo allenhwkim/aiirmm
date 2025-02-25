@@ -16,10 +16,11 @@ export default function(editor: Editor) {
         draggable: function(dragging, target: Component) { // draggable to
           const parentType = dragging?.parent?.()?.get('type');
           const targetType = target.get('type') as string;
-          if (parentType === undefined) { // when dragging from block, parent is undefined,
+          // when dragging from block, parent is wrapper(or wrapper),
+          if (!parentType || parentType === 'wrapper') { 
             return [...DROP_ALLOWED_TO, 'bs-row'].includes(targetType);
           }
-          // wnen dragging from 'bs-row', dropping allowed within it
+          // wnen move within 'bs-row', dropping allowed within it
           else if (parentType === 'bs-row') {
             return targetType === 'bs-row';
           }
