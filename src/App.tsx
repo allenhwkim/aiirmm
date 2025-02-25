@@ -1,65 +1,55 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { debounce } from 'lodash';
+import * as monaco from 'monaco-editor';
 import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
 import FormFlow from './FormFlow/FormFlow';
 import GrapesJs from './GrapesJs/GrapesJs';
 import { ReactFlowInstance, Node, Edge } from '@xyflow/react';
 import { Editor } from 'grapesjs';
+import MonacoEditor from './MonacoEditor';
 
 export default function() {
   const [reactflow, setReactFlow] = useState<ReactFlowInstance>();
   const [gjsEditor, setGjsEditor] = useState<Editor>();
+  const [txtEditor, setTxtEditor] = useState<monaco.editor.IStandaloneCodeEditor>();
   const [selected, setSelected] = useState<Node|Edge>();
-  const monacoRef = useRef<any>();
-
-  useEffect(() => {
-    const handleMonacoChange = event => {
-      const jsonCode = event.detail;
-      console.log('monaco-change', event.detail);
-      selected && updateDataSelected(selected, JSON.parse(jsonCode));
-    }
-    const jsonStr = JSON.stringify(selected?.data || {}, null, '  ')
-    const monacoEl = monacoRef.current;
-    monacoEl.setValue(jsonStr);
-    monacoEl.addEventListener('monaco-change', handleMonacoChange);
-
-    return () => {
-      monacoEl.removeEventListener('monaco-change', handleMonacoChange);
-    };
-  }, [selected]);
-
-  useEffect(() => {
-    gjsEditor?.on('change', (e) => {
-      console.log('grapesjs', 'change', e);
-      const html = gjsEditor.getHtml().replace(/<\/?body>/g,'');
-      updateDataSelected(selected, {html});
-    })
-  }, [gjsEditor]);
 
   const fitView = debounce(() => {
     reactflow?.fitView();
     gjsEditor?.refresh();
   }, 50);
 
-  const updateDataSelected = (selected, data) => {
-    if ((selected as Node)?.position) {
-      reactflow?.setNodes((nds) => nds.map((node) => {
-        (node.id === selected?.id) && (node.data = {...node.data, ...data});
-        return node;
-      }));
-    }
-    else if ((selected as Edge)?.source) {
-      reactflow?.setEdges((eds) => eds.map((edge) => {
-        (edge.id === selected?.id) && (edge.data = {...edge.data, ...data});
-        return edge;
-      }));
-    }
+  function updateChartData(selected, data) {
+    if (!data) return;
+    const func = selected?.position ? 'setNodes' :
+      selected?.source ? 'setEdges' : 'n/a';
+    reactflow?.[func]?.(els => els.map((el) => {
+      (el.id === selected?.id) && (el.data = {...el.data, ...data});
+      return el;
+    }));
   };
+
+  const onMonacoLoad = function(editor: monaco.editor.IStandaloneCodeEditor) {
+    setTxtEditor(editor);
+    editor.onDidBlurEditorText(() => {
+      console.log('onTxtEditorBlur value', editor.getValue());
+    });
+  };
+
+  const onGjsLoad = function(editor: Editor) {
+    setGjsEditor(editor);
+    const iframe: any = document.querySelector('.gjs-frame');
+    iframe.contentWindow.addEventListener('blur', () => {
+      const finalHtml = editor.getHtml();
+      console.log('Canvas iframe lost focus. Final HTML:', finalHtml);
+    });
+  }
 
   return (
     <PanelGroup direction="horizontal" className="container mw-100">
       <Panel className="vh-100 position-relative"
         onResize={fitView} defaultSize={30}>
+          {JSON.stringify(selected)}
         <FormFlow
           onInit={(instance) => setReactFlow(instance)}
           onNodeClick={(_, node) => setSelected(node)}
@@ -70,12 +60,20 @@ export default function() {
       <Panel defaultSize={70} minSize={30}>
         <PanelGroup direction="vertical">
           <Panel defaultSize={30}>
-            selected: {JSON.stringify(selected)}
-            <x-monaco ref={monacoRef} language='javascript'></x-monaco>
+            <MonacoEditor
+              options={{
+                value: selected?.data,
+                language: "json",
+                automaticLayout: true,
+              }}
+              onLoad={onMonacoLoad}
+            />
           </Panel>
           <PanelResizeHandle style={{height: '4px', background: '#CCC'}} />
           <Panel defaultSize={70}>
-            <GrapesJs onLoad={setGjsEditor} />
+            <GrapesJs
+              onLoad={onGjsLoad}
+            />
           </Panel>
         </PanelGroup>
       </Panel>

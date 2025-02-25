@@ -55,7 +55,7 @@ export default function(props: any) {
   }, [])
 
   return (
-    <div ref={ref}></div>
+    <div ref={ref} tabIndex={0}></div>
   )
 
 }
