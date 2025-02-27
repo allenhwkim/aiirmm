@@ -1,7 +1,13 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useEffect, useRef, useImperativeHandle, useState } from 'react';
 
-export default function(props, ref: React.ForwardedRef<any>) {
+interface IProps {
+  options: monaco.editor.IStandaloneEditorConstructionOptions;
+  override?: monaco.editor.IEditorOverrideServices;
+  onLoad?: (Editor: monaco.editor.IStandaloneCodeEditor) => void;
+}
+
+export default function(props: IProps, ref: React.ForwardedRef<any>) {
   const divRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>();
 
@@ -21,6 +27,11 @@ export default function(props, ref: React.ForwardedRef<any>) {
     const value = JSON.stringify(props.options.value, null, '  ');
     editor?.setValue(value)
   }, [props.options.value]);
+
+  useEffect(() => {
+    console.log(props.options)
+    editor?.updateOptions({readOnly: props.options.readOnly})
+  }, [props.options.readOnly]);
 
   return (
     <div ref={divRef}

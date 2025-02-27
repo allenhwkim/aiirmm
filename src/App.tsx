@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 import * as monaco from 'monaco-editor';
 import { Panel, PanelGroup, PanelResizeHandle, } from 'react-resizable-panels';
@@ -8,10 +8,26 @@ import { ReactFlowInstance, Node, Edge } from '@xyflow/react';
 import { Editor } from 'grapesjs';
 import MonacoEditor from './MonacoEditor';
 
+function getEditableData(val) {
+  if(!val) return;
+  const newVal = {...val};
+  [
+    'position', 'measured', 'selected', 'dragging', 'deletable', 'origin', 'style',
+    'id', 'source', 'target', 
+  ].forEach( el => delete newVal[el]);
+
+  return newVal;
+}
+
+/* To see selected in a deep callback function  */
+let _selected;
+const getSelected = () => _selected;
+const _setSelected = (val) => {_selected = val};
+
 export default function() {
   const [reactflow, setReactFlow] = useState<ReactFlowInstance>();
   const [gjsEditor, setGjsEditor] = useState<Editor>();
-  const [txtEditor, setTxtEditor] = useState<monaco.editor.IStandaloneCodeEditor>();
+  const [monacoEditor, setMonacoEditor] = useState<monaco.editor.IStandaloneCodeEditor>();
   const [selected, setSelected] = useState<Node|Edge>();
 
   const fitView = debounce(() => {
@@ -19,31 +35,43 @@ export default function() {
     gjsEditor?.refresh();
   }, 50);
 
-  function updateChartData(selected, data) {
-    if (!data) return;
-    const func = selected?.position ? 'setNodes' :
-      selected?.source ? 'setEdges' : 'n/a';
-    reactflow?.[func]?.(els => els.map((el) => {
-      (el.id === selected?.id) && (el.data = {...el.data, ...data});
-      return el;
-    }));
-  };
+  useEffect(() => {
+    const value = JSON.stringify(getEditableData(selected), null, '  ');
+    monacoEditor?.setValue(value)
+    gjsEditor?.setComponents(selected?.data?.html || '');
+    _setSelected(selected);
+  }, [selected])
 
-  const onMonacoLoad = function(editor: monaco.editor.IStandaloneCodeEditor) {
-    setTxtEditor(editor);
-    editor.onDidBlurEditorText(() => {
-      console.log('onTxtEditorBlur value', editor.getValue());
+  useEffect(() => {
+    monacoEditor?.onDidBlurEditorText(() => {
+      const sel = getSelected();
+      const value = monacoEditor.getValue();
+      console.log('editor.getValue()', value, 'selected', sel);
+      const func = sel['position'] ? 'setNodes' : sel['source'] ? 'setEdges' : '';
+      const parsed = JSON.parse(value);
+      reactflow?.[func]?.(els => els.map((el) => {
+        (el.id === sel.id) && (el = {...el, ...parsed});
+        return el;
+      }));
     });
-  };
+  }, [monacoEditor])
 
-  const onGjsLoad = function(editor: Editor) {
-    setGjsEditor(editor);
+  useEffect(() => {
     const iframe: any = document.querySelector('.gjs-frame');
-    iframe.contentWindow.addEventListener('blur', () => {
-      const finalHtml = editor.getHtml();
-      console.log('Canvas iframe lost focus. Final HTML:', finalHtml);
-    });
-  }
+    function onBlur () {
+      const selected = getSelected();
+      const html = gjsEditor?.getHtml();
+      const newHtml = (html as string).replace(/<\/*body.*?>/g, '');
+      console.log({newHtml, selected})
+      reactflow?.setNodes(els => els.map((el) => {
+        (newHtml && (el.id === selected?.id) && (el.data.html = html));
+        return el;
+      }));
+    };
+    iframe?.contentWindow.addEventListener('blur', onBlur);
+
+    return () => { iframe?.contentWindow.removeEventListener('blur', onBlur) };
+  }, [gjsEditor, monacoEditor, reactflow]);
 
   return (
     <PanelGroup direction="horizontal" className="container mw-100">
@@ -57,24 +85,24 @@ export default function() {
       </Panel>
       <PanelResizeHandle style={{width: '4px', background: '#CCC'}} />
       <Panel defaultSize={70} minSize={30}>
-        <PanelGroup direction="vertical">
-          <Panel defaultSize={30}>
-            <MonacoEditor
-              options={{
-                value: selected?.data,
-                language: 'json',
-                automaticLayout: true,
-              }}
-              onLoad={onMonacoLoad}
-            />
-          </Panel>
-          <PanelResizeHandle style={{height: '4px', background: '#CCC'}} />
-          <Panel defaultSize={70}>
-            <GrapesJs
-              onLoad={onGjsLoad}
-            />
-          </Panel>
-        </PanelGroup>
+          <PanelGroup direction="vertical">
+            <Panel defaultSize={30} className={selected? '' : 'pe-none'}>
+              <MonacoEditor
+                options={{
+                  language: 'json',
+                  automaticLayout: true,
+                  minimap: {enabled: false},
+                }}
+                onLoad={setMonacoEditor}
+              />
+            </Panel>
+            <PanelResizeHandle style={{height: '4px', background: '#CCC'}} />
+            <Panel defaultSize={70}>
+              {selected && 
+                <GrapesJs onLoad={setGjsEditor} /> 
+              }
+            </Panel>
+          </PanelGroup>
       </Panel>
     </PanelGroup>
   )

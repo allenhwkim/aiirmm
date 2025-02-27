@@ -17,7 +17,7 @@ export default function(editor: Editor) {
           const parentType = dragging?.parent?.()?.get('type');
           const targetType = target.get('type') as string;
           // when dragging from block, parent is wrapper(or wrapper),
-          if (!parentType || parentType === 'wrapper') { 
+          if (!parentType || parentType === 'wrapper') {
             return [...DROP_ALLOWED_TO, 'bs-row'].includes(targetType);
           }
           // wnen move within 'bs-row', dropping allowed within it

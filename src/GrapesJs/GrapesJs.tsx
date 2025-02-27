@@ -52,6 +52,11 @@ export default function(props: any) {
     }) as Editor;
 
     editor.on('load', () => props.onLoad?.(editor));
+
+    ref.current?.addEventListener('keydown', event => {
+      event.stopPropagation(); // Reactflow is listenting on document-level
+    });
+
   }, [])
 
   return (
