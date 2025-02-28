@@ -17,6 +17,7 @@ export default function(props: any) {
   useEffect(() => {
     const editor = grapesjs.init({
       container: ref.current as HTMLElement,
+      height: '100%', // default height 900px prevent categories panel not to scroll
       plugins: [
         // cleaner css, https://grapesjs.com/docs/guides/Custom-CSS-parser.html#plugins
         grapesjsParserPostCss,

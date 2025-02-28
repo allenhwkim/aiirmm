@@ -12,7 +12,8 @@ function getEditableData(val) {
   if(!val) return;
   const newVal = {...val};
   [
-    'position', 'measured', 'selected', 'dragging', 'deletable', 'origin', 'style',
+    'position', 'measured', 'selected',
+    'dragging', 'deletable', 'origin', 'style',
     'id', 'source', 'target',
   ].forEach( el => delete newVal[el]);
 
@@ -98,9 +99,7 @@ export default function() {
           </Panel>
           <PanelResizeHandle style={{height: '4px', background: '#CCC'}} />
           <Panel defaultSize={70}>
-            {selected &&
-                <GrapesJs onLoad={setGjsEditor} />
-            }
+            {selected && <GrapesJs onLoad={setGjsEditor} /> }
           </Panel>
         </PanelGroup>
       </Panel>
