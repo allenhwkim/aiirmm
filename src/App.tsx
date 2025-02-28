@@ -13,7 +13,7 @@ function getEditableData(val) {
   const newVal = {...val};
   [
     'position', 'measured', 'selected', 'dragging', 'deletable', 'origin', 'style',
-    'id', 'source', 'target', 
+    'id', 'source', 'target',
   ].forEach( el => delete newVal[el]);
 
   return newVal;
@@ -85,24 +85,24 @@ export default function() {
       </Panel>
       <PanelResizeHandle style={{width: '4px', background: '#CCC'}} />
       <Panel defaultSize={70} minSize={30}>
-          <PanelGroup direction="vertical">
-            <Panel defaultSize={30} className={selected? '' : 'pe-none'}>
-              <MonacoEditor
-                options={{
-                  language: 'json',
-                  automaticLayout: true,
-                  minimap: {enabled: false},
-                }}
-                onLoad={setMonacoEditor}
-              />
-            </Panel>
-            <PanelResizeHandle style={{height: '4px', background: '#CCC'}} />
-            <Panel defaultSize={70}>
-              {selected && 
-                <GrapesJs onLoad={setGjsEditor} /> 
-              }
-            </Panel>
-          </PanelGroup>
+        <PanelGroup direction="vertical">
+          <Panel defaultSize={30} className={selected? '' : 'pe-none'}>
+            <MonacoEditor
+              options={{
+                language: 'json',
+                automaticLayout: true,
+                minimap: {enabled: false},
+              }}
+              onLoad={setMonacoEditor}
+            />
+          </Panel>
+          <PanelResizeHandle style={{height: '4px', background: '#CCC'}} />
+          <Panel defaultSize={70}>
+            {selected &&
+                <GrapesJs onLoad={setGjsEditor} />
+            }
+          </Panel>
+        </PanelGroup>
       </Panel>
     </PanelGroup>
   )
