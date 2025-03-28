@@ -18,6 +18,7 @@
     "last 2 safari version"
   ],
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "@xyflow/react": "^12.4.3",
     "bootstrap": "^5.3.3",
@@ -27,13 +28,11 @@
     "html-to-image": "^1.11.13",
     "json-edit-react": "^1.19.2",
     "lodash": "^4.17.21",
-    "monaco-editor": "^0.52.2",
     "pretty": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-resizable-panels": "^2.1.7",
-    "react-router-dom": "^6.21.2",
-    "zustand": "^5.0.3"
+    "react-router-dom": "^6.21.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
